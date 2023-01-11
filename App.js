@@ -3,7 +3,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
 import {View } from 'react-native';
-import { MD3DarkTheme as DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { adaptNavigationTheme, MD3DarkTheme, Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 ;
 import Home from './src/screens/Home';
@@ -27,32 +27,24 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationDark: NavigationDarkTheme,
 });
 
-const CombinedDarkTheme = merge(DefaultTheme, DarkTheme);
-
-
-const theme = {
-  ...CombinedDarkTheme,
-  dark: true,
-  colors:{
-
-  }
-}
+const CombinedDarkTheme = {
+  ...MD3DarkTheme,
+  ...DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    ...DarkTheme.colors,
+  },
+};
 
 
 
 export default function App() {
   return (
-    <PaperProvider theme={theme} >
-      <View style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-      }}>
+    <PaperProvider theme={CombinedDarkTheme} >
       <SafeAreaView/>
-      <NavigationContainer theme={theme} >
+      <NavigationContainer theme={CombinedDarkTheme} >
         <TabNavigation/>
       </NavigationContainer>
-      <Home/>
-      </View>
     </PaperProvider>
   );
 }
