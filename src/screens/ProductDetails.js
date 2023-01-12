@@ -1,6 +1,6 @@
-import { Image, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 import { useTheme, Text, Button, Divider } from "react-native-paper";
 import { AirbnbRating, Rating } from "react-native-ratings";
@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProductDetails({ route, navigation }) {
   const { item } = route.params;
-  const [tab, setTab] = useState("");
+  const [tab, setTab] = useState("description");
   console.log(tab);
   return (
     <>
@@ -16,13 +16,17 @@ export default function ProductDetails({ route, navigation }) {
       <View>
         <View
           style={{
-            justifyContent: "flex-end",
-            alignItems: "flex-end",
+            flexDirection: "row",
+            justifyContent: "space-between",
             marginTop: 20,
             marginBottom: 20,
             marginRight: 20,
+            marginLeft: 20,
           }}
         >
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={30} color="#e7e7e7e7" />
+          </TouchableOpacity>
           <AntDesign name="heart" size={24} color="#e7e7e7e7" />
         </View>
         <View
@@ -102,52 +106,52 @@ export default function ProductDetails({ route, navigation }) {
         }}
       >
         <Button
-          mode="text"
+          mode={tab === "description" ? "contained" : "text"}
           style={{
             // fontSize: 20,
             fontWeight: "medium",
             marginLeft: 20,
             marginTop: 20,
-            borderBottomColor: tab === "description" ? "white" : "transparent",
-            borderBottomWidth: 2,
-            backgroundColor: tab === "description" ? "black" : "",
           }}
           onPress={() => setTab("description")}
-          dark={true}
         >
           Description
         </Button>
         <Button
-          mode="text"
+          mode={tab === "reviews" ? "contained" : "text"}
           style={{
             fontWeight: "medium",
             marginLeft: 20,
             marginTop: 20,
-            borderBottomColor: tab === "reviews" ? "black" : "transparent",
-            borderBottomWidth: 2,
-            backgroundColor: tab === "reviews" ? "black" : "",
           }}
           onPress={() => setTab("reviews")}
         >
           Shipping Info
         </Button>
         <Button
-          mode="text"
+          mode={tab === "payment" ? "contained" : "text"}
           style={{
             fontWeight: "medium",
             marginLeft: 20,
             marginTop: 20,
-            borderBottomColor: tab === "reviews" ? "black" : "transparent",
-            borderBottomWidth: 2,
-            backgroundColor: tab === "payment" ? "black" : "",
           }}
           onPress={() => setTab("payment")}
-          dark={true}
         >
           Payment Options
         </Button>
       </View>
       <Divider />
+      <View>
+        {tab === "description" ? (
+          <Text>Description Text</Text>
+        ) : tab === "reviews" ? (
+          <Text>Shipping Info Text</Text>
+        ) : tab === "payment" ? (
+          <Text>Payment Options Text</Text>
+        ) : (
+          <Text>Description Text</Text>
+        )}
+      </View>
     </>
   );
 }
