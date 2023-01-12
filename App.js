@@ -10,8 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { NavigationContainer } from "@react-navigation/native";
-import TabNavigation, { NativeScreen } from "./src/components/Navigation";
-import { StatusBar } from "expo-status-bar";
+import { NativeScreen } from "./src/components/Navigation";
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
