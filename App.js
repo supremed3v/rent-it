@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { NavigationContainer } from "@react-navigation/native";
-import TabNavigation from "./src/components/Navigation";
+import TabNavigation, { NativeScreen } from "./src/components/Navigation";
 import { StatusBar } from "expo-status-bar";
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
@@ -31,10 +31,8 @@ const CombinedDarkTheme = {
 export default function App() {
   return (
     <PaperProvider theme={CombinedDarkTheme}>
-      <SafeAreaView />
-      <StatusBar style="auto" />
       <NavigationContainer theme={CombinedDarkTheme}>
-        <TabNavigation />
+        <NativeScreen />
       </NavigationContainer>
     </PaperProvider>
   );

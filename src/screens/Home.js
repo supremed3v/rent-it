@@ -2,7 +2,7 @@ import { View, ScrollView, Image, FlatList, Dimensions } from "react-native";
 import React from "react";
 import { useTheme, Text, Divider, Button } from "react-native-paper";
 
-export default function Home() {
+export default function Home({ navigation }) {
   const theme = useTheme();
 
   const data = [
@@ -150,7 +150,7 @@ export default function Home() {
           flex: 1,
         }}
       >
-        <Button mode="outlined" textColor="">
+        <Button mode="outlined" onPress={() => navigation.navigate("Explore")}>
           BROWSE ALL PRODUCTS
         </Button>
       </View>
