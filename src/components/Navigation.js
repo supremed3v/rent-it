@@ -15,7 +15,11 @@ export default function TabNavigation() {
             let iconName;
             if (route.name === "Home") {
               iconName = focused ? "home" : "home";
-            } else if (route.name === "Products") {
+            } else if (route.name === "Explore") {
+              iconName = focused ? "search1" : "search1";
+            } else if (route.name === "Likes") {
+              iconName = focused ? "hearto" : "hearto";
+            } else if (route.name === "Cart") {
               iconName = focused ? "shoppingcart" : "shoppingcart";
             }
             return (
@@ -30,6 +34,7 @@ export default function TabNavigation() {
           tabBarInactiveTintColor: "gray",
           headerShown: false,
           tabBarStyle: {
+            tabBarBackground: "transparent",
             backgroundColor: theme.dark ? theme.colors.background : "#fff",
             borderTopColor: theme.dark ? theme.colors.background : "#fff",
             shadowOpacity: 0,
@@ -40,14 +45,29 @@ export default function TabNavigation() {
             },
             shadowOpacity: 0.3,
             shadowRadius: 4.65,
-
             elevation: 15,
+          },
+          tabBarBadgeStyle: {
+            backgroundColor: "#fff",
+            color: "#000",
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+            textAlign: "center",
+            fontSize: 12,
+            fontWeight: "bold",
           },
         };
       }}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Products" component={Products} />
+      <Tab.Screen name="Explore" component={Products} />
+      <Tab.Screen name="Likes" component={Products} />
+      <Tab.Screen
+        name="Cart"
+        options={{ tabBarBadge: 2 }}
+        component={Products}
+      />
     </Tab.Navigator>
   );
 }

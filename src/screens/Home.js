@@ -1,6 +1,6 @@
 import { View, ScrollView, Image, FlatList, Dimensions } from "react-native";
 import React from "react";
-import { useTheme, Text, Divider } from "react-native-paper";
+import { useTheme, Text, Divider, Button } from "react-native-paper";
 
 export default function Home() {
   const theme = useTheme();
@@ -25,32 +25,9 @@ export default function Home() {
       id: "6",
     },
   ];
-  const renderItem = ({ item }) => {
+
+  const header = () => {
     return (
-      <View
-        style={{
-          width: Dimensions.get("window").width / 2,
-          height: 200,
-          backgroundColor: "#e7e7e7e7",
-          borderRadius: 20,
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 1,
-          margin: 10,
-        }}
-      >
-        <Text
-          style={{
-            color: "#000",
-          }}
-        >
-          {item.id}
-        </Text>
-      </View>
-    );
-  };
-  return (
-    <View>
       <ScrollView
         style={{
           backgroundColor: theme.dark ? theme.colors.background : "#fff",
@@ -157,14 +134,63 @@ export default function Home() {
             horizontalInset={true}
           />
           <Text variant="displayMedium">Products</Text>
-          <FlatList
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            numColumns={2}
-          />
         </View>
       </ScrollView>
+    );
+  };
+
+  const footer = () => {
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 20,
+          marginBottom: 20,
+          flex: 1,
+        }}
+      >
+        <Button mode="outlined" textColor="">
+          BROWSE ALL PRODUCTS
+        </Button>
+      </View>
+    );
+  };
+
+  const renderItem = ({ item }) => {
+    return (
+      <View
+        style={{
+          width: Dimensions.get("window").width / 2,
+          height: 200,
+          backgroundColor: "#e7e7e7e7",
+          borderRadius: 20,
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          margin: 10,
+        }}
+      >
+        <Text
+          style={{
+            color: "#000",
+          }}
+        >
+          {item.id}
+        </Text>
+      </View>
+    );
+  };
+  return (
+    <View>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2}
+        ListHeaderComponent={header}
+        ListFooterComponent={footer}
+      />
     </View>
   );
 }
