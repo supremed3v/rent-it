@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { TouchableOpacity, View } from "react-native";
 import { Text, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import AllProducts from "../screens/AllProducts";
 
 const CustomTabBar = ({ children }) => {
   const navigation = useNavigation();
@@ -157,6 +158,7 @@ export const NativeScreen = () => {
       }}
     >
       <Stack.Screen name="HomeTab" component={TabNavigation} />
+      <Stack.Screen name="AllProducts" component={AllProducts} />
     </Stack.Navigator>
   );
 };

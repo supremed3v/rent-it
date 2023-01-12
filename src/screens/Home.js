@@ -146,11 +146,14 @@ export default function Home({ navigation }) {
           justifyContent: "center",
           alignItems: "center",
           marginTop: 20,
-          marginBottom: 20,
+          marginBottom: 100,
           flex: 1,
         }}
       >
-        <Button mode="outlined" onPress={() => navigation.navigate("Explore")}>
+        <Button
+          mode="outlined"
+          onPress={() => navigation.navigate("AllProducts")}
+        >
           BROWSE ALL PRODUCTS
         </Button>
       </View>
