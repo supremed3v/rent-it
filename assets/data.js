@@ -20,7 +20,7 @@ export const productsData = [
     name: "Product 2",
     image: "productImg",
     price: 100,
-    category: "Category 1",
+    category: "Category 2",
     stock: 10,
     numOfReviews: 10,
     rating: 4.5,

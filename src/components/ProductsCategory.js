@@ -1,8 +1,10 @@
 import { TouchableOpacity, Dimensions } from "react-native";
 import React from "react";
 import { Text } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ProductsCategory({ item }) {
+  const navigation = useNavigation();
   return (
     <TouchableOpacity
       style={{
@@ -16,7 +18,9 @@ export default function ProductsCategory({ item }) {
         margin: 10,
         width: Dimensions.get("window").width / 2,
       }}
-      onPress={() => navigation.navigate("ProductDetails", { item: item })}
+      onPress={() =>
+        navigation.navigate("FilteredProducts", { category: item?.name })
+      }
     >
       <Text
         style={{
