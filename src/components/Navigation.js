@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Products from "../screens/Products";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import { useTheme } from "react-native-paper";
+import { Appbar, Avatar, useTheme } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { TouchableOpacity, View } from "react-native";
 import { Text, Button } from "react-native-paper";
@@ -99,26 +99,31 @@ export const TabNavigation = () => {
           headerShown: route.name === "Home" ? true : false,
           headerTitle: () => (
             <View>
-              <Text>AppBarComponent</Text>
+              <Text
+                variant="displaySmall"
+                style={{
+                  color: theme.dark ? theme.colors.text : "#000",
+                  fontWeight: "bold",
+                }}
+              >
+                Logo
+              </Text>
             </View>
           ),
           headerRight: () => (
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: 80,
-                marginRight: 10,
+                marginRight: 15,
               }}
             >
-              <Button
-                mode="outline"
-                style={{
-                  marginTop: 10,
-                }}
-              >
-                <FontAwesome name="user-circle" size={24} color="#fff" />
-              </Button>
+              <View>
+                <Avatar.Image
+                  size={40}
+                  source={{
+                    uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                  }}
+                />
+              </View>
             </View>
           ),
           headerStyle: {
