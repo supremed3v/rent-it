@@ -8,6 +8,7 @@ import { TouchableOpacity, View } from "react-native";
 import { Text, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import AllProducts from "../screens/AllProducts";
+import ProductDetails from "../screens/ProductDetails";
 
 const CustomTabBar = ({ children }) => {
   const navigation = useNavigation();
@@ -122,7 +123,6 @@ export const TabNavigation = () => {
           ),
           headerStyle: {
             backgroundColor: theme.dark ? theme.colors.background : "#fff",
-            elevation: theme.colors.elevation.level0,
           },
         };
       }}
@@ -159,6 +159,7 @@ export const NativeScreen = () => {
     >
       <Stack.Screen name="HomeTab" component={TabNavigation} />
       <Stack.Screen name="AllProducts" component={AllProducts} />
+      <Stack.Screen name="ProductDetails" component={ProductDetails} />
     </Stack.Navigator>
   );
 };

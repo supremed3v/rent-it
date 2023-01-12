@@ -30,10 +30,13 @@ const CombinedDarkTheme = {
 
 export default function App() {
   return (
-    <PaperProvider theme={CombinedDarkTheme}>
-      <NavigationContainer theme={CombinedDarkTheme}>
-        <NativeScreen />
-      </NavigationContainer>
-    </PaperProvider>
+    <>
+      <SafeAreaView />
+      <PaperProvider theme={CombinedDarkTheme}>
+        <NavigationContainer theme={CombinedDarkTheme}>
+          <NativeScreen />
+        </NavigationContainer>
+      </PaperProvider>
+    </>
   );
 }

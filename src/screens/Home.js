@@ -1,30 +1,17 @@
-import { View, ScrollView, Image, FlatList, Dimensions } from "react-native";
+import {
+  View,
+  ScrollView,
+  Image,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { useTheme, Text, Divider, Button } from "react-native-paper";
+import { productsData } from "../../assets/data";
 
 export default function Home({ navigation }) {
   const theme = useTheme();
-
-  const data = [
-    {
-      id: "1",
-    },
-    {
-      id: "2",
-    },
-    {
-      id: "3",
-    },
-    {
-      id: "4",
-    },
-    {
-      id: "5",
-    },
-    {
-      id: "6",
-    },
-  ];
 
   const header = () => {
     return (
@@ -162,7 +149,7 @@ export default function Home({ navigation }) {
 
   const renderItem = ({ item }) => {
     return (
-      <View
+      <TouchableOpacity
         style={{
           width: Dimensions.get("window").width / 2,
           height: 200,
@@ -173,21 +160,29 @@ export default function Home({ navigation }) {
           flex: 1,
           margin: 10,
         }}
+        onPress={() => navigation.navigate("ProductDetails", { item: item })}
       >
         <Text
           style={{
             color: "#000",
           }}
         >
-          {item.id}
+          {item.name}
         </Text>
-      </View>
+        <Text
+          style={{
+            color: "#000",
+          }}
+        >
+          {item.price}
+        </Text>
+      </TouchableOpacity>
     );
   };
   return (
     <View>
       <FlatList
-        data={data}
+        data={productsData}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
