@@ -1,9 +1,10 @@
 export const productsData = [
   {
-    name: "Product 1",
-    image: "productImg",
+    name: "Hand Bag",
+    image:
+      "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80",
     price: 100,
-    category: "Category 1",
+    category: "Hand Bags",
     stock: 10,
     numOfReviews: 10,
     rating: 4.5,
@@ -17,10 +18,11 @@ export const productsData = [
     ],
   },
   {
-    name: "Product 2",
-    image: "productImg",
+    name: "Hand Bag 2",
+    image:
+      "https://images.unsplash.com/photo-1614179689702-355944cd0918?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
     price: 100,
-    category: "Category 2",
+    category: "Hand Bags",
     stock: 10,
     numOfReviews: 10,
     rating: 4.5,
@@ -102,10 +104,11 @@ export const productsData = [
     ],
   },
   {
-    name: "Product 7",
-    image: "productImg",
+    name: "Hand Bag 3",
+    image:
+      "https://images.unsplash.com/photo-1591561954555-607968c989ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=596&q=80",
     price: 100,
-    category: "Category 2",
+    category: "Hand Bags",
     stock: 10,
     numOfReviews: 10,
     rating: 4.5,
@@ -122,7 +125,7 @@ export const productsData = [
 
 export const categoriesData = [
   {
-    name: "Category 1",
+    name: "Hand Bags",
     image: "categoryImg",
     numOfProducts: 10,
     id: 1,

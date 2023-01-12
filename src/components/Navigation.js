@@ -19,6 +19,7 @@ import {
   Provider as PaperProvider,
 } from "react-native-paper";
 import CategorizedProducts from "../screens/CategorizedProducts";
+import ProductCard from "./ProductCard";
 
 const CustomTabBar = ({ children }) => {
   const navigation = useNavigation();
@@ -194,6 +195,7 @@ export const NativeScreen = () => {
         <Stack.Screen name="AllProducts" component={AllProducts} />
         <Stack.Screen name="ProductDetails" component={ProductDetails} />
         <Stack.Screen name="FilteredProducts" component={CategorizedProducts} />
+        <Stack.Screen name="ProductCard" component={ProductCard} />
       </Stack.Navigator>
     </PaperProvider>
   );

@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { useTheme, Text, Divider, Button } from "react-native-paper";
 import { productsData } from "../../assets/data";
+import ProductCard from "../components/ProductCard";
 
 export default function Home({ navigation }) {
   const theme = useTheme();
@@ -65,63 +66,6 @@ export default function Home({ navigation }) {
           leftInset={true}
           horizontalInset={true}
         />
-        {/* <View>
-          <Text variant="displayMedium">Categories</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 10,
-              }}
-            >
-              <Text
-                variant="displaySmall"
-                style={{
-                  marginRight: 10,
-                }}
-              >
-                Category 1
-              </Text>
-              <Text
-                variant="displaySmall"
-                style={{
-                  marginRight: 10,
-                }}
-              >
-                Category 2
-              </Text>
-              <Text
-                variant="displaySmall"
-                style={{
-                  marginRight: 10,
-                }}
-              >
-                Category 3
-              </Text>
-              <Text
-                variant="displaySmall"
-                style={{
-                  marginRight: 10,
-                }}
-              >
-                Category 4
-              </Text>
-            </View>
-          </ScrollView>
-          <Divider
-            style={{
-              marginTop: 20,
-              marginBottom: 20,
-              height: 2,
-              backgroundColor: "#fff",
-            }}
-            bold={true}
-            leftInset={true}
-            horizontalInset={true}
-          />
-          <Text variant="displayMedium">Products</Text>
-        </View> */}
       </ScrollView>
     );
   };
@@ -147,38 +91,7 @@ export default function Home({ navigation }) {
     );
   };
 
-  const renderItem = ({ item }) => {
-    return (
-      <TouchableOpacity
-        style={{
-          width: Dimensions.get("window").width / 2,
-          height: 200,
-          backgroundColor: "#e7e7e7e7",
-          borderRadius: 20,
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 1,
-          margin: 10,
-        }}
-        onPress={() => navigation.navigate("ProductDetails", { item: item })}
-      >
-        <Text
-          style={{
-            color: "#000",
-          }}
-        >
-          {item.name}
-        </Text>
-        <Text
-          style={{
-            color: "#000",
-          }}
-        >
-          {item.price}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
+  const renderItem = ({ item }) => <ProductCard item={item} />;
   return (
     <View>
       <FlatList
