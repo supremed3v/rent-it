@@ -88,7 +88,7 @@ export const productsData = [
     name: "Product 6",
     image: "productImg",
     price: 100,
-    category: "Category 1",
+    category: "Category 2",
     stock: 10,
     numOfReviews: 10,
     rating: 4.5,
@@ -105,7 +105,7 @@ export const productsData = [
     name: "Product 7",
     image: "productImg",
     price: 100,
-    category: "Category 1",
+    category: "Category 2",
     stock: 10,
     numOfReviews: 10,
     rating: 4.5,
@@ -117,5 +117,50 @@ export const productsData = [
         userId: "user",
       },
     ],
+  },
+];
+
+export const categoriesData = [
+  {
+    name: "Category 1",
+    image: "categoryImg",
+    numOfProducts: 10,
+    id: 1,
+  },
+  {
+    name: "Category 2",
+    image: "categoryImg",
+    numOfProducts: 10,
+    id: 2,
+  },
+  {
+    name: "Category 3",
+    image: "categoryImg",
+    numOfProducts: 10,
+    id: 3,
+  },
+  {
+    name: "Category 4",
+    image: "categoryImg",
+    numOfProducts: 10,
+    id: 4,
+  },
+  {
+    name: "Category 5",
+    image: "categoryImg",
+    numOfProducts: 10,
+    id: 5,
+  },
+  {
+    name: "Category 5",
+    image: "categoryImg",
+    numOfProducts: 10,
+    id: 6,
+  },
+  {
+    name: "Category 5",
+    image: "categoryImg",
+    numOfProducts: 10,
+    id: 7,
   },
 ];

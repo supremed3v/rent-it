@@ -6,9 +6,18 @@ import { Appbar, Avatar, useTheme } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { TouchableOpacity, View } from "react-native";
 import { Text, Button } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useNavigation,
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from "@react-navigation/native";
 import AllProducts from "../screens/AllProducts";
 import ProductDetails from "../screens/ProductDetails";
+import {
+  adaptNavigationTheme,
+  MD3DarkTheme,
+  Provider as PaperProvider,
+} from "react-native-paper";
 
 const CustomTabBar = ({ children }) => {
   const navigation = useNavigation();
@@ -154,17 +163,36 @@ export const TabNavigation = () => {
   );
 };
 
+const { LightTheme, DarkTheme } = adaptNavigationTheme({
+  reactNavigationLight: NavigationDefaultTheme,
+  reactNavigationDark: NavigationDarkTheme,
+});
+
+const CombinedDarkTheme = {
+  ...MD3DarkTheme,
+  ...DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    ...DarkTheme.colors,
+    primary: "#fff",
+    text: "#fff",
+    buttonText: "#fff",
+  },
+};
+
 export const NativeScreen = () => {
   const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="HomeTab" component={TabNavigation} />
-      <Stack.Screen name="AllProducts" component={AllProducts} />
-      <Stack.Screen name="ProductDetails" component={ProductDetails} />
-    </Stack.Navigator>
+    <PaperProvider theme={CombinedDarkTheme}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="HomeTab" component={TabNavigation} />
+        <Stack.Screen name="AllProducts" component={AllProducts} />
+        <Stack.Screen name="ProductDetails" component={ProductDetails} />
+      </Stack.Navigator>
+    </PaperProvider>
   );
 };

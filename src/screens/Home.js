@@ -65,7 +65,7 @@ export default function Home({ navigation }) {
           leftInset={true}
           horizontalInset={true}
         />
-        <View>
+        {/* <View>
           <Text variant="displayMedium">Categories</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View
@@ -121,7 +121,7 @@ export default function Home({ navigation }) {
             horizontalInset={true}
           />
           <Text variant="displayMedium">Products</Text>
-        </View>
+        </View> */}
       </ScrollView>
     );
   };
