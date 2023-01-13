@@ -1,18 +1,16 @@
 import { Image, TouchableOpacity, View, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 import { useTheme, Text, Button, Divider, Snackbar } from "react-native-paper";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCart } from "../context/CartContext";
+import { BottomSheet } from "react-native-btr";
 
 export default function ProductDetails({ route, navigation }) {
   const [visible, setVisible] = useState(false);
-
-  const onToggleSnackBar = () => setVisible(!visible);
-
-  const onDismissSnackBar = () => setVisible(false);
+  const [open, setOpen] = useState(false);
   const { item } = route.params;
   const [tab, setTab] = useState("description");
   const { cart, addToCart } = useCart();
@@ -23,7 +21,13 @@ export default function ProductDetails({ route, navigation }) {
     }
     addToCart(prod);
     onToggleSnackBar();
+    onToggle();
   };
+
+  const onToggleSnackBar = () => setVisible(!visible);
+  const onDismissSnackBar = () => setVisible(false);
+
+  const onToggle = () => setOpen(!open);
 
   return (
     <>
@@ -181,6 +185,20 @@ export default function ProductDetails({ route, navigation }) {
       >
         Item Added to Cart
       </Snackbar>
+      <BottomSheet
+        visible={open}
+        onBackButtonPress={onToggle}
+        onBackdropPress={onToggle}
+      >
+        <View
+          style={{
+            backgroundColor: "#fff",
+            height: 300,
+          }}
+        >
+          <Text>Bottom Sheet</Text>
+        </View>
+      </BottomSheet>
     </>
   );
 }
