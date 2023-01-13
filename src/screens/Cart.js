@@ -22,6 +22,12 @@ export default function Cart() {
         ) : (
           <Text>Cart is empty</Text>
         )}
+        {cart.length !== 0 && (
+          <Text>
+            Total:{" "}
+            {cart.reduce((acc, item) => acc + item.price * item.quantity, 0)}
+          </Text>
+        )}
       </View>
     </>
   );

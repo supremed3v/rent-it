@@ -4,9 +4,10 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const addToCart = (item) => {
-    setCart([...cart, item]);
+    setCart([...cart, { ...item, quantity: 1 }]);
   };
 
   const removeFromCart = (item) => {
@@ -19,10 +20,6 @@ export const CartProvider = ({ children }) => {
 
   const isInCart = (item) => {
     return cart.some((cartItem) => cartItem.id === item.id);
-  };
-
-  const getCartTotal = () => {
-    return cart.reduce((total, item) => total + item.price, 0);
   };
 
   const getCartCount = () => {
@@ -44,7 +41,7 @@ export const CartProvider = ({ children }) => {
       if (cartItem.id === item.id) {
         return { ...cartItem, quantity: cartItem.quantity - 1 };
       }
-      return cartItem;
+      return newCart;
     });
   };
 
@@ -57,7 +54,6 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         clearCart,
         isInCart,
-        getCartTotal,
         getCartCount,
         addQuantity,
         removeQuantity,
