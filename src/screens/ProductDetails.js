@@ -1,15 +1,30 @@
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View, Alert } from "react-native";
 import React, { useState } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
-import { useTheme, Text, Button, Divider } from "react-native-paper";
+import { useTheme, Text, Button, Divider, Snackbar } from "react-native-paper";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useCart } from "../context/CartContext";
 
 export default function ProductDetails({ route, navigation }) {
+  const [visible, setVisible] = useState(false);
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
   const { item } = route.params;
   const [tab, setTab] = useState("description");
-  console.log(tab);
+  const { cart, addToCart } = useCart();
+  console.log(cart);
+  const addItemToCart = (prod) => {
+    if (cart.find((item) => item.id === prod.id)) {
+      return Alert.alert("Item already in cart");
+    }
+    addToCart(prod);
+    onToggleSnackBar();
+  };
+
   return (
     <>
       <SafeAreaView />
@@ -89,7 +104,9 @@ export default function ProductDetails({ route, navigation }) {
                 marginBottom: 10,
               }}
             >
-              <Button mode="outlined">Add to Cart</Button>
+              <Button mode="outlined" onPress={() => addItemToCart(item)}>
+                Add to Cart
+              </Button>
             </View>
             <Button mode="contained">Buy Now</Button>
           </View>
@@ -152,6 +169,18 @@ export default function ProductDetails({ route, navigation }) {
           <Text>Description Text</Text>
         )}
       </View>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: "X",
+          onPress: () => {
+            setVisible(false);
+          },
+        }}
+      >
+        Item Added to Cart
+      </Snackbar>
     </>
   );
 }

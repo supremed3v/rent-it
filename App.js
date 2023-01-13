@@ -17,6 +17,8 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationDark: NavigationDarkTheme,
 });
 
+import { CartProvider } from "./src/context/CartContext";
+
 const CombinedDarkTheme = {
   ...MD3DarkTheme,
   ...DarkTheme,
@@ -30,12 +32,14 @@ const CombinedDarkTheme = {
 export default function App() {
   return (
     <>
-      <SafeAreaView mode="light" />
-      <PaperProvider theme={CombinedDarkTheme}>
-        <NavigationContainer theme={CombinedDarkTheme}>
-          <NativeScreen />
-        </NavigationContainer>
-      </PaperProvider>
+      <CartProvider>
+        <SafeAreaView mode="light" />
+        <PaperProvider theme={CombinedDarkTheme}>
+          <NavigationContainer theme={CombinedDarkTheme}>
+            <NativeScreen />
+          </NavigationContainer>
+        </PaperProvider>
+      </CartProvider>
     </>
   );
 }

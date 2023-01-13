@@ -16,6 +16,7 @@ export const productsData = [
         userId: "user1",
       },
     ],
+    id: 1,
   },
   {
     name: "Hand Bag 2",
@@ -34,6 +35,7 @@ export const productsData = [
         userId: "user",
       },
     ],
+    id: 2,
   },
   {
     name: "Product 3",
@@ -51,6 +53,7 @@ export const productsData = [
         userId: "user",
       },
     ],
+    id: 3,
   },
   {
     name: "Product 4",
@@ -68,6 +71,7 @@ export const productsData = [
         userId: "user",
       },
     ],
+    id: 4,
   },
   {
     name: "Product 5",
@@ -85,6 +89,7 @@ export const productsData = [
         userId: "user",
       },
     ],
+    id: 5,
   },
   {
     name: "Product 6",
@@ -102,6 +107,7 @@ export const productsData = [
         userId: "user",
       },
     ],
+    id: 6,
   },
   {
     name: "Hand Bag 3",
@@ -120,6 +126,7 @@ export const productsData = [
         userId: "user",
       },
     ],
+    id: 7,
   },
 ];
 

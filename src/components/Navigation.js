@@ -20,6 +20,8 @@ import {
 } from "react-native-paper";
 import CategorizedProducts from "../screens/CategorizedProducts";
 import ProductCard from "./ProductCard";
+import Cart from "../screens/Cart";
+const { useCart } = require("../context/CartContext");
 
 const CustomTabBar = ({ children }) => {
   const navigation = useNavigation();
@@ -47,6 +49,8 @@ const CustomTabBar = ({ children }) => {
 };
 
 export const TabNavigation = () => {
+  const { cart } = useCart();
+  console.log(cart);
   const theme = useTheme();
   const Tab = createBottomTabNavigator();
   return (
@@ -158,8 +162,8 @@ export const TabNavigation = () => {
       <Tab.Screen name="Likes" component={Products} />
       <Tab.Screen
         name="Cart"
-        options={{ tabBarBadge: 2 }}
-        component={Products}
+        options={cart.length !== 0 ? { tabBarBadge: cart.length } : {}}
+        component={Cart}
       />
     </Tab.Navigator>
   );
