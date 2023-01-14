@@ -23,8 +23,8 @@ export default function ProductCard({ item }) {
       <Image
         source={{ uri: item.image }}
         style={{
-          width: 100,
-          height: 100,
+          width: 150,
+          height: 150,
         }}
         resizeMode="cover"
       />

@@ -11,7 +11,14 @@ export default function Cart({ navigation }) {
     <>
       <SafeAreaView />
       <View>
-        <Text>Cart</Text>
+        <Text
+          variant="displayLarge"
+          style={{
+            textAlign: "center",
+          }}
+        >
+          Cart
+        </Text>
         {cart.length !== 0 ? (
           cart.map((item) => (
             <View
@@ -94,7 +101,7 @@ export default function Cart({ navigation }) {
               }}
               onPress={() => navigation.navigate("AllProducts")}
             >
-              Buy Now
+              Explore Products
             </Button>
           </View>
         )}

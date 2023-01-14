@@ -141,6 +141,17 @@ export const TabNavigation = () => {
               </View>
             </View>
           ),
+          headerLeft: () => (
+            <View
+              style={{
+                marginLeft: 15,
+              }}
+            >
+              <View>
+                <AntDesign name="bars" size={24} color="#fff" />
+              </View>
+            </View>
+          ),
           headerStyle: {
             backgroundColor: theme.dark ? theme.colors.background : "#fff",
           },
