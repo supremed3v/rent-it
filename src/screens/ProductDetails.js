@@ -1,13 +1,16 @@
 import { Image, TouchableOpacity, View, Alert } from "react-native";
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useRef } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 import { useTheme, Text, Button, Divider, Snackbar } from "react-native-paper";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCart } from "../context/CartContext";
-import BottomSheet from "reanimated-bottom-sheet";
-
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 export default function ProductDetails({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
@@ -20,244 +23,292 @@ export default function ProductDetails({ route, navigation }) {
       return Alert.alert("Item already in cart");
     }
     addToCart(prod);
-    sheetPress();
+    openModal();
+    handleDismissModalPress();
   };
 
-  const sheetPress = () => {
-    sheetRef.current.snapTo(0);
-  };
+  const onDismissSnackBar = () => setVisible(false);
 
-  const sheetRef = useRef(null);
+  // callbacks
+  const openModal = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
 
-  const renderContent = () => (
+  const bottomSheetModalRef = useRef(1);
+
+  // variables
+  const snapPoints = useMemo(() => ["25%", "50%"], []);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleSheetChanges = useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
+  const handleDismissModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.dismiss() && setOpen(false);
+  }, []);
+  return (
     <>
-      <View
+      <GestureHandlerRootView
         style={{
-          backgroundColor: "#fff",
-          height: 300,
+          flex: 1,
         }}
       >
-        {cart &&
-          cart.map((item) => (
+        <BottomSheetModalProvider>
+          <SafeAreaView />
+          <View>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                alignItems: "center",
                 marginTop: 20,
-                marginLeft: 20,
+                marginBottom: 20,
                 marginRight: 20,
+                marginLeft: 20,
               }}
-              key={item.id}
             >
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="arrow-back" size={30} color="#e7e7e7e7" />
+              </TouchableOpacity>
+              <AntDesign name="heart" size={24} color="#e7e7e7e7" />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
+              <Image
+                source={{ uri: item.image }}
+                style={{
+                  width: 200,
+                  height: 200,
+                  borderRadius: 20,
+                }}
+              />
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  marginLeft: 20,
                 }}
               >
-                <Image
-                  source={{ uri: item.image }}
+                <Text
+                  variant="bodyLarge"
                   style={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: 20,
+                    fontSize: 20,
+                    fontWeight: "medium",
                   }}
-                />
+                >
+                  {item.name}
+                </Text>
+                <Text
+                  variant=""
+                  style={{
+                    fontSize: 22,
+                    fontWeight: "bold",
+                    marginBottom: 10,
+                  }}
+                >
+                  PKR {item.price} /-
+                </Text>
                 <View
                   style={{
-                    marginLeft: 20,
+                    // marginLeft: -30,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <AirbnbRating
+                    count={5}
+                    defaultRating={Math.floor(item.rating)}
+                    size={14}
+                    showRating={false}
+                    isDisabled={true}
+                  />
+                  <Text variant="labelSmall">({item.numOfReviews})</Text>
+                </View>
+                <View
+                  style={{
+                    marginTop: 10,
+                    marginBottom: 10,
+                  }}
+                >
+                  <Button mode="outlined" onPress={() => addItemToCart(item)}>
+                    Add to Cart
+                  </Button>
+                </View>
+                <Button mode="contained">Buy Now</Button>
+              </View>
+            </View>
+          </View>
+          <Divider />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              alignItems: "center",
+              marginTop: 20,
+              marginLeft: -10,
+            }}
+          >
+            <Button
+              mode={tab === "description" ? "contained" : "text"}
+              style={{
+                // fontSize: 20,
+                fontWeight: "medium",
+                marginLeft: 20,
+                marginTop: 20,
+              }}
+              onPress={() => setTab("description")}
+            >
+              Description
+            </Button>
+            <Button
+              mode={tab === "reviews" ? "contained" : "text"}
+              style={{
+                fontWeight: "medium",
+                marginLeft: 20,
+                marginTop: 20,
+              }}
+              onPress={() => setTab("reviews")}
+            >
+              Shipping Info
+            </Button>
+            <Button
+              mode={tab === "payment" ? "contained" : "text"}
+              style={{
+                fontWeight: "medium",
+                marginLeft: 20,
+                marginTop: 20,
+              }}
+              onPress={() => setTab("payment")}
+            >
+              Payment Options
+            </Button>
+          </View>
+          <Divider />
+          <View>
+            {tab === "description" ? (
+              <Text>Description Text</Text>
+            ) : tab === "reviews" ? (
+              <Text>Shipping Info Text</Text>
+            ) : tab === "payment" ? (
+              <Text>Payment Options Text</Text>
+            ) : (
+              <Text>Description Text</Text>
+            )}
+          </View>
+          <Snackbar
+            visible={visible}
+            onDismiss={onDismissSnackBar}
+            action={{
+              label: "X",
+              onPress: () => {
+                setVisible(false);
+              },
+            }}
+          >
+            Item Added to Cart
+          </Snackbar>
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={1}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+            enableHandlePanningGesture={true}
+            enablePanDownToClose={true}
+          >
+            <View
+              style={{
+                backgroundColor: "#fff",
+                height: 300,
+                flex: 1,
+              }}
+            >
+              <>
+                {cart &&
+                  cart.map((item) => (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginTop: 20,
+                        marginLeft: 20,
+                        marginRight: 20,
+                      }}
+                      key={item.id}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Image
+                          source={{ uri: item.image }}
+                          style={{
+                            width: 100,
+                            height: 100,
+                            borderRadius: 20,
+                          }}
+                        />
+                        <View
+                          style={{
+                            marginLeft: 20,
+                          }}
+                        >
+                          <Text
+                            variant="bodyLarge"
+                            style={{
+                              fontSize: 20,
+                              fontWeight: "medium",
+                              color: "#000",
+                            }}
+                          >
+                            {item.name}
+                          </Text>
+                          <Text
+                            variant=""
+                            style={{
+                              fontSize: 22,
+                              fontWeight: "bold",
+                              marginBottom: 10,
+                              color: "#000",
+                            }}
+                          >
+                            PKR {item.price} /-
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+                <Divider />
+                <Button
+                  mode="outlined"
+                  dark={false}
+                  style={{
+                    color: "black",
+                  }}
+                  onPress={() => {
+                    bottomSheetModalRef.current?.close();
+                    navigation.navigate("Cart");
                   }}
                 >
                   <Text
-                    variant="bodyLarge"
                     style={{
-                      fontSize: 20,
-                      fontWeight: "medium",
+                      color: "black",
                     }}
                   >
-                    {item.name}
+                    Go to Cart
                   </Text>
-                  <Text
-                    variant=""
-                    style={{
-                      fontSize: 22,
-                      fontWeight: "bold",
-                      marginBottom: 10,
-                    }}
-                  >
-                    PKR {item.price} /-
-                  </Text>
-                </View>
-              </View>
+                </Button>
+              </>
             </View>
-          ))}
-      </View>
-    </>
-  );
-
-  return (
-    <>
-      <SafeAreaView />
-      <View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginTop: 20,
-            marginBottom: 20,
-            marginRight: 20,
-            marginLeft: 20,
-          }}
-        >
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={30} color="#e7e7e7e7" />
-          </TouchableOpacity>
-          <AntDesign name="heart" size={24} color="#e7e7e7e7" />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-          }}
-        >
-          <Image
-            source={{ uri: item.image }}
-            style={{
-              width: 200,
-              height: 200,
-              borderRadius: 20,
-            }}
-          />
-          <View
-            style={{
-              marginLeft: 20,
-            }}
-          >
-            <Text
-              variant="bodyLarge"
-              style={{
-                fontSize: 20,
-                fontWeight: "medium",
-              }}
-            >
-              {item.name}
-            </Text>
-            <Text
-              variant=""
-              style={{
-                fontSize: 22,
-                fontWeight: "bold",
-                marginBottom: 10,
-              }}
-            >
-              PKR {item.price} /-
-            </Text>
-            <View
-              style={{
-                // marginLeft: -30,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <AirbnbRating
-                count={5}
-                defaultRating={Math.floor(item.rating)}
-                size={14}
-                showRating={false}
-                isDisabled={true}
-              />
-              <Text variant="labelSmall">({item.numOfReviews})</Text>
-            </View>
-            <View
-              style={{
-                marginTop: 10,
-                marginBottom: 10,
-              }}
-            >
-              <Button mode="outlined" onPress={() => addItemToCart(item)}>
-                Add to Cart
-              </Button>
-            </View>
-            <Button mode="contained">Buy Now</Button>
-          </View>
-        </View>
-      </View>
-      <Divider />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          alignItems: "center",
-          marginTop: 20,
-          marginLeft: -10,
-        }}
-      >
-        <Button
-          mode={tab === "description" ? "contained" : "text"}
-          style={{
-            // fontSize: 20,
-            fontWeight: "medium",
-            marginLeft: 20,
-            marginTop: 20,
-          }}
-          onPress={() => setTab("description")}
-        >
-          Description
-        </Button>
-        <Button
-          mode={tab === "reviews" ? "contained" : "text"}
-          style={{
-            fontWeight: "medium",
-            marginLeft: 20,
-            marginTop: 20,
-          }}
-          onPress={() => setTab("reviews")}
-        >
-          Shipping Info
-        </Button>
-        <Button
-          mode={tab === "payment" ? "contained" : "text"}
-          style={{
-            fontWeight: "medium",
-            marginLeft: 20,
-            marginTop: 20,
-          }}
-          onPress={() => setTab("payment")}
-        >
-          Payment Options
-        </Button>
-      </View>
-      <Divider />
-      <View>
-        {tab === "description" ? (
-          <Text>Description Text</Text>
-        ) : tab === "reviews" ? (
-          <Text>Shipping Info Text</Text>
-        ) : tab === "payment" ? (
-          <Text>Payment Options Text</Text>
-        ) : (
-          <Text>Description Text</Text>
-        )}
-      </View>
-      <Snackbar
-        visible={visible}
-        onDismiss={onDismissSnackBar}
-        action={{
-          label: "X",
-          onPress: () => {
-            setVisible(false);
-          },
-        }}
-      >
-        Item Added to Cart
-      </Snackbar>
-      <BottomSheet
-        ref={sheetRef}
-        snapPoints={[450, 300, 0]}
-        borderRadius={10}
-        renderContent={renderContent}
-      />
+          </BottomSheetModal>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     </>
   );
 }
