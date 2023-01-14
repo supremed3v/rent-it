@@ -9,6 +9,7 @@ import { useCart } from "../context/CartContext";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
+  BottomSheetFlatList,
 } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 export default function ProductDetails({ route, navigation }) {
@@ -40,15 +41,72 @@ export default function ProductDetails({ route, navigation }) {
   const snapPoints = useMemo(() => ["25%", "50%"], []);
 
   // callbacks
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
   const handleDismissModalPress = useCallback(() => {
     bottomSheetModalRef.current?.dismiss() && setOpen(false);
   }, []);
+
+  const renderItem = ({ item }) => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: 20,
+          marginLeft: 20,
+          marginRight: 20,
+        }}
+        key={item.id}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={{ uri: item.image }}
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: 20,
+            }}
+          />
+          <View
+            style={{
+              marginLeft: 20,
+            }}
+          >
+            <Text
+              variant="bodyLarge"
+              style={{
+                fontSize: 20,
+                fontWeight: "medium",
+                color: "#000",
+              }}
+            >
+              {item.name}
+            </Text>
+            <Text
+              variant=""
+              style={{
+                fontSize: 22,
+                fontWeight: "bold",
+                marginBottom: 10,
+                color: "#000",
+              }}
+            >
+              PKR {item.price} /-
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <>
       <GestureHandlerRootView
@@ -221,90 +279,58 @@ export default function ProductDetails({ route, navigation }) {
           >
             <View
               style={{
-                backgroundColor: "#fff",
+                backgroundColor: "#e7e7e7e7",
                 height: 300,
                 flex: 1,
               }}
             >
-              <>
-                {cart &&
-                  cart.map((item) => (
-                    <View
+              <BottomSheetFlatList
+                data={cart}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+                ListFooterComponent={
+                  <>
+                    <Divider />
+                    <Text
                       style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginTop: 20,
-                        marginLeft: 20,
-                        marginRight: 20,
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "black",
+                        textAlign: "center",
                       }}
-                      key={item.id}
                     >
-                      <View
+                      Total:{" "}
+                      {cart.reduce((a, c) => a + c.price * c.quantity, 0)}{" "}
+                    </Text>
+                    <Button
+                      mode="outlined"
+                      dark={false}
+                      style={{
+                        color: "black",
+                        marginTop: 20,
+                        width: "90%",
+                        marginLeft: 20,
+                        backgroundColor: "#000",
+                        marginBottom: 20,
+                      }}
+                      onPress={() => {
+                        bottomSheetModalRef.current?.close();
+                        navigation.navigate("Cart");
+                      }}
+                    >
+                      <Text
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
+                          fontSize: 20,
+                          fontWeight: "bold",
                         }}
                       >
-                        <Image
-                          source={{ uri: item.image }}
-                          style={{
-                            width: 100,
-                            height: 100,
-                            borderRadius: 20,
-                          }}
-                        />
-                        <View
-                          style={{
-                            marginLeft: 20,
-                          }}
-                        >
-                          <Text
-                            variant="bodyLarge"
-                            style={{
-                              fontSize: 20,
-                              fontWeight: "medium",
-                              color: "#000",
-                            }}
-                          >
-                            {item.name}
-                          </Text>
-                          <Text
-                            variant=""
-                            style={{
-                              fontSize: 22,
-                              fontWeight: "bold",
-                              marginBottom: 10,
-                              color: "#000",
-                            }}
-                          >
-                            PKR {item.price} /-
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  ))}
-                <Divider />
-                <Button
-                  mode="outlined"
-                  dark={false}
-                  style={{
-                    color: "black",
-                  }}
-                  onPress={() => {
-                    bottomSheetModalRef.current?.close();
-                    navigation.navigate("Cart");
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "black",
-                    }}
-                  >
-                    Go to Cart
-                  </Text>
-                </Button>
-              </>
+                        Go to cart
+                      </Text>
+                    </Button>
+                  </>
+                }
+              />
+              <></>
             </View>
           </BottomSheetModal>
         </BottomSheetModalProvider>
