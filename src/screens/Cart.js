@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useCart } from "../context/CartContext";
 import { Entypo } from "@expo/vector-icons";
 
-export default function Cart() {
+export default function Cart({ navigation }) {
   const { cart, removeFromCart } = useCart();
   return (
     <>
@@ -71,10 +71,41 @@ export default function Cart() {
             </View>
           ))
         ) : (
-          <Text>Cart is empty</Text>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "50%",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              Cart is empty
+            </Text>
+            <Button
+              mode="outlined"
+              style={{
+                marginTop: 20,
+              }}
+              onPress={() => navigation.navigate("AllProducts")}
+            >
+              Buy Now
+            </Button>
+          </View>
         )}
         {cart.length !== 0 && (
-          <Text>
+          <Text
+            style={{
+              fontSize: 22,
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
             Total:{" "}
             {cart.reduce((acc, item) => acc + item.price * item.quantity, 0)}
           </Text>
