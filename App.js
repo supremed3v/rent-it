@@ -8,6 +8,7 @@ import {
   Provider as PaperProvider,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import "react-native-gesture-handler";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { NativeScreen } from "./src/components/Navigation";
@@ -18,6 +19,7 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 });
 
 import { CartProvider } from "./src/context/CartContext";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const CombinedDarkTheme = {
   ...MD3DarkTheme,

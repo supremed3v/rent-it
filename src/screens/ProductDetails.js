@@ -6,7 +6,7 @@ import { useTheme, Text, Button, Divider, Snackbar } from "react-native-paper";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCart } from "../context/CartContext";
-import { BottomSheet } from "react-native-btr";
+import BottomSheet from "reanimated-bottom-sheet";
 
 export default function ProductDetails({ route, navigation }) {
   const [visible, setVisible] = useState(false);
@@ -20,14 +20,81 @@ export default function ProductDetails({ route, navigation }) {
       return Alert.alert("Item already in cart");
     }
     addToCart(prod);
-    onToggleSnackBar();
-    onToggle();
+    sheetPress();
   };
 
-  const onToggleSnackBar = () => setVisible(!visible);
-  const onDismissSnackBar = () => setVisible(false);
+  const sheetPress = () => {
+    sheetRef.current.snapTo(0);
+  };
 
-  const onToggle = () => setOpen(!open);
+  const sheetRef = useRef(null);
+
+  const renderContent = () => (
+    <>
+      <View
+        style={{
+          backgroundColor: "#fff",
+          height: 300,
+        }}
+      >
+        {cart &&
+          cart.map((item) => (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 20,
+                marginLeft: 20,
+                marginRight: 20,
+              }}
+              key={item.id}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  source={{ uri: item.image }}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 20,
+                  }}
+                />
+                <View
+                  style={{
+                    marginLeft: 20,
+                  }}
+                >
+                  <Text
+                    variant="bodyLarge"
+                    style={{
+                      fontSize: 20,
+                      fontWeight: "medium",
+                    }}
+                  >
+                    {item.name}
+                  </Text>
+                  <Text
+                    variant=""
+                    style={{
+                      fontSize: 22,
+                      fontWeight: "bold",
+                      marginBottom: 10,
+                    }}
+                  >
+                    PKR {item.price} /-
+                  </Text>
+                </View>
+              </View>
+            </View>
+          ))}
+      </View>
+    </>
+  );
 
   return (
     <>
@@ -186,27 +253,11 @@ export default function ProductDetails({ route, navigation }) {
         Item Added to Cart
       </Snackbar>
       <BottomSheet
-        visible={open}
-        onBackButtonPress={onToggle}
-        onBackdropPress={onToggle}
-      >
-        <View
-          style={{
-            backgroundColor: "#fff",
-            height: 300,
-          }}
-        >
-          <Text>Bottom Sheet</Text>
-        </View>
-      </BottomSheet>
+        ref={sheetRef}
+        snapPoints={[450, 300, 0]}
+        borderRadius={10}
+        renderContent={renderContent}
+      />
     </>
   );
-}
-
-{
-  /* <Text>{item.name}</Text>
-<Button mode="elevated" onPress={() => navigation.goBack()}>
-  go back
-</Button>
-*/
 }
