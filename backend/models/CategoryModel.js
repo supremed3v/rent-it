@@ -19,6 +19,12 @@ const CategorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  relatedProducts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
 });
 
 export default mongoose.models.Category ||

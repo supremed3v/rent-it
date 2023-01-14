@@ -31,12 +31,6 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-    },
-  ],
   orders: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -46,7 +40,7 @@ const UserSchema = new mongoose.Schema({
   rentedItems: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "RentedItem",
+      ref: "Product",
     },
   ],
 });
