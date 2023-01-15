@@ -38,8 +38,8 @@ export const newProduct = async (req, res) => {
       message: "Not authorized",
     });
   } else {
-    const category = await Category.findById(product.category);
-    category.products.push(product._id);
+    const category = await Category.find({ name: category });
+    category.relatedProducts.push(product._id);
     user.rentedItems.push(product);
     await category.save();
   }
