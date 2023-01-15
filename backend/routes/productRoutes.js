@@ -23,11 +23,6 @@ router.post(
   addCategory
 );
 
-router.get(
-  "/categories",
-  isAuthenticatedUser,
-  authorizeRoles("admin"),
-  getCategories
-);
+router.get("/categories", getCategories);
 
 export default router;
