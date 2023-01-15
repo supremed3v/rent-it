@@ -17,6 +17,16 @@ export const newProduct = async (req, res) => {
   }
 
   const user = await User.findById(req.user.id);
+  const categories = await Category.find();
+
+  const relatedCat = categories.find((cat) => cat.name === category);
+  const relatedCatId = relatedCat._id;
+  if (!relatedCat) {
+    return res.status(400).json({
+      success: false,
+      message: "Category not found",
+    });
+  }
 
   const product = await Product.create({
     name,
@@ -32,17 +42,12 @@ export const newProduct = async (req, res) => {
       success: false,
       message: "User not found",
     });
-  } else if (user.role !== "seller" || user.role !== "admin") {
-    return res.status(400).json({
-      success: false,
-      message: "Not authorized",
-    });
-  } else {
-    const category = await Category.find({ name: category });
-    category.relatedProducts.push(product._id);
-    user.rentedItems.push(product);
-    await category.save();
   }
+  user.rentedItems.push(product._id);
+  const pushCat = await Category.findById(relatedCatId);
+  pushCat.relatedProducts.push(product._id);
+  await pushCat.save({ validateBeforeSave: false });
+  await user.save();
 
   res.status(201).json({
     success: true,
