@@ -8,7 +8,7 @@ import User from "../models/UserModel.js";
 // @access  Public
 
 export const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, avatar } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({
@@ -29,6 +29,7 @@ export const registerUser = async (req, res) => {
     name,
     email,
     password,
+    avatar,
   });
 
   sendToken(user, 200, res);
@@ -47,6 +48,15 @@ export const loginUser = async (req, res) => {
     return res.status(400).json({
       success: false,
       message: "Please enter all fields",
+    });
+  }
+
+  const { token } = req.cookies;
+
+  if (token) {
+    return res.status(400).json({
+      success: false,
+      message: "You are already logged in",
     });
   }
 

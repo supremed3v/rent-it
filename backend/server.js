@@ -4,17 +4,21 @@ import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
+import productRoute from "./routes/productRoutes.js";
+import userRoute from "./routes/userRoutes.js";
 
 dotenv.config();
+connectDB();
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 
-connectDB();
-
 const PORT = process.env.PORT || 5000;
+
+app.use("/api/v1", productRoute);
+app.use("/api/v1", userRoute);
 
 process.on("uncaughtException", (err) => {
   console.log(`Error: ${err.message}`);
@@ -29,6 +33,11 @@ const server = app.listen(PORT, () => {
 // Handle unhandled promise rejections
 
 process.on("unhandledRejection", (err) => {
+  console.log(`Logged Error: ${err}`);
+  server.close(() => process.exit(1));
+});
+
+process.on("ValidationError", (err) => {
   console.log(`Logged Error: ${err}`);
   server.close(() => process.exit(1));
 });
