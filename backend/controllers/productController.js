@@ -1,5 +1,6 @@
 import Product from "../models/ProductModel.js";
 import Category from "../models/CategoryModel.js";
+import User from "../models/UserModel.js";
 
 // @desc    Create new product
 // @route   POST /api/v1/admin/product/new
@@ -15,6 +16,8 @@ export const newProduct = async (req, res) => {
     });
   }
 
+  const user = await User.findById(req.user.id);
+
   const product = await Product.create({
     name,
     price,
@@ -23,6 +26,23 @@ export const newProduct = async (req, res) => {
     images,
     seller: req.user.id,
   });
+
+  if (!user) {
+    return res.status(400).json({
+      success: false,
+      message: "User not found",
+    });
+  } else if (user.role !== "seller" || user.role !== "admin") {
+    return res.status(400).json({
+      success: false,
+      message: "Not authorized",
+    });
+  } else {
+    const category = await Category.findById(product.category);
+    category.products.push(product._id);
+    user.rentedItems.push(product);
+    await category.save();
+  }
 
   res.status(201).json({
     success: true,
