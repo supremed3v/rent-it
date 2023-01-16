@@ -59,6 +59,22 @@ const ProductSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
+      reply: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          comment: {
+            type: String,
+            required: true,
+          },
+          user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+          },
+        },
+      ],
     },
   ],
   createdAt: {

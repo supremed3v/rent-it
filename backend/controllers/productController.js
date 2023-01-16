@@ -121,3 +121,35 @@ export const updateProduct = async (req, res) => {
     product,
   });
 };
+
+// @desc    Delete product
+// @route   DELETE /api/v1/admin/product/:id
+
+export const deleteProduct = async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return res.status(404).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
+
+  if (
+    product.seller.toString() !== req.user.id ||
+    req.user.role !== "admin" ||
+    req.user.role !== "seller"
+  ) {
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized to delete this product",
+    });
+  }
+
+  await product.remove();
+
+  res.status(200).json({
+    success: true,
+    message: "Product deleted successfully",
+  });
+};
