@@ -178,7 +178,7 @@ export const createProductReview = async (req, res) => {
 
     product.reviews.push(review);
 
-    product.numReviews = product.reviews.length;
+    product.numOfReviews = product.reviews.length;
 
     product.rating =
       product.reviews.reduce((acc, item) => item.rating + acc, 0) /
@@ -193,7 +193,7 @@ export const createProductReview = async (req, res) => {
 };
 
 export const getTopProducts = async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+  const products = await Product.find({}).sort({ rating: -1 }).limit(5);
 
   res.json(products);
 };
@@ -258,4 +258,54 @@ export const deleteReview = async (req, res) => {
       throw new Error("Review not found");
     }
   }
+};
+
+export const deleteReply = async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const review = product.reviews.find(
+      (r) => r._id.toString() === req.params.reviewId.toString()
+    );
+
+    if (review) {
+      const reply = review.reply.find(
+        (r) => r._id.toString() === req.params.replyId.toString()
+      );
+
+      if (reply) {
+        if (
+          (reply.user.toString() !== req.user.id.toString() &&
+            req.user.role !== "seller") ||
+          req.user.role !== "admin"
+        ) {
+          res.status(401);
+          throw new Error("Not authorized to delete this reply");
+        }
+        await review.reply.pull(reply._id);
+        await product.save();
+        res.status(201).json({ message: "Reply deleted" });
+      } else {
+        res.status(404);
+        throw new Error("Reply not found");
+      }
+    } else {
+      res.status(404);
+      throw new Error("Review not found");
+    }
+  }
+};
+
+export const getProductsByCategory = async (req, res) => {
+  const categories = await Category.find({});
+  const products = await Product.find({});
+
+  const productByCategories = categories.map((category) => {
+    const productsByCategory = products.filter(
+      (product) => product.category === category.name
+    );
+    return { category: category.name, products: productsByCategory };
+  });
+
+  res.json(productByCategories);
 };
