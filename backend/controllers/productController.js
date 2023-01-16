@@ -55,3 +55,69 @@ export const newProduct = async (req, res) => {
     product,
   });
 };
+
+// @desc    Get all products
+// @route   GET /api/v1/products
+
+export const getProducts = async (req, res) => {
+  const products = await Product.find();
+  res.status(200).json({
+    success: true,
+    count: products.length,
+    products,
+  });
+};
+
+// @desc    Get single product
+// @route   GET /api/v1/product/:id
+
+export const getProduct = async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    return res.status(404).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
+};
+
+// @desc    Update product
+// @route   PUT /api/v1/admin/product/:id
+
+export const updateProduct = async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    return res.status(404).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
+
+  if (
+    (product.seller.toString() !== req.user.id && req.user.role !== "admin") ||
+    req.user.role !== "seller"
+  ) {
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized to update this product",
+    });
+  }
+
+  let productFields = req.body;
+
+  product = await Product.findByIdAndUpdate(req.params.id, productFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Product updated successfully",
+    product,
+  });
+};
