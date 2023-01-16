@@ -202,11 +202,12 @@ export const replyReview = async (req, res) => {
   const { comment } = req.body;
 
   const product = await Product.findById(req.params.id);
+  const user = await User.findById(req.user.id);
 
   const reply = {
-    name: req.user.name,
+    name: user.name,
     reply: comment,
-    user: req.user.id,
+    user: user._id,
   };
 
   if (product) {
@@ -220,7 +221,7 @@ export const replyReview = async (req, res) => {
     }
 
     if (review) {
-      review.reply = reply;
+      review.reply.push(reply);
       await product.save();
       res.status(201).json({ message: "Reply added" });
     } else {
