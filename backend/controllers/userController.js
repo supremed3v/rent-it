@@ -1,6 +1,5 @@
 import { sendToken } from "../middlewares/sendToken.js";
 import User from "../models/UserModel.js";
-import crypto from "crypto";
 import { sendMail } from "../middlewares/sendMail.js";
 import otpGenerator from "otp-generator";
 
