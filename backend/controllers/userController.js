@@ -2,6 +2,7 @@ import { sendToken } from "../middlewares/sendToken.js";
 import User from "../models/UserModel.js";
 import crypto from "crypto";
 import { sendMail } from "../middlewares/sendMail.js";
+import otpGenerator from "otp-generator";
 
 // @desc    Register a user
 
@@ -184,21 +185,25 @@ export const forgotPassword = async (req, res) => {
     });
   }
 
-  const resetToken = crypto.randomBytes(20).toString("hex");
-  user.resetPasswordToken = resetToken;
-  user.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
+  const resetOtp = otpGenerator.generate(6, {
+    upperCase: false,
+    specialChars: false,
+    alphabets: false,
+  });
+
+  const expiry = new Date(Date.now() + 10 * 60 * 1000);
+
+  user.resetPasswordToken = resetOtp;
+  user.resetPasswordExpire = expiry;
 
   await user.save();
 
-  const resetUrl = `http://localhost:3000/password/reset/${resetToken}`;
-
-  const message = `
-    <h1>You have requested a password reset</h1>
-    <p>Please go to this link to reset your password</p>
-    <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
-    <hr />
-    <p>This email may contain sensitive information</p>
-  `;
+  const message =
+    `Dear User, \n\n` +
+    "OTP for Reset Password is : \n\n" +
+    `${resetOtp}\n\n` +
+    "This is a auto-generated email. Please do not reply to this email.\n\n" +
+    "Regards\n\n";
 
   try {
     await sendMail({
