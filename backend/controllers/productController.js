@@ -324,3 +324,29 @@ export const getProductsByCategory = async (req, res) => {
 
   res.json(productByCategories);
 };
+
+// @desc    Get update product status
+// @route   PUT /api/products/:id
+// @access  Private/Admin
+
+export const updateProductStatus = async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    if (req.user.role !== "admin") {
+      res.status(401);
+      throw new Error("Not authorized to update this product");
+    }
+
+    if (product.isApproved === true) {
+      res.status(401);
+      throw new Error("Product already approved");
+    }
+
+    product.isApproved = req.body.isApproved;
+    await product.save({
+      validateBeforeSave: false,
+    });
+    res.status(201).json({ message: "Product updated" });
+  }
+};
