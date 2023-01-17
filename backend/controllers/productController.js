@@ -310,7 +310,10 @@ export const getProductsByCategory = async (req, res) => {
 
   const productByCategories = categories.map((category) => {
     const productsByCategory = products.filter(
-      (product) => product.category === category.name
+      (product) =>
+        product.category === category.name &&
+        product.isApproved === true &&
+        product.isAvailable === true
     );
     return {
       category: {
