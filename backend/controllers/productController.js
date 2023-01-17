@@ -195,7 +195,15 @@ export const createProductReview = async (req, res) => {
 export const getTopProducts = async (req, res) => {
   const products = await Product.find({}).sort({ rating: -1 }).limit(5);
 
-  res.json(products);
+  if (!products) {
+    res.status(404);
+    throw new Error("Products not found with a rating of 5");
+  }
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
 };
 
 export const replyReview = async (req, res) => {
