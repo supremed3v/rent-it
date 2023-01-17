@@ -304,7 +304,14 @@ export const getProductsByCategory = async (req, res) => {
     const productsByCategory = products.filter(
       (product) => product.category === category.name
     );
-    return { category: category.name, products: productsByCategory };
+    return {
+      category: {
+        categoryName: category.name,
+        categoryImage: category.image,
+      },
+      products: productsByCategory,
+      count: productsByCategory.length,
+    };
   });
 
   res.json(productByCategories);

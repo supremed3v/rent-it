@@ -3,7 +3,10 @@ import {
   isAuthenticatedUser,
   authorizeRoles,
 } from "../middlewares/authenticate.js";
-import { newProduct } from "../controllers/productController.js";
+import {
+  getProductsByCategory,
+  newProduct,
+} from "../controllers/productController.js";
 import {
   addCategory,
   getCategories,
@@ -24,5 +27,6 @@ router.post(
 );
 
 router.get("/categories", getCategories);
+router.get("/getCategoriesProducts", getProductsByCategory);
 
 export default router;
