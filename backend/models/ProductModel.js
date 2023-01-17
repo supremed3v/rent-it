@@ -85,6 +85,10 @@ const ProductSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  available: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 export default mongoose.models.Product ||
