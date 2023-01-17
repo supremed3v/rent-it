@@ -95,3 +95,83 @@ export const logoutUser = async (req, res) => {
     message: "Logged out",
   });
 };
+
+// @desc    Get currently logged in user details
+
+// @route   GET /api/v1/me
+
+// @access  Private
+
+export const getUserProfile = async (req, res) => {
+  const user = await User.findById(req.user.id);
+  res.status(200).json({
+    success: true,
+    user,
+  });
+};
+
+// @desc    Update / Change password
+
+// @route   PUT /api/v1/password/update
+
+// @access  Private
+
+export const updatePassword = async (req, res) => {
+  const user = await User.findById(req.user.id).select("+password");
+
+  const isMatched = await user.comparePassword(req.body.oldPassword);
+
+  if (!isMatched) {
+    return res.status(400).json({
+      success: false,
+      message: "Old password is incorrect",
+    });
+  }
+
+  if (req.body.newPassword !== req.body.confirmPassword) {
+    return res.status(400).json({
+      success: false,
+      message: "Passwords do not match",
+    });
+  }
+
+  user.password = req.body.newPassword;
+  await user.save();
+
+  sendToken(user, 200, res);
+};
+
+// @desc    Update user profile
+
+// @route   PUT /api/v1/me/update
+
+// @access  Private
+
+export const updateUserProfile = async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
+  if (req.body.avatar !== "") {
+    user.avatar = req.body.avatar || user.avatar;
+  }
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+  });
+};
+
+// @desc    Forgot password
+
+// @route   POST /api/v1/password/forgot
+
+// @access  Public
+
+export const forgotPassword = async (req, res) => {
+  const user = await User.findOne({
+    email: req.body.email,
+  });
+};

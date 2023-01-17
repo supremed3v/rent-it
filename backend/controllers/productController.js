@@ -350,3 +350,31 @@ export const updateProductStatus = async (req, res) => {
     res.status(201).json({ message: "Product updated" });
   }
 };
+
+export const getProductsBySeller = async (req, res) => {
+  const products = await Product.find({ seller: req.user.id });
+
+  if (!products) {
+    res.status(404);
+    throw new Error("Products not found");
+  }
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+};
+
+export const getProductsBySellerId = async (req, res) => {
+  const products = await Product.find({ seller: req.params.id });
+
+  if (!products) {
+    res.status(404);
+    throw new Error("Products not found");
+  }
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+};
