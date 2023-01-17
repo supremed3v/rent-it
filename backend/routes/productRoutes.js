@@ -27,6 +27,6 @@ router.post(
 );
 
 router.get("/categories", getCategories);
-router.get("/getCategoriesProducts", getProductsByCategory);
+router.get("/getCategoriesProducts/:category", getProductsByCategory);
 
 export default router;

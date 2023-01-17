@@ -305,27 +305,27 @@ export const deleteReply = async (req, res) => {
 };
 
 export const getProductsByCategory = async (req, res) => {
-  const categories = await Category.find({});
-  const products = await Product.find({});
+  let queryString = req.params.category;
+  const myQuery = queryString.replace(/%20/g, " ");
+  const products = await Product.find({ category: myQuery });
+  const category = await Category.findOne({ name: myQuery });
 
-  const productByCategories = categories.map((category) => {
-    const productsByCategory = products.filter(
-      (product) =>
-        product.category === category.name &&
-        product.isApproved === true &&
-        product.isAvailable === true
-    );
-    return {
-      category: {
-        categoryName: category.name,
-        categoryImage: category.image,
-      },
-      products: productsByCategory,
-      count: productsByCategory.length,
-    };
+  if (!products) {
+    res.status(404);
+    throw new Error("Products not found");
+  }
+
+  const productsWithCategory = products.map((product) => {
+    if (product.category === category.name) {
+      return {
+        ...product._doc,
+      };
+    }
   });
-
-  res.json(productByCategories);
+  res.status(200).json({
+    success: true,
+    products: productsWithCategory,
+  });
 };
 
 // @desc    Get update product status
