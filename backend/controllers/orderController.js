@@ -133,6 +133,13 @@ export const updateOrder = async (req, res) => {
     }
   }
 
+  if (order.orderStatus === "Returned") {
+    order.returnedAt = Date.now();
+    order.orderItems.forEach(async (item) => {
+      await updateAvailability(item._id);
+    });
+  }
+
   await order.save();
   res.status(200).json({
     success: true,
@@ -141,6 +148,10 @@ export const updateOrder = async (req, res) => {
 
 const updateAvailability = async (id) => {
   const product = await Product.findById(id);
-  product.available = false;
+  if (product.availability === true) {
+    product.availability = false;
+  } else {
+    product.availability = true;
+  }
   await product.save({ validateBeforeSave: false });
 };
