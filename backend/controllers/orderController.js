@@ -1,5 +1,7 @@
 import Order from "../models/OrderModel.js";
 import Product from "../models/ProductModel.js";
+import { sendMail } from "../middlewares/sendMail.js";
+import User from "../models/UserModel.js";
 
 export const newOrder = async (req, res) => {
   const { orderItems, shippingAddress, paymentInfo, itemsPrice, totalPrice } =
@@ -80,11 +82,55 @@ export const updateOrder = async (req, res) => {
     order.deliveredAt = undefined;
   }
 
+  if (order.orderStatus === "Confirmed") {
+    order.paidAt = Date.now();
+    const message =
+      `Your Order has been confirmed! || Order#: ${order._id}, \n\n` +
+      "This is the confirmation email for your order. You can always check your order status from your orders tab through applciation. \n\n" +
+      "This is a auto-generated email. Please do not reply to this email.\n\n" +
+      "Thankyou for your order!\n\n";
+
+    try {
+      const user = await User.findById(order.user._id);
+      const orderEmail = user.email;
+      await sendMail({
+        email: orderEmail,
+        subject: "Order Confirmed",
+        text: message,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
+  }
+
   if (order.orderStatus === "Delivered") {
     order.deliveredAt = Date.now();
     order.orderItems.forEach(async (item) => {
       await updateAvailability(item._id);
     });
+    const message =
+      `Your Order has been Delivered! || Order#: ${order._id}, \n\n` +
+      "This is the confirmation email for the delivery of your order \n\n" +
+      "This is a auto-generated email. Please do not reply to this email.\n\n" +
+      "Thankyou for your order!\n\n";
+
+    try {
+      const user = await User.findById(order.user._id);
+      const orderEmail = user.email;
+      await sendMail({
+        email: orderEmail,
+        subject: "Order Delivered",
+        text: message,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
   }
 
   await order.save();
