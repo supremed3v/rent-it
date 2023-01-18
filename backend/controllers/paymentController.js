@@ -21,3 +21,11 @@ export const createPayment = async (req, res) => {
     });
   }
 };
+
+export const sendPubKey = async (req, res) => {
+  const publishableKey = process.env.STRIPE_PUBLISH_KEY;
+  res.status(200).json({
+    publishableKey,
+    success: true,
+  });
+};
