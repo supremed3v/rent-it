@@ -60,7 +60,7 @@ export const newProduct = async (req, res) => {
 // @route   GET /api/v1/products
 
 export const getProducts = async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find({ available: true });
   res.status(200).json({
     success: true,
     count: products.length,
