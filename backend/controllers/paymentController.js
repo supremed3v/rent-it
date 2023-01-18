@@ -1,12 +1,15 @@
-import stripe from "stripe";
+import Stripe from "stripe";
 
-const myStripe = new stripe(process.env.STRIPE_SECRET_KEY);
+const myStripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const createPayment = async (req, res) => {
   try {
     const paymentIntent = await myStripe.paymentIntents.create({
       amount: req.body.amount,
       currency: "PKR",
+      metadata: {
+        companyName: "Rent-It",
+      },
     });
     const clientSecret = paymentIntent.client_secret;
 
