@@ -1,11 +1,4 @@
-import {
-  View,
-  ScrollView,
-  Image,
-  FlatList,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { View, ScrollView, Image, FlatList } from "react-native";
 import React from "react";
 import { useTheme, Text, Divider, Button } from "react-native-paper";
 import { productsData } from "../../assets/data";

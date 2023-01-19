@@ -1,7 +1,6 @@
 import { FlatList, SafeAreaView, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Text } from "react-native-paper";
-import { productsData } from "../../assets/data";
 import ProductCard from "../components/ProductCard";
 import { API } from "../context/ProductsContext";
 import axios from "axios";
@@ -26,7 +25,6 @@ export default function CategorizedProducts({ route }) {
   useEffect(() => {
     getData();
   }, []);
-  console.log(filteredProducts);
 
   const renderItem = ({ item }) => <ProductCard item={item} />;
 

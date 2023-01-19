@@ -20,7 +20,7 @@ export default function ProductDetails({ route, navigation }) {
   const { cart, addToCart } = useCart();
   console.log(cart);
   const addItemToCart = (prod) => {
-    if (cart.find((item) => item.id === prod.id)) {
+    if (cart.find((item) => item._id === prod._id)) {
       return Alert.alert("Item already in cart");
     }
     addToCart(prod);
@@ -287,7 +287,7 @@ export default function ProductDetails({ route, navigation }) {
               <BottomSheetFlatList
                 data={cart}
                 renderItem={renderItem}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item._id}
                 ListFooterComponent={
                   <>
                     <Divider />
