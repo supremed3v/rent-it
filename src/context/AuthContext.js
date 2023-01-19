@@ -10,6 +10,7 @@ const initialState = {
   isAuthenticated: false,
   loading: false,
   error: null,
+  loginToken: null,
 };
 
 export const AuthContextProvider = ({ children }) => {
@@ -29,9 +30,10 @@ export const AuthContextProvider = ({ children }) => {
         isAuthenticated: true,
       });
       const jsonValue = res.data.token;
-      console.log("token", jsonValue);
       try {
-        if (jsonValue) await AsyncStorage.setItem("token", jsonValue);
+        if (jsonValue) {
+          AsyncStorage.setItem("token", jsonValue);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -45,30 +47,46 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const loadUser = async () => {
-    // const token = AsyncStorage.getItem("token");
-    // try {
-    //   const res = await fetch(`${API}/api/v1/me`, {
-    //     method: "GET",
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    //   setAuthState({
-    //     ...authState,
-    //     loading: false,
-    //     user: res.data.user,
-    //     isAuthenticated: true,
-    //   });
-    // } catch (error) {
-    //   setAuthState({
-    //     ...authState,
-    //     loading: false,
-    //     isAuthenticated: false,
-    //     error: error.response.data.message,
-    //   });
-    // }
+  const getToken = async () => {
+    try {
+      const value = AsyncStorage.getItem("token");
+      if (value !== null) {
+        return value;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+  const loadUser = async () => {
+    try {
+      const res = await axios.get(`${API}/api/v1/me`, {
+        headers: {
+          Authorization: `Bearer ${authState.loginToken}`,
+        },
+      });
+      setAuthState({
+        ...authState,
+        loading: false,
+        user: res.data.user,
+        isAuthenticated: true,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        isAuthenticated: false,
+        error: error.response.data.message,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getToken().then((value) =>
+      setAuthState({ ...authState, loginToken: value })
+    );
+  }, []);
+
+  console.log(authState.loginToken);
 
   return (
     <AuthContext.Provider

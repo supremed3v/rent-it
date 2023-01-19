@@ -11,18 +11,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Home({ navigation }) {
   const theme = useTheme();
   const { user } = useAuthContext();
-  const getToken = async () => {
-    try {
-      const token = AsyncStorage.getItem("token");
-      console.log(token);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getToken();
-  }, []);
 
   const { categories, error } = useProductContext();
   console.log("Categories:", categories);
