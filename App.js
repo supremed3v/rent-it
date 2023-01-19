@@ -21,6 +21,7 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 import { CartProvider } from "./src/context/CartContext";
 import { ProductProvider } from "./src/context/ProductsContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { AuthContextProvider } from "./src/context/AuthContext";
 
 const CombinedDarkTheme = {
   ...MD3DarkTheme,
@@ -35,16 +36,18 @@ const CombinedDarkTheme = {
 export default function App() {
   return (
     <>
-      <ProductProvider>
-        <CartProvider>
-          <SafeAreaView mode="light" />
-          <PaperProvider theme={CombinedDarkTheme}>
-            <NavigationContainer theme={CombinedDarkTheme}>
-              <NativeScreen />
-            </NavigationContainer>
-          </PaperProvider>
-        </CartProvider>
-      </ProductProvider>
+      <AuthContextProvider>
+        <ProductProvider>
+          <CartProvider>
+            <SafeAreaView mode="light" />
+            <PaperProvider theme={CombinedDarkTheme}>
+              <NavigationContainer theme={CombinedDarkTheme}>
+                <NativeScreen />
+              </NavigationContainer>
+            </PaperProvider>
+          </CartProvider>
+        </ProductProvider>
+      </AuthContextProvider>
     </>
   );
 }
