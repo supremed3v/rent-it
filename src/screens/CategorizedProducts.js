@@ -1,16 +1,32 @@
 import { FlatList, SafeAreaView, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "react-native-paper";
 import { productsData } from "../../assets/data";
 import ProductCard from "../components/ProductCard";
+import { API } from "../context/ProductsContext";
+import axios from "axios";
 
 export default function CategorizedProducts({ route }) {
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const { category } = route.params;
   console.log(category);
 
-  const filteredProducts = productsData.filter((product) => {
-    return product.category === category;
-  });
+  const getData = async () => {
+    try {
+      const { data } = await axios.get(
+        `${API}/api/v1/getCategoriesProducts/${category}`
+      );
+      setFilteredProducts(data.products);
+      console.log("data", data);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+  console.log(filteredProducts);
 
   const renderItem = ({ item }) => <ProductCard item={item} />;
 
@@ -25,7 +41,7 @@ export default function CategorizedProducts({ route }) {
       <FlatList
         data={filteredProducts}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         numColumns={2}
         ListHeaderComponent={
           <Text
@@ -35,7 +51,9 @@ export default function CategorizedProducts({ route }) {
               marginBottom: 20,
             }}
           >
-            Products: {filteredProducts.length}
+            {filteredProducts.length !== 0 && (
+              <Text>Products: {filteredProducts.length}</Text>
+            )}
           </Text>
         }
         ListEmptyComponent={

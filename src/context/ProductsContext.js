@@ -11,7 +11,7 @@ const initialState = {
   error: null,
 };
 
-const API = "http://192.168.18.3:5000";
+export const API = "http://192.168.18.3:5000";
 
 export const ProductProvider = ({ children }) => {
   const [state, setState] = useState(initialState);
