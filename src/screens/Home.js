@@ -1,15 +1,29 @@
 import { View, ScrollView, Image, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTheme, Text, Divider, Button } from "react-native-paper";
 import { productsData } from "../../assets/data";
 import ProductCard from "../components/ProductCard";
 import { useProductContext } from "../context/ProductsContext";
 import { useAuthContext } from "../context/AuthContext";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default function Home({ navigation }) {
   const theme = useTheme();
   const { user } = useAuthContext();
-  console.log(user);
+  const getToken = async () => {
+    try {
+      const token = AsyncStorage.getItem("token");
+      console.log(token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
+
   const { categories, error } = useProductContext();
   console.log("Categories:", categories);
   console.log("Error:", error);

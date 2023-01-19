@@ -2,15 +2,13 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 
 export const isAuthenticatedUser = async (req, res, next) => {
-  const { token } = req.cookies;
+  const { token } = req.header("authorization");
 
   if (!token) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "Login first to access this resource.",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "Login first to access this resource.",
+    });
   }
 
   try {
@@ -28,12 +26,10 @@ export const isAuthenticatedUser = async (req, res, next) => {
 export const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: `Role (${req.user.role}) is not allowed to access this resource`,
-        });
+      return res.status(400).json({
+        success: false,
+        message: `Role (${req.user.role}) is not allowed to access this resource`,
+      });
     }
     next();
   };
