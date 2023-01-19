@@ -4,9 +4,11 @@ import { useTheme, Text, Divider, Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { categoriesData } from "../../assets/data";
 import ProductsCategory from "../components/ProductsCategory";
+import { useProductContext } from "../context/ProductsContext";
 
 export default function AllProducts() {
   const [selected, setSelected] = useState([]);
+  const { categoriesDetails } = useProductContext();
 
   const renderItem = ({ item }) => <ProductsCategory item={item} />;
 
@@ -24,7 +26,7 @@ export default function AllProducts() {
       </Text>
       {/* Grid view for categories button */}
       <FlatList
-        data={categoriesData}
+        data={categoriesDetails}
         renderItem={renderItem}
         //Setting the number of column
         numColumns={2}

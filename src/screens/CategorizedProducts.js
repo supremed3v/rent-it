@@ -12,8 +12,6 @@ export default function CategorizedProducts({ route }) {
     return product.category === category;
   });
 
-  console.log(filteredProducts);
-
   const renderItem = ({ item }) => <ProductCard item={item} />;
 
   return (

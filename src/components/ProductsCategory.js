@@ -34,7 +34,7 @@ export default function ProductsCategory({ item }) {
           color: "#000",
         }}
       >
-        {item?.numOfProducts}
+        {item?.relatedProducts.length}
       </Text>
     </TouchableOpacity>
   );
