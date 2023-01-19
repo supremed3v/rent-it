@@ -21,6 +21,7 @@ import {
 import CategorizedProducts from "../screens/CategorizedProducts";
 import ProductCard from "./ProductCard";
 import Cart from "../screens/Cart";
+import LoginSignup from "../screens/LoginSignup";
 const { useCart } = require("../context/CartContext");
 
 const CustomTabBar = ({ children }) => {
@@ -205,12 +206,14 @@ export const NativeScreen = () => {
         screenOptions={{
           headerShown: false,
         }}
+        initialRouteName={"LoginSignup"}
       >
         <Stack.Screen name="HomeTab" component={TabNavigation} />
         <Stack.Screen name="AllProducts" component={AllProducts} />
         <Stack.Screen name="ProductDetails" component={ProductDetails} />
         <Stack.Screen name="FilteredProducts" component={CategorizedProducts} />
         <Stack.Screen name="ProductCard" component={ProductCard} />
+        <Stack.Screen name="LoginSignup" component={LoginSignup} />
       </Stack.Navigator>
     </PaperProvider>
   );
