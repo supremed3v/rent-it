@@ -1,13 +1,11 @@
-import { View, ScrollView, FlatList } from "react-native";
-import React, { useState } from "react";
-import { useTheme, Text, Divider, Button } from "react-native-paper";
+import { View, FlatList } from "react-native";
+import React from "react";
+import { Text, Divider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { categoriesData } from "../../assets/data";
 import ProductsCategory from "../components/ProductsCategory";
 import { useProductContext } from "../context/ProductsContext";
 
 export default function AllProducts() {
-  const [selected, setSelected] = useState([]);
   const { categoriesDetails } = useProductContext();
 
   const renderItem = ({ item }) => <ProductsCategory item={item} />;

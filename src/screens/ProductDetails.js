@@ -2,8 +2,8 @@ import { Image, TouchableOpacity, View, Alert } from "react-native";
 import React, { useState, useMemo, useCallback, useRef } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
-import { useTheme, Text, Button, Divider, Snackbar } from "react-native-paper";
-import { AirbnbRating, Rating } from "react-native-ratings";
+import { Text, Button, Divider, Snackbar } from "react-native-paper";
+import { AirbnbRating } from "react-native-ratings";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCart } from "../context/CartContext";
 import {
