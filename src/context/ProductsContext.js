@@ -5,7 +5,7 @@ const ProductContext = createContext();
 
 const initialState = {
   products: [],
-  categories: [],
+  categories: {},
   loading: false,
   error: null,
 };
@@ -14,21 +14,23 @@ export const ProductProvider = ({ children }) => {
   const [state, setState] = useState(initialState);
 
   const getCategories = async () => {
-    setState({ ...state, loading: true });
     try {
-      const { data } = axios.get("http://192.168.18.3/api/v1/getCategories");
+      setState({ ...state, loading: true });
+      const { data } = await axios.get(
+        "http://192.168.18.3:5000/api/v1/categories"
+      );
       setState({
         ...state,
         loading: false,
-        categories: data,
+        categories: data.categoryName,
       });
-      console.log(data);
     } catch (error) {
       setState({
         ...state,
         loading: false,
-        error: error.response.error.message,
+        error: error.response.data.message,
       });
+      console.log(error);
     }
   };
 
@@ -36,7 +38,11 @@ export const ProductProvider = ({ children }) => {
     getCategories();
   }, []);
 
-  return <ProductContext.Provider>{children}</ProductContext.Provider>;
+  return (
+    <ProductContext.Provider value={{ ...state, categories: state.categories }}>
+      {children}
+    </ProductContext.Provider>
+  );
 };
 
 export const useProductContext = () => useContext(ProductContext);

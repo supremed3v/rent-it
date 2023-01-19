@@ -10,10 +10,13 @@ import React from "react";
 import { useTheme, Text, Divider, Button } from "react-native-paper";
 import { productsData } from "../../assets/data";
 import ProductCard from "../components/ProductCard";
+import { useProductContext } from "../context/ProductsContext";
 
 export default function Home({ navigation }) {
   const theme = useTheme();
-
+  const { categories, error } = useProductContext();
+  console.log("Categories:", categories);
+  console.log("Error:", error);
   const header = () => {
     return (
       <ScrollView
