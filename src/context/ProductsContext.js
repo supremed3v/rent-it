@@ -6,9 +6,12 @@ const ProductContext = createContext();
 const initialState = {
   products: [],
   categories: {},
+  categoriesDetails: [],
   loading: false,
   error: null,
 };
+
+const API = "http://192.168.18.3:5000";
 
 export const ProductProvider = ({ children }) => {
   const [state, setState] = useState(initialState);
@@ -16,13 +19,12 @@ export const ProductProvider = ({ children }) => {
   const getCategories = async () => {
     try {
       setState({ ...state, loading: true });
-      const { data } = await axios.get(
-        "http://192.168.18.3:5000/api/v1/categories"
-      );
+      const { data } = await axios.get(`${API}/api/v1/categories`);
       setState({
         ...state,
         loading: false,
-        categories: data.categoryName,
+        categories: data.categoryNames,
+        categoriesDetails: data.categories,
       });
     } catch (error) {
       setState({
