@@ -2,14 +2,15 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 
 export const isAuthenticatedUser = async (req, res, next) => {
-  const { token } = req.header("authorization");
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
+  if (!authHeader) {
     return res.status(400).json({
       success: false,
       message: "Login first to access this resource.",
     });
   }
+  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
