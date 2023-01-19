@@ -37,11 +37,31 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const loadUser = async () => {
+    try {
+      const res = await axios.get(`${API}/api/v1/me`);
+      setAuthState({
+        ...authState,
+        loading: false,
+        user: res.data.user,
+        isAuthenticated: true,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        isAuthenticated: false,
+        error: error.response.data.message,
+      });
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         ...authState,
         login,
+        loadUser,
       }}
     >
       {children}

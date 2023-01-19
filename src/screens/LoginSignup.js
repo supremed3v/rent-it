@@ -1,5 +1,5 @@
-import { View } from "react-native";
-import React, { useState } from "react";
+import { Alert, View } from "react-native";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Divider,
@@ -8,11 +8,33 @@ import {
   TextInput,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuthContext } from "../context/AuthContext";
 
-export default function LoginSignup() {
+export default function LoginSignup({ navigation }) {
   const [value, setValue] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, isAuthenticated, error } = useAuthContext();
+
+  const handleLogin = () => {
+    const myForm = {
+      email,
+      password,
+    };
+    login(myForm);
+  };
+  console.log(error, isAuthenticated);
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert(error);
+    }
+
+    if (isAuthenticated === true) {
+      navigation.navigate("HomeTab");
+    }
+  }, [isAuthenticated, error]);
+
   return (
     <>
       <SafeAreaView />
@@ -58,17 +80,18 @@ export default function LoginSignup() {
       >
         <TextInput
           value={email}
-          onChange={(text) => setEmail(text)}
+          onChangeText={(text) => setEmail(text)}
           label="Enter your email"
           mode="outlined"
           style={{
             width: 300,
           }}
           placeholder="Enter email address"
+          autoCapitalize={false}
         />
         <TextInput
           value={password}
-          onChange={(text) => setPassword(text)}
+          onChangeText={(text) => setPassword(text)}
           label="Enter your password"
           mode="outlined"
           style={{
@@ -77,6 +100,7 @@ export default function LoginSignup() {
             marginBottom: 20,
           }}
           placeholder="Enter your password"
+          secureTextEntry={true}
         />
         <Button
           mode="outlined"
@@ -85,6 +109,7 @@ export default function LoginSignup() {
             width: 150,
             backgroundColor: "#fff",
           }}
+          onPress={handleLogin}
         >
           <Text
             style={{

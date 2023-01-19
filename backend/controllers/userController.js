@@ -53,15 +53,6 @@ export const loginUser = async (req, res) => {
     });
   }
 
-  const { token } = req.cookies;
-
-  if (token) {
-    return res.status(400).json({
-      success: false,
-      message: "You are already logged in",
-    });
-  }
-
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
@@ -110,6 +101,12 @@ export const getUserProfile = async (req, res) => {
     success: true,
     user,
   });
+  if (!user) {
+    res.status(404).json({
+      success: false,
+      message: "Please login",
+    });
+  }
 };
 
 // @desc    Update / Change password

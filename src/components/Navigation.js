@@ -4,7 +4,7 @@ import Products from "../screens/Products";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Appbar, Avatar, useTheme } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { TouchableOpacity, View } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
 import { Text, Button } from "react-native-paper";
 import {
   useNavigation,
@@ -23,6 +23,8 @@ import ProductCard from "./ProductCard";
 import Cart from "../screens/Cart";
 import LoginSignup from "../screens/LoginSignup";
 const { useCart } = require("../context/CartContext");
+import { useEffect } from "react";
+import { useAuthContext } from "../context/AuthContext";
 
 const CustomTabBar = ({ children }) => {
   const navigation = useNavigation();
@@ -199,6 +201,13 @@ const CombinedDarkTheme = {
 };
 
 export const NativeScreen = () => {
+  const { isAuthenticated, error, loadUser } = useAuthContext();
+  useEffect(() => {
+    loadUser();
+    if (error) {
+      Alert.alert(error);
+    }
+  }, []);
   const Stack = createNativeStackNavigator();
   return (
     <PaperProvider theme={CombinedDarkTheme}>
@@ -206,7 +215,7 @@ export const NativeScreen = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={"LoginSignup"}
+        initialRouteName={isAuthenticated ? "HomeTab" : "LoginSignup"}
       >
         <Stack.Screen name="HomeTab" component={TabNavigation} />
         <Stack.Screen name="AllProducts" component={AllProducts} />
