@@ -4,6 +4,7 @@ import { Text, Divider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProductsCategory from "../components/ProductsCategory";
 import { useProductContext } from "../context/ProductsContext";
+import Header from "../components/Header";
 
 export default function AllProducts() {
   const { categoriesDetails } = useProductContext();
@@ -13,15 +14,6 @@ export default function AllProducts() {
   return (
     <View>
       <SafeAreaView />
-      <Text
-        variant="displayMedium"
-        style={{
-          marginTop: 20,
-          marginBottom: 20,
-        }}
-      >
-        Categories
-      </Text>
       {/* Grid view for categories button */}
       <FlatList
         data={categoriesDetails}
@@ -30,6 +22,7 @@ export default function AllProducts() {
         numColumns={2}
         keyExtractor={(item, index) => index.toString()}
         horizontal={false}
+        ListHeaderComponent={<Header title={"Categories"} />}
         ListFooterComponent={
           <View
             style={{
@@ -38,9 +31,7 @@ export default function AllProducts() {
               marginTop: 20,
               marginBottom: 100,
             }}
-          >
-            <Text>asdsd</Text>
-          </View>
+          ></View>
         }
       />
       <ProductsCategory />
