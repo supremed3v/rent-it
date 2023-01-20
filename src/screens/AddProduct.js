@@ -28,6 +28,9 @@ export default function AddProduct() {
     marginLeft: 10,
     borderRadius: 20,
   };
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
   const pickImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -47,7 +50,6 @@ export default function AddProduct() {
       myImages.push(img.base64);
     });
   });
-  console.log("base64", myImages.length);
   return (
     <Provider>
       <View>
@@ -62,16 +64,23 @@ export default function AddProduct() {
             style={styles.textField}
             mode="outlined"
             label="Enter product name"
+            value={name}
+            onChangeText={(text) => setName(text)}
           />
           <TextInput
             style={styles.textField}
             mode="outlined"
             label="Enter product price"
+            value={price}
+            onChangeText={(num) => setPrice(num)}
+            keyboardType="number-pad"
           />
           <TextInput
             style={styles.textField}
             mode="outlined"
             label="Enter product description"
+            value={description}
+            onChangeText={(text) => setDescription(text)}
           />
           {value === null ? (
             <Button
@@ -81,6 +90,7 @@ export default function AddProduct() {
               }}
               mode="contained"
               onPress={showModal}
+              dark={true}
             >
               Select Category
             </Button>
@@ -94,6 +104,7 @@ export default function AddProduct() {
                 }}
                 mode="contained"
                 onPress={showModal}
+                dark={true}
               >
                 Change Category
               </Button>
