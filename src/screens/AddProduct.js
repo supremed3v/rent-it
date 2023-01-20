@@ -11,6 +11,7 @@ import {
 } from "react-native-paper";
 import Header from "../components/Header";
 import { useProductContext } from "../context/ProductsContext";
+import * as ImagePicker from "expo-image-picker";
 
 export default function AddProduct() {
   const [visible, setVisible] = useState(false);
@@ -18,6 +19,7 @@ export default function AddProduct() {
   const [value, setValue] = useState(null);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+  const [images, setImages] = useState([]);
   const containerStyle = {
     backgroundColor: "#fff",
     width: 300,
@@ -26,7 +28,26 @@ export default function AddProduct() {
     marginLeft: 10,
     borderRadius: 20,
   };
-  console.log(value);
+  const pickImages = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [4, 3],
+      quality: 1,
+      allowsMultipleSelection: true,
+      base64: true,
+      allowsEditing: false,
+    });
+    if (!result.canceled) {
+      setImages([...images, result.assets]);
+    }
+  };
+  let myImages = [];
+  images.map((image) => {
+    image.map((img) => {
+      myImages.push(img.base64);
+    });
+  });
+  console.log("base64", myImages.length);
   return (
     <Provider>
       <View>
@@ -78,7 +99,7 @@ export default function AddProduct() {
               </Button>
             </>
           )}
-          <Button mode="contained" icon={"camera"}>
+          <Button mode="contained" icon={"camera"} onPress={pickImages}>
             Select Images
           </Button>
           <Portal>
