@@ -58,25 +58,27 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
   const loadUser = async () => {
-    try {
-      const res = await axios.get(`${API}/api/v1/me`, {
-        headers: {
-          Authorization: `Bearer ${authState.loginToken}`,
-        },
-      });
-      setAuthState({
-        ...authState,
-        loading: false,
-        user: res.data.user,
-        isAuthenticated: true,
-      });
-    } catch (error) {
-      setAuthState({
-        ...authState,
-        loading: false,
-        isAuthenticated: false,
-        error: error.response.data.message,
-      });
+    if (authState.loginToken !== null) {
+      try {
+        const res = await axios.get(`${API}/api/v1/me`, {
+          headers: {
+            Authorization: `Bearer ${authState.loginToken}`,
+          },
+        });
+        setAuthState({
+          ...authState,
+          loading: false,
+          user: res.data.user,
+          isAuthenticated: true,
+        });
+      } catch (error) {
+        setAuthState({
+          ...authState,
+          loading: false,
+          isAuthenticated: false,
+          error: error.response.data.message,
+        });
+      }
     }
   };
 
@@ -85,8 +87,6 @@ export const AuthContextProvider = ({ children }) => {
       setAuthState({ ...authState, loginToken: value })
     );
   }, []);
-
-  console.log(authState.loginToken);
 
   return (
     <AuthContext.Provider

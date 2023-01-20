@@ -201,13 +201,13 @@ const CombinedDarkTheme = {
 };
 
 export const NativeScreen = () => {
-  const { isAuthenticated, error, loadUser } = useAuthContext();
+  const { isAuthenticated, error, loadUser, loginToken } = useAuthContext();
   useEffect(() => {
     loadUser();
     if (error) {
       Alert.alert(error);
     }
-  }, []);
+  }, [error, loginToken]);
   const Stack = createNativeStackNavigator();
   return (
     <PaperProvider theme={CombinedDarkTheme}>

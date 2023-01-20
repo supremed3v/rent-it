@@ -20,7 +20,7 @@ export const isAuthenticatedUser = async (req, res, next) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ success: false, message: "Authentication failed" });
+      .json({ success: false, message: "Authentication failed" + error });
   }
 };
 
