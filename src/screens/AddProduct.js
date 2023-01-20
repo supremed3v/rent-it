@@ -1,11 +1,12 @@
 import { View } from "react-native";
 import React from "react";
 import { Text } from "react-native-paper";
+import Header from "../components/Header";
 
 export default function AddProduct() {
   return (
     <View>
-      <Text>AddProduct</Text>
+      <Header title={"Add Product"} />
     </View>
   );
 }
