@@ -25,9 +25,19 @@ import LoginSignup from "../screens/LoginSignup";
 const { useCart } = require("../context/CartContext");
 import { useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
+import AddProduct from "../screens/AddProduct";
 
 const CustomTabBar = ({ children }) => {
+  const { user } = useAuthContext();
   const navigation = useNavigation();
+  const postButton = () => {
+    if (user.role === "admin" || "seller") {
+      navigation.navigate("AddProduct");
+    } else {
+      return;
+    }
+  };
+
   return (
     <TouchableOpacity
       style={{
@@ -35,7 +45,7 @@ const CustomTabBar = ({ children }) => {
         justifyContent: "center",
         alignItems: "center",
       }}
-      onPress={() => navigation.navigate("Home")}
+      onPress={postButton}
     >
       <View
         style={{
@@ -223,6 +233,7 @@ export const NativeScreen = () => {
         <Stack.Screen name="FilteredProducts" component={CategorizedProducts} />
         <Stack.Screen name="ProductCard" component={ProductCard} />
         <Stack.Screen name="LoginSignup" component={LoginSignup} />
+        <Stack.Screen name="AddProduct" component={AddProduct} />
       </Stack.Navigator>
     </PaperProvider>
   );
