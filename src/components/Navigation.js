@@ -158,14 +158,16 @@ export const TabNavigation = () => {
                   marginRight: 15,
                 }}
               >
-                <View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Profile")}
+                >
                   <Avatar.Image
                     size={40}
                     source={{
                       uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
                     }}
                   />
-                </View>
+                </TouchableOpacity>
               </View>
             ),
             headerLeft: () => (
@@ -175,7 +177,7 @@ export const TabNavigation = () => {
                     marginLeft: 15,
                   }}
                 >
-                  <Pressable onPress={() => setOpen(!open)}>
+                  <Pressable onPress={() => navigation.openDrawer()}>
                     <AntDesign name="bars" size={24} color="#fff" />
                   </Pressable>
                 </View>
@@ -238,10 +240,10 @@ export const DrawerNavigation = () => {
         headerShown: false,
       }}
     >
-      <Drawer.Screen name="Home" component={TabNavigation} />
-      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
-      <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
-      <Drawer.Screen name="OrdersScreen" component={OrderScreen} />
+      <Drawer.Screen name="Home " component={TabNavigation} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
+      <Drawer.Screen name="Orders" component={OrderScreen} />
     </Drawer.Navigator>
   );
 };
