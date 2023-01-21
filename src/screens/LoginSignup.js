@@ -14,6 +14,7 @@ export default function LoginSignup({ navigation }) {
   const [value, setValue] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const { login, isAuthenticated, error } = useAuthContext();
 
   const handleLogin = () => {
@@ -22,6 +23,19 @@ export default function LoginSignup({ navigation }) {
       password,
     };
     login(myForm);
+  };
+
+  const handleSignup = () => {
+    const signupForm = {
+      email,
+      password,
+      name,
+      avatar: {
+        public_id: "id",
+        url: "url",
+      },
+    };
+    console.log(signupForm);
   };
   console.log(error, isAuthenticated);
 
@@ -71,57 +85,122 @@ export default function LoginSignup({ navigation }) {
           },
         ]}
       />
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 40,
-        }}
-      >
-        <TextInput
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          label="Enter your email"
-          mode="outlined"
+      {value === "login" ? (
+        <View
           style={{
-            width: 300,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 40,
           }}
-          placeholder="Enter email address"
-          autoCapitalize={false}
-        />
-        <TextInput
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          label="Enter your password"
-          mode="outlined"
-          style={{
-            width: 300,
-            marginTop: 20,
-            marginBottom: 20,
-          }}
-          placeholder="Enter your password"
-          secureTextEntry={true}
-        />
-        <Button
-          mode="outlined"
-          dark={true}
-          style={{
-            width: 150,
-            backgroundColor: "#fff",
-          }}
-          onPress={handleLogin}
         >
-          <Text
+          <TextInput
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            label="Enter your email"
+            mode="outlined"
             style={{
-              fontSize: 20,
-              color: "#000",
-              fontWeight: "600",
+              width: 300,
             }}
+            placeholder="Enter email address"
+            autoCapitalize={false}
+          />
+          <TextInput
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            label="Enter your password"
+            mode="outlined"
+            style={{
+              width: 300,
+              marginTop: 20,
+              marginBottom: 20,
+            }}
+            placeholder="Enter your password"
+            secureTextEntry={true}
+          />
+          <Button
+            mode="outlined"
+            dark={true}
+            style={{
+              width: 150,
+              backgroundColor: "#fff",
+            }}
+            onPress={handleLogin}
           >
-            Login
-          </Text>
-        </Button>
-      </View>
+            <Text
+              style={{
+                fontSize: 20,
+                color: "#000",
+                fontWeight: "600",
+              }}
+            >
+              Login
+            </Text>
+          </Button>
+        </View>
+      ) : (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 40,
+          }}
+        >
+          <TextInput
+            value={name}
+            onChangeText={(text) => setName(text)}
+            label="Enter your name"
+            mode="outlined"
+            style={{
+              width: 300,
+            }}
+            placeholder="Name"
+            autoCapitalize={false}
+          />
+          <TextInput
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            label="Enter your email"
+            mode="outlined"
+            style={{
+              width: 300,
+            }}
+            placeholder="Enter email address"
+            autoCapitalize={false}
+          />
+          <TextInput
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            label="Enter your password"
+            mode="outlined"
+            style={{
+              width: 300,
+              marginTop: 20,
+              marginBottom: 20,
+            }}
+            placeholder="Enter your password"
+            secureTextEntry={true}
+          />
+          <Button
+            mode="outlined"
+            dark={true}
+            style={{
+              width: 150,
+              backgroundColor: "#fff",
+            }}
+            onPress={handleSignup}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                color: "#000",
+                fontWeight: "600",
+              }}
+            >
+              Signup
+            </Text>
+          </Button>
+        </View>
+      )}
     </>
   );
 }

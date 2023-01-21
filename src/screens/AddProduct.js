@@ -81,6 +81,7 @@ export default function AddProduct() {
             label="Enter product description"
             value={description}
             onChangeText={(text) => setDescription(text)}
+            multiline={true}
           />
           {value === null ? (
             <Button
