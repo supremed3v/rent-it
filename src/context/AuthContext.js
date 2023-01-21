@@ -47,6 +47,30 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const signup = async () => {
+    setAuthState({
+      ...authState,
+      loading: true,
+    });
+    try {
+      const res = await axios.post(`${API}/api/v1/register`, userData);
+      setAuthState({
+        ...authState,
+        loading: false,
+        user: res.data.user,
+        isAuthenticated: true,
+      });
+      const jsonValue = res.data.token;
+      try {
+        if (jsonValue) {
+          AsyncStorage.setItem("token", jsonValue);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {}
+  };
+
   const getToken = async () => {
     try {
       const value = AsyncStorage.getItem("token");
@@ -54,7 +78,12 @@ export const AuthContextProvider = ({ children }) => {
         return value;
       }
     } catch (error) {
-      console.log(error);
+      setAuthState({
+        ...authState,
+        loading: false,
+        isAuthenticated: false,
+        error: error.response.data.message,
+      });
     }
   };
   const loadUser = async () => {
