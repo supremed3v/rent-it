@@ -45,6 +45,8 @@ export default function CustomDrawer(props) {
               borderRadius: 50,
               alignSelf: "center",
               marginTop: 20,
+              borderWidth: 2,
+              borderColor: "#fff",
             }}
           />
           <Text
@@ -52,6 +54,7 @@ export default function CustomDrawer(props) {
               alignSelf: "center",
               marginTop: 20,
             }}
+            variant="displaySmall"
           >
             {user.name}
           </Text>

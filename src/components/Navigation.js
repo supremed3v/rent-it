@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Products from "../screens/Products";
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Appbar, Avatar, Button, useTheme, Switch } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -240,10 +240,42 @@ export const DrawerNavigation = () => {
         headerShown: false,
       }}
     >
-      <Drawer.Screen name="Home " component={TabNavigation} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
-      <Drawer.Screen name="Orders" component={OrderScreen} />
+      <Drawer.Screen
+        name="Home"
+        component={TabNavigation}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="home-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="person-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Orders"
+        component={OrderScreen}
+        options={{
+          drawerIcon: ({ color }) => (
+            <FontAwesome name="shopping-bag" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="settings" size={22} color={color} />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 };
