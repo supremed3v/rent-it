@@ -4,14 +4,8 @@ import Products from "../screens/Products";
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Appbar, Avatar, Button, useTheme, Switch } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {
-  Alert,
-  Pressable,
-  TouchableOpacity,
-  View,
-  TouchableRipple,
-} from "react-native";
-import { Text } from "react-native-paper";
+import { Alert, Pressable, TouchableOpacity, View } from "react-native";
+import { Text, Dialog } from "react-native-paper";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import {
@@ -43,10 +37,28 @@ const CustomTabBar = ({ children }) => {
   const { user } = useAuthContext();
   const navigation = useNavigation();
   const postButton = () => {
-    if (user.role === "admin" || "seller") {
+    if (user.role === "seller" || user.role === "admin") {
       navigation.navigate("AddProduct");
     } else {
-      return;
+      Alert.alert(
+        "You are not authorized to add products",
+        "Please register as a seller to add products",
+        [
+          {
+            text: "Register",
+            onPress: () => navigation.navigate("LoginSignup"),
+          },
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+        ],
+        {
+          cancelable: true,
+          onDismiss: () => {},
+        }
+      );
     }
   };
 
@@ -79,6 +91,7 @@ export const TabNavigation = () => {
   const theme = useTheme();
   const Tab = createBottomTabNavigator();
   const [open, setOpen] = useState(false);
+  const { user } = useAuthContext();
   return (
     <>
       <Tab.Navigator
@@ -164,7 +177,7 @@ export const TabNavigation = () => {
                   <Avatar.Image
                     size={40}
                     source={{
-                      uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                      uri: user.avatar.url,
                     }}
                   />
                 </TouchableOpacity>
