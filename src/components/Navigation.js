@@ -2,10 +2,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Products from "../screens/Products";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import { Appbar, Avatar, useTheme } from "react-native-paper";
+import { Appbar, Avatar, Button, useTheme } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Alert, TouchableOpacity, View } from "react-native";
-import { Text, Button } from "react-native-paper";
+import { Alert, Pressable, TouchableOpacity, View } from "react-native";
+import { Text } from "react-native-paper";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+
 import {
   useNavigation,
   DarkTheme as NavigationDarkTheme,
@@ -23,7 +25,7 @@ import ProductCard from "./ProductCard";
 import Cart from "../screens/Cart";
 import LoginSignup from "../screens/LoginSignup";
 const { useCart } = require("../context/CartContext");
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import AddProduct from "../screens/AddProduct";
 
@@ -58,6 +60,23 @@ const CustomTabBar = ({ children }) => {
         {children}
       </View>
     </TouchableOpacity>
+  );
+};
+
+const Drawer = createDrawerNavigator();
+const myDrawer = () => {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name="Logout"
+        component={(props) => {
+          const handleLogout = () => {
+            console.log("logged out");
+          };
+          return <Button onPress={handleLogout}>Logout</Button>;
+        }}
+      />
+    </Drawer.Navigator>
   );
 };
 
@@ -160,9 +179,9 @@ export const TabNavigation = () => {
                 marginLeft: 15,
               }}
             >
-              <View>
+              <Pressable onPress={() => console.log("pressed")}>
                 <AntDesign name="bars" size={24} color="#fff" />
-              </View>
+              </Pressable>
             </View>
           ),
           headerStyle: {
@@ -234,6 +253,7 @@ export const NativeScreen = () => {
         <Stack.Screen name="ProductCard" component={ProductCard} />
         <Stack.Screen name="LoginSignup" component={LoginSignup} />
         <Stack.Screen name="AddProduct" component={AddProduct} />
+        <Stack.Screen name="Drawer" component={myDrawer} />
       </Stack.Navigator>
     </PaperProvider>
   );
