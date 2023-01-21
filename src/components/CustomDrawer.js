@@ -10,7 +10,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { useAuthContext } from "../context/AuthContext";
 
 export default function CustomDrawer(props) {
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
+  const handleLogout = () => {
+    logout();
+    props.navigation.navigate("LoginSignup");
+  };
   return (
     <View
       style={{
@@ -73,6 +77,7 @@ export default function CustomDrawer(props) {
             flexDirection: "row",
             alignItems: "center",
           }}
+          onPress={handleLogout}
         >
           <AntDesign name="logout" size={24} color="#fff" />
           <Text

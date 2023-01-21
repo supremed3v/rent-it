@@ -82,6 +82,22 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+      setAuthState({
+        ...authState,
+        isAuthenticated: false,
+        user: null,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        error: error.message,
+      });
+    }
+  };
+
   useEffect(() => {
     getToken().then((value) =>
       setAuthState({ ...authState, loginToken: value })
@@ -94,6 +110,7 @@ export const AuthContextProvider = ({ children }) => {
         ...authState,
         login,
         loadUser,
+        logout,
       }}
     >
       {children}
