@@ -2,15 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Products from "../screens/Products";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import {
-  Appbar,
-  Avatar,
-  Button,
-  useTheme,
-  Drawer,
-  DrawerContent,
-  Switch,
-} from "react-native-paper";
+import { Appbar, Avatar, Button, useTheme, Switch } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   Alert,
@@ -42,6 +34,10 @@ const { useCart } = require("../context/CartContext");
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import AddProduct from "../screens/AddProduct";
+import ProfileScreen from "../screens/ProfileScreen";
+import SettingsScreen from "../screens/SettingsScreen";
+import OrderScreen from "../screens/OrderScreen";
+import CustomDrawer from "./CustomDrawer";
 
 const CustomTabBar = ({ children }) => {
   const { user } = useAuthContext();
@@ -179,43 +175,9 @@ export const TabNavigation = () => {
                     marginLeft: 15,
                   }}
                 >
-                  <Pressable onPress={() => setOpen(true)}>
+                  <Pressable onPress={() => setOpen(!open)}>
                     <AntDesign name="bars" size={24} color="#fff" />
                   </Pressable>
-                  {open && (
-                    <View
-                      style={{
-                        width: 200,
-                        height: 200,
-                        left: -15,
-                        top: 50,
-                      }}
-                    >
-                      <Drawer.Section
-                        title="Some title"
-                        style={{
-                          backgroundColor: theme.dark
-                            ? "#fff"
-                            : theme.colors.background,
-                        }}
-                        theme={{
-                          colors: {
-                            text: theme.dark ? "#000" : "#fff",
-                          },
-                        }}
-                      >
-                        <Drawer.Item
-                          label="First Item"
-                          style={{
-                            backgroundColor: theme.dark
-                              ? "#fff"
-                              : theme.colors.background,
-                          }}
-                          onPress={() => setOpen(false)}
-                        />
-                      </Drawer.Section>
-                    </View>
-                  )}
                 </View>
               </>
             ),
@@ -265,6 +227,25 @@ const CombinedDarkTheme = {
   },
 };
 
+const Drawer = createDrawerNavigator();
+
+export const DrawerNavigation = () => {
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawer {...props} />}
+      initialRouteName="Home"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Drawer.Screen name="Home" component={TabNavigation} />
+      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
+      <Drawer.Screen name="OrdersScreen" component={OrderScreen} />
+    </Drawer.Navigator>
+  );
+};
+
 export const NativeScreen = () => {
   const { isAuthenticated, error, loadUser, loginToken } = useAuthContext();
   useEffect(() => {
@@ -280,15 +261,15 @@ export const NativeScreen = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={isAuthenticated ? "HomeTab" : "LoginSignup"}
+        initialRouteName={isAuthenticated ? "Drawer" : "LoginSignup"}
       >
-        <Stack.Screen name="HomeTab" component={TabNavigation} />
         <Stack.Screen name="AllProducts" component={AllProducts} />
         <Stack.Screen name="ProductDetails" component={ProductDetails} />
         <Stack.Screen name="FilteredProducts" component={CategorizedProducts} />
         <Stack.Screen name="ProductCard" component={ProductCard} />
         <Stack.Screen name="LoginSignup" component={LoginSignup} />
         <Stack.Screen name="AddProduct" component={AddProduct} />
+        <Stack.Screen name="Drawer" component={DrawerNavigation} />
       </Stack.Navigator>
     </PaperProvider>
   );

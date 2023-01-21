@@ -45,7 +45,7 @@ export default function LoginSignup({ navigation }) {
     }
 
     if (isAuthenticated === true) {
-      navigation.navigate("HomeTab");
+      navigation.navigate("Drawer");
     }
   }, [isAuthenticated, error]);
 
