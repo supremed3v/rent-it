@@ -47,7 +47,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const signup = async () => {
+  const signUp = async () => {
     setAuthState({
       ...authState,
       loading: true,
@@ -140,6 +140,7 @@ export const AuthContextProvider = ({ children }) => {
         login,
         loadUser,
         logout,
+        signUp,
       }}
     >
       {children}

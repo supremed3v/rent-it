@@ -9,13 +9,15 @@ import {
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthContext } from "../context/AuthContext";
+import * as ImagePicker from "expo-image-picker";
 
 export default function LoginSignup({ navigation }) {
   const [value, setValue] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const { login, isAuthenticated, error } = useAuthContext();
+  const { login, isAuthenticated, error, signUp, loading } = useAuthContext();
+  const [image, setImage] = useState(null);
 
   const handleLogin = () => {
     const myForm = {
@@ -35,10 +37,22 @@ export default function LoginSignup({ navigation }) {
         url: "url",
       },
     };
-    console.log(signupForm);
+    signUp(signupForm);
   };
-  console.log(error, isAuthenticated);
 
+  const handleImagePicker = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      base64: true,
+    });
+    if (!result.canceled) {
+      let base64 = `data:image/jpg;base64,${result.assets[0].base64}`;
+      setImage(base64);
+    }
+  };
   useEffect(() => {
     if (error) {
       Alert.alert(error);
@@ -180,24 +194,18 @@ export default function LoginSignup({ navigation }) {
             placeholder="Enter your password"
             secureTextEntry={true}
           />
+          <Button icon="camera" mode="contained" onPress={handleImagePicker}>
+            Upload Picture
+          </Button>
           <Button
-            mode="outlined"
-            dark={true}
+            mode="contained"
             style={{
-              width: 150,
-              backgroundColor: "#fff",
+              marginTop: 10,
             }}
             onPress={handleSignup}
+            disabled={loading === true}
           >
-            <Text
-              style={{
-                fontSize: 20,
-                color: "#000",
-                fontWeight: "600",
-              }}
-            >
-              Signup
-            </Text>
+            Signup
           </Button>
         </View>
       )}
