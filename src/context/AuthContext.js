@@ -47,7 +47,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const signUp = async () => {
+  const signUp = async (userData) => {
     setAuthState({
       ...authState,
       loading: true,
@@ -68,7 +68,14 @@ export const AuthContextProvider = ({ children }) => {
       } catch (error) {
         console.log(error);
       }
-    } catch (error) {}
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        isAuthenticated: false,
+        error: error.response.data.message,
+      });
+    }
   };
 
   const getToken = async () => {

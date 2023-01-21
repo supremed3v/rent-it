@@ -2,6 +2,7 @@ import { sendToken } from "../middlewares/sendToken.js";
 import User from "../models/UserModel.js";
 import { sendMail } from "../middlewares/sendMail.js";
 import otpGenerator from "otp-generator";
+import cloudinary from "cloudinary";
 
 // @desc    Register a user
 
@@ -11,30 +12,44 @@ import otpGenerator from "otp-generator";
 
 export const registerUser = async (req, res) => {
   const { name, email, password, avatar } = req.body;
+  try {
+    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+      folder: "avatars",
+      width: 150,
+      crop: "scale",
+    });
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter all fields",
+      });
+    }
 
-  if (!name || !email || !password) {
-    return res.status(400).json({
+    const valUser = await User.findOne({ email });
+    if (valUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists",
+      });
+    }
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
+    });
+
+    sendToken(user, 201, res);
+  } catch (error) {
+    return res.status(500).json({
       success: false,
-      message: "Please enter all fields",
+      message: error.message,
     });
   }
-
-  const valUser = await User.findOne({ email });
-  if (valUser) {
-    return res.status(400).json({
-      success: false,
-      message: "User already exists",
-    });
-  }
-
-  const user = await User.create({
-    name,
-    email,
-    password,
-    avatar,
-  });
-
-  sendToken(user, 200, res);
 };
 
 // @desc    Login user

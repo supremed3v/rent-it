@@ -32,10 +32,7 @@ export default function LoginSignup({ navigation }) {
       email,
       password,
       name,
-      avatar: {
-        public_id: "id",
-        url: "url",
-      },
+      avatar: image,
     };
     signUp(signupForm);
   };
@@ -62,6 +59,7 @@ export default function LoginSignup({ navigation }) {
       navigation.navigate("Drawer");
     }
   }, [isAuthenticated, error]);
+  console.log(error);
 
   return (
     <>
@@ -194,9 +192,11 @@ export default function LoginSignup({ navigation }) {
             placeholder="Enter your password"
             secureTextEntry={true}
           />
-          <Button icon="camera" mode="contained" onPress={handleImagePicker}>
-            Upload Picture
-          </Button>
+          {image === null && (
+            <Button icon="camera" mode="contained" onPress={handleImagePicker}>
+              Upload Picture
+            </Button>
+          )}
           <Button
             mode="contained"
             style={{

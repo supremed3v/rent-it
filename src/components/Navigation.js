@@ -86,7 +86,7 @@ export const TabNavigation = () => {
           return {
             tabBarIcon: ({ focused }) => {
               let iconName;
-              if (route.name === "Home") {
+              if (route.name === "HomeScreen") {
                 iconName = focused ? "home" : "home";
               } else if (route.name === "Explore") {
                 iconName = focused ? "search1" : "search1";
@@ -138,7 +138,7 @@ export const TabNavigation = () => {
               fontWeight: "bold",
             },
             tabBarShowLabel: false,
-            headerShown: route.name === "Home" ? true : false,
+            headerShown: route.name === "HomeScreen" ? true : false,
             headerTitle: () => (
               <View>
                 <Text
@@ -189,7 +189,7 @@ export const TabNavigation = () => {
           };
         }}
       >
-        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="HomeScreen" component={Home} />
         <Tab.Screen name="Explore" component={Products} />
         <Tab.Screen
           name="Post"
