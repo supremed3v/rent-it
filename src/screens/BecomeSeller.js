@@ -50,7 +50,9 @@ export default function BecomeSeller() {
               >
                 <Text
                   style={{
-                    color: !pinReady ? "#fff" : "#000",
+                    color: !pinReady ? "#fff" : "#777",
+                    fontWeight: "bold",
+                    fontSize: 18,
                   }}
                 >
                   {pinReady ? "Verify" : "Enter OTP"}

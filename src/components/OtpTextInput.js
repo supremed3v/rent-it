@@ -17,7 +17,7 @@ export default function OtpTextInput({
     const isInputFilled = code.length === maxLength;
     const isDigitisFocused = isCurrentDigit || (isLastDigit && isInputFilled);
     const inputContainerFocused = isDigitisFocused;
-    const styledOtpInput = inputContainerFocused ? "gray" : "#fff";
+    const styledOtpInput = inputContainerFocused ? "#d4af37" : "#777";
     return (
       <View
         style={{
@@ -26,6 +26,7 @@ export default function OtpTextInput({
           borderWidth: 2,
           borderRadius: 5,
           padding: 12,
+          backgroundColor: styledOtpInput,
         }}
         key={index}
       >
