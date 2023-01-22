@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, TouchableOpacity, View, Image } from "react-native";
 import { Camera } from "expo-camera";
-import { Button, Text } from "react-native-paper";
+import { Button, SegmentedButtons, Text } from "react-native-paper";
+import Header from "../components/Header";
 const CameraModule = (props) => {
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -58,7 +59,7 @@ const CameraModule = (props) => {
                   });
                   props.setImage(photo);
                   props.setModalVisible();
-                  props.setBase64Image(photo);
+                  props.setBase64Image(photo.base64);
                 }
               }}
             >
@@ -225,9 +226,7 @@ export default function IDVerification() {
   const [hasPermission, setHasPermission] = useState(null);
   const [base64Card, setBase64Card] = useState(null);
   const [base64Image, setBase64Image] = useState(null);
-
-  console.log("base64Card", base64Card);
-  console.log("base64Image", base64Image);
+  const [value, setValue] = useState("ID");
 
   useEffect(() => {
     (async () => {
@@ -242,82 +241,144 @@ export default function IDVerification() {
     return <Text>No access to camera</Text>;
   }
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>We need to verify your ID and Photo first.</Text>
+    <>
+      <Header title={"Verification"} />
       <View
         style={{
-          backgroundColor: "#fff",
-          width: 120,
-          height: 120,
-          borderRadius: 100,
-          marginBottom: 8,
+          justifyContent: "center",
+          alignItems: "center",
+          marginVertical: 20,
         }}
       >
-        <Image
-          source={{ uri: image }}
-          style={{ width: 120, height: 120, borderRadius: 100 }}
+        <SegmentedButtons
+          style={{ width: "80%", paddingVertical: 8 }}
+          buttons={[
+            {
+              value: "ID",
+              label: "Face",
+            },
+            {
+              value: "signup",
+              label: "ID Card",
+            },
+          ]}
+          value={value}
+          onValueChange={(value) => setValue(value)}
         />
-      </View>
-      <Button
-        style={{ width: "30%", marginTop: 16 }}
-        icon="camera"
-        mode="contained"
-        onPress={() => {
-          setShowCamera(true);
-        }}
-      >
-        Camera
-      </Button>
-      {camera && (
-        <CameraModule
-          showModal={camera}
-          setModalVisible={() => setShowCamera(false)}
-          setImage={(result) => setImage(result.uri)}
-          setBase64Image={(result) => {
-            setBase64Image(result.base64);
-          }}
-        />
-      )}
-      <View>
-        <Text>Upload your ID Card</Text>
-      </View>
+        {value === "ID" && (
+          <>
+            <Text
+              style={{
+                marginTop: 16,
+                marginBottom: 8,
+                width: "80%",
+              }}
+              variant="bodyLarge"
+            >
+              Please take a picture of your face. Make sure your face is clearly
+              visible.
+            </Text>
+            <View
+              style={{
+                backgroundColor: "#fff",
+                width: 120,
+                height: 120,
+                borderRadius: 100,
+                marginBottom: 8,
+                marginTop: 50,
+              }}
+            >
+              <Image
+                source={{ uri: image }}
+                style={{ width: 120, height: 120, borderRadius: 100 }}
+              />
+            </View>
+            <Button
+              style={{ width: "30%", marginTop: 16 }}
+              icon="camera"
+              mode="contained"
+              onPress={() => {
+                setShowCamera(true);
+              }}
+            >
+              Camera
+            </Button>
+            {camera && (
+              <CameraModule
+                showModal={camera}
+                setModalVisible={() => setShowCamera(false)}
+                setImage={(result) => setImage(result.uri)}
+                setBase64Image={(result) => {
+                  setBase64Image(result.base64);
+                }}
+              />
+            )}
+          </>
+        )}
 
-      <View
-        style={{
-          backgroundColor: "#fff",
-          width: 120,
-          height: 120,
-          borderRadius: 100,
-          marginBottom: 8,
-        }}
-      >
-        <Image
-          source={{ uri: cardImage }}
-          style={{ width: 120, height: 120, borderRadius: 100 }}
-        />
-      </View>
-      <Button
-        style={{ width: "30%", marginTop: 16 }}
-        icon="camera"
-        mode="contained"
-        onPress={() => {
-          setOpenSecondCamera(true);
-        }}
-      >
-        Camera
-      </Button>
-      {openSecondCamera && (
-        <CardVerification
-          showModal={openSecondCamera}
-          setModalVisible={() => setOpenSecondCamera(false)}
-          setCardImage={(result) =>
-            setCardImage(result.uri) && setBase64Card(result.base64)
-          }
-          setBase64Card={(result) => {
-            setBase64Card(result.base64);
+        {value === "signup" && (
+          <>
+            <Text
+              style={{
+                marginTop: 16,
+                marginBottom: 8,
+                width: "80%",
+              }}
+              variant="bodyLarge"
+            >
+              Please take a picture of your National ID Card. Make sure your it
+              is clearly visible.
+            </Text>
+
+            <View
+              style={{
+                backgroundColor: "#fff",
+                width: 120,
+                height: 120,
+                borderRadius: 100,
+                marginBottom: 8,
+                marginTop: 50,
+              }}
+            >
+              <Image
+                source={{ uri: cardImage }}
+                style={{ width: 120, height: 120, borderRadius: 100 }}
+              />
+            </View>
+            <Button
+              style={{ width: "30%", marginTop: 16 }}
+              icon="camera"
+              mode="contained"
+              onPress={() => {
+                setOpenSecondCamera(true);
+              }}
+            >
+              Camera
+            </Button>
+            {openSecondCamera && (
+              <CardVerification
+                showModal={openSecondCamera}
+                setModalVisible={() => setOpenSecondCamera(false)}
+                setCardImage={(result) =>
+                  setCardImage(result.uri) && setBase64Card(result.base64)
+                }
+                setBase64Card={(result) => {
+                  setBase64Card(result.base64);
+                }}
+              />
+            )}
+          </>
+        )}
+        <Button
+          mode="contained"
+          disabled={value === "ID" ? !image : !cardImage}
+          style={{
+            marginTop: 16,
           }}
-        />
-      )}
-    </View>
+        >
+          Submit
+        </Button>
+      </View>
+    </>
   );
 }
