@@ -33,6 +33,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import OrderScreen from "../screens/OrderScreen";
 import CustomDrawer from "./CustomDrawer";
 import BecomeSeller from "../screens/BecomeSeller";
+import IDVerification from "../screens/IdVerification";
 
 const CustomTabBar = ({ children }) => {
   const { user } = useAuthContext();
@@ -318,6 +319,7 @@ export const NativeScreen = () => {
         <Stack.Screen name="AddProduct" component={AddProduct} />
         <Stack.Screen name="Drawer" component={DrawerNavigation} />
         <Stack.Screen name="BecomeSeller" component={BecomeSeller} />
+        <Stack.Screen name="IDVerification" component={IDVerification} />
       </Stack.Navigator>
     </PaperProvider>
   );
