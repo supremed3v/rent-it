@@ -85,7 +85,6 @@ export default function OtpTextInput({
         value={code}
         onChangeText={setCode}
         maxLength={maxLength}
-        keyboardType="number-pad"
         returnKeyType="done"
         textContentType="oneTimeCode"
         ref={textInputRef}
