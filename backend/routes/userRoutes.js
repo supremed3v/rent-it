@@ -19,7 +19,7 @@ router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 router.get("/me", isAuthenticatedUser, getUserProfile);
 router.post(
-  "/register-seller",
+  "/generate-otp",
   isAuthenticatedUser,
   authorizeRoles("user"),
   verifySeller

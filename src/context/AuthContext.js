@@ -11,6 +11,7 @@ const initialState = {
   loading: false,
   error: null,
   loginToken: null,
+  success: null,
 };
 
 export const AuthContextProvider = ({ children }) => {
@@ -134,6 +135,48 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const generateOtp = async (email) => {
+    setAuthState({
+      ...authState,
+      loading: true,
+    });
+    try {
+      const res = await axios.post(`${API}/api/v1/generate-otp`, { email });
+      setAuthState({
+        ...authState,
+        loading: false,
+        success: res.data.success,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        error: error.response.data.message,
+      });
+    }
+  };
+
+  const verifyOtp = async (otp) => {
+    setAuthState({
+      ...authState,
+      loading: true,
+    });
+    try {
+      const res = await axios.put(`${API}/api/v1/verify-seller`, { otp });
+      setAuthState({
+        ...authState,
+        loading: false,
+        success: res.data.success,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        error: error.response.data.message,
+      });
+    }
+  };
+
   useEffect(() => {
     getToken().then((value) =>
       setAuthState({ ...authState, loginToken: value })
@@ -148,6 +191,8 @@ export const AuthContextProvider = ({ children }) => {
         loadUser,
         logout,
         signUp,
+        verifyOtp,
+        generateOtp,
       }}
     >
       {children}

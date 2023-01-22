@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import OtpTextInput from "../components/OtpTextInput";
 
 export default function BecomeSeller() {
-  const [code, setCode] = useState("");
+  const [otp, setOtp] = useState("");
   const [pinReady, setPinReady] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const MAX_CODE_LENGTH = 5;
@@ -35,8 +35,8 @@ export default function BecomeSeller() {
           <>
             <OtpTextInput
               setPinReady={setPinReady}
-              code={code}
-              setCode={setCode}
+              otp={otp}
+              setOtp={setOtp}
               maxLength={MAX_CODE_LENGTH}
             />
             <View>

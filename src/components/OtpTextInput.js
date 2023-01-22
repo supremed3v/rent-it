@@ -1,20 +1,15 @@
 import { View, Text, TextInput, Pressable } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 
-export default function OtpTextInput({
-  setPinReady,
-  code,
-  setCode,
-  maxLength,
-}) {
+export default function OtpTextInput({ setPinReady, otp, setOtp, maxLength }) {
   const textInputRef = useRef(null);
   const codeDigitArray = new Array(maxLength).fill(0);
   const codeDigitInput = (_value, index) => {
     const emptyInputChar = " ";
-    const digit = code[index] || emptyInputChar;
-    const isCurrentDigit = index === code.length;
+    const digit = otp[index] || emptyInputChar;
+    const isCurrentDigit = index === otp.length;
     const isLastDigit = index === maxLength - 1;
-    const isInputFilled = code.length === maxLength;
+    const isInputFilled = otp.length === maxLength;
     const isDigitisFocused = isCurrentDigit || (isLastDigit && isInputFilled);
     const inputContainerFocused = isDigitisFocused;
     const styledOtpInput = inputContainerFocused ? "#d4af37" : "#777";
@@ -52,11 +47,11 @@ export default function OtpTextInput({
     textInputRef?.current?.focus();
   };
   useEffect(() => {
-    setPinReady(code.length === maxLength);
+    setPinReady(otp.length === maxLength);
     return () => {
       setPinReady(false);
     };
-  }, [code]);
+  }, [otp]);
   return (
     <View
       style={{
@@ -82,8 +77,8 @@ export default function OtpTextInput({
           height: "100%",
           opacity: 0,
         }}
-        value={code}
-        onChangeText={setCode}
+        value={otp}
+        onChangeText={setOtp}
         maxLength={maxLength}
         returnKeyType="done"
         textContentType="oneTimeCode"
