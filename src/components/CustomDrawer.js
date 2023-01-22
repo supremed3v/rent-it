@@ -89,7 +89,6 @@ export default function CustomDrawer(props) {
             Logout
           </Text>
         </TouchableOpacity>
-        <Divider />
       </View>
       {user.role === "user" && (
         <View
@@ -102,6 +101,7 @@ export default function CustomDrawer(props) {
             style={{
               flexDirection: "row",
               alignItems: "center",
+              marginBottom: 20,
             }}
           >
             <FontAwesome5 name="user-check" size={24} color="#fff" />

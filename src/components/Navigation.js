@@ -47,7 +47,7 @@ const CustomTabBar = ({ children }) => {
         [
           {
             text: "Register",
-            onPress: () => navigation.navigate("LoginSignup"),
+            onPress: () => navigation.navigate("BecomeSeller"),
           },
           {
             text: "Cancel",

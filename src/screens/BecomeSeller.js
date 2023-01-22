@@ -11,6 +11,14 @@ export default function BecomeSeller() {
   const [otp, setOtp] = useState("");
   const [pinReady, setPinReady] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
+  const [otpResend, setOtpResend] = useState(60);
+
+  useEffect(() => {
+    const timer =
+      otpResend > 0 && setInterval(() => setOtpResend(otpResend - 1), 1000);
+    return () => clearInterval(timer);
+  }, [otpResend]);
+
   const MAX_CODE_LENGTH = 5;
   const handleVerify = () => {
     verifyOtp(otp);
@@ -79,6 +87,13 @@ export default function BecomeSeller() {
             </View>
           </>
         )}
+        <Button
+          onPress={() => navigation.openDrawer()}
+          disabled={otpResend > 0}
+          mode="outlined"
+        >
+          <Text>Resend OTP {otpResend > 0 ? `(${otpResend})` : ""}</Text>
+        </Button>
       </View>
     </Pressable>
   );
