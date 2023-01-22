@@ -360,3 +360,92 @@ export const getSellers = async (req, res) => {
     });
   }
 };
+
+export const verifySeller = async (req, res) => {
+  const seller = await User.findById(req.user.id);
+  const { idCardNumber } = req.body;
+  if (seller.role !== "user") {
+    res.status(400).send({
+      success: true,
+      message: "You are already eligible for renting your products",
+    });
+  }
+
+  const email = seller.email;
+
+  const resetOtp = otpGenerator.generate(6, {
+    upperCase: false,
+    specialChars: false,
+    alphabets: false,
+  });
+
+  const expiry = new Date(Date.now() + 10 * 60 * 1000);
+
+  seller.verifySellerToken = resetOtp;
+  seller.verifySellerTokenExpiry = expiry;
+  seller.idCardNumber = idCardNumber;
+
+  await seller.save();
+
+  const message =
+    `Dear User, \n\n` +
+    "OTP for Account Verification for Seller is : \n\n" +
+    `${resetOtp}\n\n` +
+    "This is a auto-generated email. Please do not reply to this email.\n\n" +
+    "Regards\n\n";
+
+  try {
+    await sendMail({
+      email: email,
+      subject: "Seller Account Verification",
+      text: message,
+    });
+  } catch (error) {
+    seller.verifySellerToken = undefined;
+    seller.verifySellerTokenExpiry = undefined;
+
+    await seller.save();
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const verifySellerOtp = async (req, res) => {
+  const { otp } = req.body;
+  try {
+    const seller = User.findOne({
+      verifySellerToken: otp,
+      verifySellerTokenExpiry: { $gt: Date.now() },
+    });
+    if (!seller) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+
+    if (otp !== seller.verifySellerToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect OTP",
+      });
+    }
+    seller.role = "seller";
+    seller.verifySellerToken = undefined;
+    seller.verifySellerTokenExpiry = undefined;
+    await seller.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Congratulation you've successfully become a seller now!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

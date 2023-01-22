@@ -90,7 +90,6 @@ export const TabNavigation = () => {
   const navigation = useNavigation();
   const theme = useTheme();
   const Tab = createBottomTabNavigator();
-  const [open, setOpen] = useState(false);
   const { user } = useAuthContext();
   return (
     <>

@@ -51,6 +51,12 @@ const UserSchema = new mongoose.Schema({
   ],
   resetPasswordToken: String,
   resetPasswordExpire: Date,
+  verifySellerToken: String,
+  verifySellerTokenExpiry: Date,
+  idCardNumber: {
+    type: Number,
+    maxLength: 13,
+  },
 });
 
 UserSchema.pre("save", async function (next) {
