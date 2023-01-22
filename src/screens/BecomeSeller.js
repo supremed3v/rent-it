@@ -1,6 +1,6 @@
 import { View, Pressable, Keyboard, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Button, Text } from "react-native-paper";
+import { Button, Divider, Text } from "react-native-paper";
 import Header from "../components/Header";
 import OtpTextInput from "../components/OtpTextInput";
 import { useAuthContext } from "../context/AuthContext";
@@ -10,7 +10,7 @@ export default function BecomeSeller() {
     useAuthContext();
   const [otp, setOtp] = useState("");
   const [pinReady, setPinReady] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
+  const [otpSent, setOtpSent] = useState(true);
   const [otpResend, setOtpResend] = useState(60);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function BecomeSeller() {
     return () => clearInterval(timer);
   }, [otpResend]);
 
-  const MAX_CODE_LENGTH = 5;
+  const MAX_CODE_LENGTH = 4;
   const handleVerify = () => {
     verifyOtp(otp);
   };
@@ -29,8 +29,7 @@ export default function BecomeSeller() {
       setOtpSent(true);
     }
     if (error) {
-      Alert.alert(error);
-      clearError();
+      Alert.alert("Error", error, [{ text: "OK", onPress: clearError }]);
     }
   };
 
@@ -73,6 +72,7 @@ export default function BecomeSeller() {
                   width: "60%",
                 }}
                 disabled={!pinReady || loading}
+                onPress={handleVerify}
               >
                 <Text
                   style={{
@@ -87,13 +87,34 @@ export default function BecomeSeller() {
             </View>
           </>
         )}
-        <Button
-          onPress={() => navigation.openDrawer()}
-          disabled={otpResend > 0}
-          mode="outlined"
+        <View
+          style={{
+            marginTop: 70,
+            borderTopColor: "#fff",
+            borderTopWidth: 1,
+            marginBottom: 30,
+          }}
         >
-          <Text>Resend OTP {otpResend > 0 ? `(${otpResend})` : ""}</Text>
-        </Button>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 18,
+              fontWeight: "bold",
+              marginBottom: 20,
+              marginTop: 20,
+            }}
+            variant="bodyLarge"
+          >
+            Didn't recieve OTP?
+          </Text>
+          <Button
+            onPress={() => navigation.openDrawer()}
+            disabled={otpResend > 0}
+            mode="outlined"
+          >
+            <Text>Resend OTP {otpResend > 0 ? `(${otpResend})` : ""}</Text>
+          </Button>
+        </View>
       </View>
     </Pressable>
   );

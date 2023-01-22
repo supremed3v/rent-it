@@ -383,22 +383,30 @@ export const verifySeller = async (req, res) => {
 
   seller.verifySellerToken = resetOtp;
   seller.verifySellerTokenExpiry = expiry;
-  seller.idCardNumber = idCardNumber;
+  // seller.idCardNumber = idCardNumber;
+  // if (!seller.idCardNumber) {
+  //   return res.status(400).json({
+  //     success: false,
+  //     message: "Please enter your id card number",
+  //   });
+  // }
 
   await seller.save();
 
-  const message =
-    `Dear User, \n\n` +
-    "OTP for Account Verification for Seller is : \n\n" +
-    `${resetOtp}\n\n` +
-    "This is a auto-generated email. Please do not reply to this email.\n\n" +
-    "Regards\n\n";
+  const message = `Your account verification OTP is as follow:
+  \n\n${resetOtp}
+  \n\nIf you have not requested this email, then ignore it.`;
 
   try {
     await sendEmail({
       email: email,
       subject: "Seller Account Verification",
-      text: message,
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "OTP sent to your email",
     });
   } catch (error) {
     seller.verifySellerToken = undefined;
@@ -416,23 +424,24 @@ export const verifySeller = async (req, res) => {
 export const verifySellerOtp = async (req, res) => {
   const { otp } = req.body;
   try {
-    const seller = User.findOne({
+    const seller = await User.findOne({
       verifySellerToken: otp,
       verifySellerTokenExpiry: { $gt: Date.now() },
     });
-    if (!seller) {
+    if (seller === null) {
       return res.status(400).json({
         success: false,
         message: "Invalid OTP",
       });
     }
 
-    if (otp !== seller.verifySellerToken) {
+    if (req.body.otp !== seller.verifySellerToken) {
       return res.status(400).json({
         success: false,
         message: "Incorrect OTP",
       });
     }
+
     seller.role = "seller";
     seller.verifySellerToken = undefined;
     seller.verifySellerTokenExpiry = undefined;
