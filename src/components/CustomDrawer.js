@@ -6,7 +6,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { useAuthContext } from "../context/AuthContext";
 
 export default function CustomDrawer(props) {
@@ -36,6 +36,7 @@ export default function CustomDrawer(props) {
           style={{
             width: "100%",
             height: 200,
+            marginBottom: 20,
           }}
           resizeMode="cover"
         >
@@ -90,17 +91,30 @@ export default function CustomDrawer(props) {
         </TouchableOpacity>
         <Divider />
       </View>
-      <View
-        style={{
-          padding: 20,
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate("BecomeSeller")}
+      {user.role === "user" && (
+        <View
+          style={{
+            padding: 20,
+          }}
         >
-          <Text>Become a seller</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate("BecomeSeller")}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <FontAwesome5 name="user-check" size={24} color="#fff" />
+            <Text
+              style={{
+                marginLeft: 15,
+              }}
+            >
+              Become a seller
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
