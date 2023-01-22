@@ -373,7 +373,7 @@ export const verifySeller = async (req, res) => {
 
   const email = seller.email;
 
-  const resetOtp = otpGenerator.generate(6, {
+  const resetOtp = otpGenerator.generate(5, {
     upperCase: false,
     specialChars: false,
     alphabets: false,
