@@ -1,6 +1,6 @@
 import { sendToken } from "../middlewares/sendToken.js";
 import User from "../models/UserModel.js";
-import { sendMail } from "../middlewares/sendMail.js";
+import sendEmail from "../middlewares/sendMail.js";
 import otpGenerator from "otp-generator";
 import cloudinary from "cloudinary";
 
@@ -217,7 +217,7 @@ export const forgotPassword = async (req, res) => {
     "Regards\n\n";
 
   try {
-    await sendMail({
+    await sendEmail({
       email: user.email,
       subject: "Password reset request",
       text: message,
@@ -395,7 +395,7 @@ export const verifySeller = async (req, res) => {
     "Regards\n\n";
 
   try {
-    await sendMail({
+    await sendEmail({
       email: email,
       subject: "Seller Account Verification",
       text: message,
@@ -408,7 +408,7 @@ export const verifySeller = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: error,
     });
   }
 };

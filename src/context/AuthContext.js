@@ -141,7 +141,15 @@ export const AuthContextProvider = ({ children }) => {
       loading: true,
     });
     try {
-      const res = await axios.post(`${API}/api/v1/generate-otp`, { email });
+      const res = await axios.post(
+        `${API}/api/v1/generate-otp`,
+        { email },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.loginToken}`,
+          },
+        }
+      );
       setAuthState({
         ...authState,
         loading: false,
@@ -177,6 +185,13 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const clearError = () => {
+    setAuthState({
+      ...authState,
+      error: null,
+    });
+  };
+
   useEffect(() => {
     getToken().then((value) =>
       setAuthState({ ...authState, loginToken: value })
@@ -193,6 +208,7 @@ export const AuthContextProvider = ({ children }) => {
         signUp,
         verifyOtp,
         generateOtp,
+        clearError,
       }}
     >
       {children}
