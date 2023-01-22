@@ -212,22 +212,20 @@ export const AuthContextProvider = ({ children }) => {
       data: encodedParams,
     };
 
-    axios
-      .request(options)
-      .then(function (response) {
-        setAuthState({
-          ...authState,
-          loading: false,
-          success: response.data.resultMessage,
-        });
-      })
-      .catch(function (error) {
-        setAuthState({
-          ...authState,
-          loading: false,
-          error: error.response.data.resultMessage,
-        });
+    try {
+      const res = await axios(options);
+      setAuthState({
+        ...authState,
+        loading: false,
+        success: res.data.resultMessage,
       });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        error: error.response.data.message,
+      });
+    }
   };
 
   useEffect(() => {
