@@ -1,6 +1,6 @@
 import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { Button, Text } from "react-native-paper";
+import { Button, Divider, Text } from "react-native-paper";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -87,6 +87,18 @@ export default function CustomDrawer(props) {
           >
             Logout
           </Text>
+        </TouchableOpacity>
+        <Divider />
+      </View>
+      <View
+        style={{
+          padding: 20,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate("BecomeSeller")}
+        >
+          <Text>Become a seller</Text>
         </TouchableOpacity>
       </View>
     </View>
