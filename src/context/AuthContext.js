@@ -192,14 +192,14 @@ export const AuthContextProvider = ({ children }) => {
     });
   };
 
-  const faceVerification = async (image1Base64, image2Base64) => {
+  const faceVerification = (image1Base64, image2Base64) => {
     setAuthState({
       ...authState,
       loading: true,
     });
     const encodedParams = new URLSearchParams();
-    encodedParams.append("image1Base64", image1Base64);
-    encodedParams.append("image2Base64", image2Base64);
+    encodedParams.append("image1Base64", `${image1Base64}`);
+    encodedParams.append("image2Base64", `${image2Base64}`);
 
     const options = {
       method: "POST",

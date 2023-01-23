@@ -60,7 +60,7 @@ const CameraModule = (props) => {
                   });
                   props.setImage(photo);
                   props.setModalVisible();
-                  props.setBase64Image(photo.base64);
+                  props.setBase64Image(photo);
                 }
               }}
             >
@@ -244,11 +244,12 @@ export default function IDVerification() {
   }
 
   const handleVerification = () => {
-    faceVerification(base64Image, base64Card);
+    console.log("base64Image", base64Image);
+    console.log("base64Card", base64Card);
   };
 
-  console.log(success);
-  console.log(error);
+  // console.log(error);
+  // console.log(success);
 
   return (
     <>
