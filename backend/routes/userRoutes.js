@@ -6,6 +6,7 @@ import {
   registerUser,
   verifySeller,
   verifySellerOtp,
+  verifyUserImage,
 } from "../controllers/userController.js";
 import {
   isAuthenticatedUser,
@@ -30,5 +31,7 @@ router.put(
   authorizeRoles("user"),
   verifySellerOtp
 );
+
+router.post("/verify-image", verifyUserImage);
 
 export default router;
