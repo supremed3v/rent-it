@@ -3,6 +3,7 @@ import { Modal, TouchableOpacity, View, Image } from "react-native";
 import { Camera } from "expo-camera";
 import { Button, SegmentedButtons, Text } from "react-native-paper";
 import Header from "../components/Header";
+import { useAuthContext } from "../context/AuthContext";
 const CameraModule = (props) => {
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -227,6 +228,7 @@ export default function IDVerification() {
   const [base64Card, setBase64Card] = useState(null);
   const [base64Image, setBase64Image] = useState(null);
   const [value, setValue] = useState("ID");
+  const { faceVerification, loading, error, success } = useAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -240,6 +242,14 @@ export default function IDVerification() {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
+  const handleVerification = () => {
+    faceVerification(base64Image, base64Card);
+  };
+
+  console.log(success);
+  console.log(error);
+
   return (
     <>
       <Header title={"Verification"} />
@@ -371,10 +381,11 @@ export default function IDVerification() {
         )}
         <Button
           mode="contained"
-          disabled={value === "ID" ? !image : !cardImage}
+          disabled={value === "ID" ? !image : !cardImage && loading === true}
           style={{
             marginTop: 16,
           }}
+          onPress={handleVerification}
         >
           Submit
         </Button>
