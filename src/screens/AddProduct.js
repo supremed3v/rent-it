@@ -41,13 +41,17 @@ export default function AddProduct() {
       allowsEditing: false,
     });
     if (!result.canceled) {
-      setImages([...images, result.assets]);
+      setImages(result.assets.map((item) => item.base64));
     }
   };
-  let myImages = [];
+
+  const imagesArray = [];
+
   for (let i = 0; i < images.length; i++) {
-    myImages.push(`data:image/jpg;base64,${images[i].base64}`);
+    imagesArray.push(`data:image/jpg;base64,${images[i]}`);
   }
+
+  console.log(imagesArray.length);
 
   const handleAddProduct = () => {
     const product = {
@@ -55,7 +59,7 @@ export default function AddProduct() {
       price,
       description,
       category: value,
-      images: myImages,
+      // images: myImages,
     };
     console.log(product);
   };

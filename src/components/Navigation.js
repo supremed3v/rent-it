@@ -39,7 +39,11 @@ const CustomTabBar = ({ children }) => {
   const { user } = useAuthContext();
   const navigation = useNavigation();
   const postButton = () => {
-    if (user.role === "seller" || user.role === "admin") {
+    if (
+      user.role === "seller" ||
+      user.role === "admin" ||
+      user.role === "pending"
+    ) {
       navigation.navigate("AddProduct");
     } else {
       Alert.alert(
