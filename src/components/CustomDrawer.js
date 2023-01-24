@@ -97,7 +97,7 @@ export default function CustomDrawer(props) {
           }}
         >
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("IDVerification")}
+            onPress={() => props.navigation.navigate("BecomeSeller")}
             style={{
               flexDirection: "row",
               alignItems: "center",

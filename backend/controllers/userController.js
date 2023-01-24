@@ -444,11 +444,12 @@ export const verifySellerOtp = async (req, res) => {
     }
     seller.verifySellerToken = undefined;
     seller.verifySellerTokenExpiry = undefined;
+    seller.role = "pending";
     await seller.save();
 
     res.status(200).json({
       success: true,
-      message: "Congratulation you've successfully become a seller now!",
+      message: "OTP verified successfully",
     });
   } catch (error) {
     res.status(500).json({

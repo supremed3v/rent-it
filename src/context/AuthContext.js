@@ -169,20 +169,6 @@ export const AuthContextProvider = ({ children }) => {
       ...authState,
       loading: true,
     });
-    try {
-      const res = await axios.put(`${API}/api/v1/verify-seller`, { otp });
-      setAuthState({
-        ...authState,
-        loading: false,
-        success: res.data.success,
-      });
-    } catch (error) {
-      setAuthState({
-        ...authState,
-        loading: false,
-        error: error.response.data.message,
-      });
-    }
   };
 
   const clearError = () => {

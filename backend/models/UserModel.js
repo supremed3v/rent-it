@@ -56,21 +56,17 @@ const UserSchema = new mongoose.Schema({
   verifySellerImage: {
     public_id: {
       type: String,
-      required: true,
     },
     url: {
       type: String,
-      required: true,
     },
   },
   verifySellerIdCard: {
     public_id: {
       type: String,
-      required: true,
     },
     url: {
       type: String,
-      required: true,
     },
   },
 });

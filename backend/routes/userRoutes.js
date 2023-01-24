@@ -25,12 +25,7 @@ router.post(
   authorizeRoles("user"),
   verifySeller
 );
-router.put(
-  "/verify-seller",
-  isAuthenticatedUser,
-  authorizeRoles("user"),
-  verifySellerOtp
-);
+router.put("/verify-seller", verifySellerOtp);
 
 router.post("/verify-image", verifyUserImage);
 

@@ -4,14 +4,17 @@ import { Button, Divider, Text } from "react-native-paper";
 import Header from "../components/Header";
 import OtpTextInput from "../components/OtpTextInput";
 import { useAuthContext } from "../context/AuthContext";
+import { API } from "../context/ProductsContext";
+import axios from "axios";
 
-export default function BecomeSeller() {
+export default function BecomeSeller({ navigation }) {
   const { user, generateOtp, verifyOtp, success, loading, error, clearError } =
     useAuthContext();
   const [otp, setOtp] = useState("");
   const [pinReady, setPinReady] = useState(false);
-  const [otpSent, setOtpSent] = useState(true);
+  const [otpSent, setOtpSent] = useState(false);
   const [otpResend, setOtpResend] = useState(60);
+  const [otpVerified, setOtpVerified] = useState(false);
 
   useEffect(() => {
     const timer =
@@ -19,9 +22,17 @@ export default function BecomeSeller() {
     return () => clearInterval(timer);
   }, [otpResend]);
 
-  const MAX_CODE_LENGTH = 4;
-  const handleVerify = () => {
-    verifyOtp(otp);
+  const MAX_CODE_LENGTH = 5;
+  const handleVerify = async (otp) => {
+    try {
+      const res = await axios.put(`${API}/api/v1/verify-seller`, { otp });
+      if (res.data.success) {
+        setOtpVerified(true);
+        navigation.navigate("IDVerification");
+      }
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
   };
   const handleGenerateOtp = () => {
     generateOtp(user.email);
@@ -32,7 +43,7 @@ export default function BecomeSeller() {
       Alert.alert("Error", error, [{ text: "OK", onPress: clearError }]);
     }
   };
-
+  console.log(otpVerified);
   return (
     <Pressable onPress={Keyboard.dismiss}>
       <Header title={"Hi Seller!"} />
@@ -72,7 +83,7 @@ export default function BecomeSeller() {
                   width: "60%",
                 }}
                 disabled={!pinReady || loading}
-                onPress={handleVerify}
+                onPress={() => handleVerify(otp)}
               >
                 <Text
                   style={{
