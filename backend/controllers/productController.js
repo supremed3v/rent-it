@@ -19,6 +19,28 @@ export const newProduct = async (req, res) => {
   const user = await User.findById(req.user.id);
   const categories = await Category.find();
 
+  let imagesArray = [];
+
+  if (typeof images === "string") {
+    images.push(images);
+  } else {
+    imagesArray = images;
+  }
+
+  const imagesLinks = [];
+
+  for (let i = 0; i < imagesArray.length; i++) {
+    const result = await cloudinary.uploader.upload(imagesArray[i], {
+      folder: "rental",
+    });
+    imagesLinks.push({
+      public_id: result.public_id,
+      url: result.secure_url,
+    });
+  }
+
+  images = imagesLinks;
+
   const relatedCat = categories.find((cat) => cat.name === category);
   const relatedCatId = relatedCat._id;
   if (!relatedCat) {

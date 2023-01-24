@@ -45,11 +45,21 @@ export default function AddProduct() {
     }
   };
   let myImages = [];
-  images.map((image) => {
-    image.map((img) => {
-      myImages.push(img.base64);
-    });
-  });
+  for (let i = 0; i < images.length; i++) {
+    myImages.push(`data:image/jpg;base64,${images[i].base64}`);
+  }
+
+  const handleAddProduct = () => {
+    const product = {
+      name,
+      price,
+      description,
+      category: value,
+      images: myImages,
+    };
+    console.log(product);
+  };
+
   return (
     <Provider>
       <View>
@@ -146,6 +156,17 @@ export default function AddProduct() {
               </RadioButton.Group>
             </Modal>
           </Portal>
+          <Button
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+            mode="contained"
+            onPress={handleAddProduct}
+            dark={true}
+          >
+            Add Product
+          </Button>
         </View>
       </View>
     </Provider>
