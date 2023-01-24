@@ -43,7 +43,6 @@ export default function BecomeSeller({ navigation }) {
       Alert.alert("Error", error, [{ text: "OK", onPress: clearError }]);
     }
   };
-  console.log(otpVerified);
   return (
     <Pressable onPress={Keyboard.dismiss}>
       <Header title={"Hi Seller!"} />

@@ -477,25 +477,25 @@ export const verifyUserImage = async (req, res) => {
       success: false,
       message: "Image upload failed",
     });
+  } else {
+    newSeller.verifySellerImage = {
+      public_id: imageUpload.public_id,
+      url: imageUpload.secure_url,
+    };
+
+    newSeller.verifySellerCard = {
+      public_id: cardUpload.public_id,
+      url: cardUpload.secure_url,
+    };
+
+    await newSeller.save();
+
+    res.status(200).json({
+      success: true,
+      message:
+        "You have successfully uploaded your images for verification process now you have to wait for admin approval. You will be notified via email once your account is verified.",
+    });
   }
-
-  newSeller.verifySellerImage = {
-    public_id: imageUpload.public_id,
-    url: imageUpload.secure_url,
-  };
-
-  newSeller.verifySellerCard = {
-    public_id: cardUpload.public_id,
-    url: cardUpload.secure_url,
-  };
-
-  await newSeller.save();
-
-  res.status(200).json({
-    success: true,
-    message:
-      "You have successfully uploaded your images for verification process now you have to wait for admin approval. You will be notified via email once your account is verified.",
-  });
 };
 
 export const verifySellerAdmin = async (req, res) => {
