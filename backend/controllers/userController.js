@@ -463,6 +463,8 @@ export const verifySellerOtp = async (req, res) => {
 export const verifyUserImage = async (req, res) => {
   const { base64Image, base64Card } = req.body;
 
+  const newSeller = await User.findById(req.user.id);
+
   const imageUpload = await cloudinary.uploader.upload(base64Image, {
     folder: "rental/user",
   });
@@ -478,40 +480,21 @@ export const verifyUserImage = async (req, res) => {
     });
   }
 
-  let url1 = imageUpload.secure_url;
-  let url2 = cardUpload.secure_url;
+  newSeller.verifySellerImage = {
+    public_id: imageUpload.public_id,
+    url: imageUpload.secure_url,
+  };
 
-  if (url1 !== null && url2 !== null) {
-    const encodedParams = new URLSearchParams();
-    encodedParams.append("lineFile1", url1);
-    encodedParams.append("linkFile2", url2);
-    console.log(encodedParams);
+  newSeller.verifySellerCard = {
+    public_id: cardUpload.public_id,
+    url: cardUpload.secure_url,
+  };
 
-    const options = {
-      method: "POST",
-      url: "https://face-verification2.p.rapidapi.com/faceverification",
-      headers: {
-        "content-type": "application/x-www-form-urlencoded",
-        "X-RapidAPI-Key": "ad86fd9dd1mshc1a61e42bd929a0p170f9fjsnde0c2f2b7a19",
-        "X-RapidAPI-Host": "face-verification2.p.rapidapi.com",
-      },
-      data: encodedParams,
-    };
+  await newSeller.save();
 
-    console.log(options);
-    axios
-      .request(options)
-      .then(function (response) {
-        res.status(200).json({
-          success: true,
-          message: response.data,
-        });
-      })
-      .catch(function (error) {
-        res.status(500).json({
-          success: false,
-          message: error,
-        });
-      });
-  }
+  res.status(200).json({
+    success: true,
+    message:
+      "You have successfully uploaded your images for verification process now you have to wait for admin approval",
+  });
 };

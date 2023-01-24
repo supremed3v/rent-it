@@ -53,9 +53,25 @@ const UserSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
   verifySellerToken: String,
   verifySellerTokenExpiry: Date,
-  idCardNumber: {
-    type: Number,
-    maxLength: 13,
+  verifySellerImage: {
+    public_id: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+  },
+  verifySellerIdCard: {
+    public_id: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
   },
 });
 

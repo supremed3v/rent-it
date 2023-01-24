@@ -197,37 +197,23 @@ export const AuthContextProvider = ({ children }) => {
       ...authState,
       loading: true,
     });
-    const encodedParams = new URLSearchParams();
-    encodedParams.append("image1Base64", `${image1Base64}`);
-    encodedParams.append("image2Base64", `${image2Base64}`);
-
-    const options = {
-      method: "POST",
-      url: "https://face-verification2.p.rapidapi.com/faceverification",
-      headers: {
-        "content-type": "application/x-www-form-urlencoded",
-        "X-RapidAPI-Key": "ad86fd9dd1mshc1a61e42bd929a0p170f9fjsnde0c2f2b7a19",
-        "X-RapidAPI-Host": "face-verification2.p.rapidapi.com",
-      },
-      data: encodedParams,
-    };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        setAuthState({
-          ...authState,
-          loading: false,
-          success: response.data,
-        });
-      })
-      .catch(function (error) {
-        setAuthState({
-          ...authState,
-          loading: false,
-          error: error.response.data.message,
-        });
+    try {
+      const res = axios.post(`${API}/api/v1/verify-image`, {
+        image1Base64,
+        image2Base64,
       });
+      setAuthState({
+        ...authState,
+        loading: false,
+        success: res.data.message,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        error: error,
+      });
+    }
   };
 
   useEffect(() => {

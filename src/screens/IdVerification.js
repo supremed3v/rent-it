@@ -244,12 +244,11 @@ export default function IDVerification() {
   }
 
   const handleVerification = () => {
-    console.log("base64Image", base64Image);
-    console.log("base64Card", base64Card);
+    faceVerification(base64Image, base64Card);
   };
 
-  // console.log(error);
-  // console.log(success);
+  console.log(error);
+  console.log(success);
 
   return (
     <>
@@ -370,9 +369,7 @@ export default function IDVerification() {
               <CardVerification
                 showModal={openSecondCamera}
                 setModalVisible={() => setOpenSecondCamera(false)}
-                setCardImage={(result) =>
-                  setCardImage(result.uri) && setBase64Card(result.base64)
-                }
+                setCardImage={(result) => setCardImage(result.uri)}
                 setBase64Card={(result) => {
                   setBase64Card(result.base64);
                 }}
