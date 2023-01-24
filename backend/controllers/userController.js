@@ -471,33 +471,47 @@ export const verifyUserImage = async (req, res) => {
     folder: "rental/user",
   });
 
-  const encodedParams = new URLSearchParams();
-  encodedParams.append("image1Base64", imageUpload.secure_url);
-  encodedParams.append("image2Base64", cardUpload.secure_url);
-
-  const options = {
-    method: "POST",
-    url: "https://face-verification2.p.rapidapi.com/faceverification",
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-      "X-RapidAPI-Key": "ad86fd9dd1mshc1a61e42bd929a0p170f9fjsnde0c2f2b7a19",
-      "X-RapidAPI-Host": "face-verification2.p.rapidapi.com",
-    },
-    data: encodedParams,
-  };
-
-  axios
-    .request(options)
-    .then(function (response) {
-      res.status(200).json({
-        success: true,
-        message: response.data,
-      });
-    })
-    .catch(function (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
+  if (!imageUpload || !cardUpload) {
+    return res.status(400).json({
+      success: false,
+      message: "Image upload failed",
     });
+  }
+
+  let url1 = imageUpload.secure_url;
+  let url2 = cardUpload.secure_url;
+
+  if (url1 !== null && url2 !== null) {
+    const encodedParams = new URLSearchParams();
+    encodedParams.append("lineFile1", url1);
+    encodedParams.append("linkFile2", url2);
+    console.log(encodedParams);
+
+    const options = {
+      method: "POST",
+      url: "https://face-verification2.p.rapidapi.com/faceverification",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        "X-RapidAPI-Key": "ad86fd9dd1mshc1a61e42bd929a0p170f9fjsnde0c2f2b7a19",
+        "X-RapidAPI-Host": "face-verification2.p.rapidapi.com",
+      },
+      data: encodedParams,
+    };
+
+    console.log(options);
+    axios
+      .request(options)
+      .then(function (response) {
+        res.status(200).json({
+          success: true,
+          message: response.data,
+        });
+      })
+      .catch(function (error) {
+        res.status(500).json({
+          success: false,
+          message: error,
+        });
+      });
+  }
 };
