@@ -15,6 +15,25 @@ export default function CustomDrawer(props) {
     logout();
     props.navigation.navigate("LoginSignup");
   };
+
+  const routeCheck = () => {
+    if (
+      user.role === "pending" &&
+      !user.verifySellerImage &&
+      !user.verifySellerIdCard
+    ) {
+      props.navigation.navigate("IDVerification");
+    } else if (
+      user.role === "pending" &&
+      user.verifySellerImage &&
+      !user.verifySellerIdCard
+    ) {
+      props.navigation.navigate("IDVerification");
+    } else if (user.role === "user") {
+      props.navigation.navigate("BecomeSeller");
+    }
+  };
+
   return (
     <View
       style={{
@@ -90,31 +109,62 @@ export default function CustomDrawer(props) {
           </Text>
         </TouchableOpacity>
       </View>
-      {user.role === "user" && (
-        <View
-          style={{
-            padding: 20,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate("BecomeSeller")}
+      {user.role === "user" ||
+        (user.role === "pending" &&
+        !user.verifySellerImage &&
+        !user.verifySellerIdCard ? (
+          <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginBottom: 20,
+              padding: 20,
             }}
           >
-            <FontAwesome5 name="user-check" size={24} color="#fff" />
-            <Text
+            <TouchableOpacity
+              onPress={() => {
+                routeCheck();
+              }}
               style={{
-                marginLeft: 15,
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 20,
               }}
             >
-              Become a seller
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
+              <FontAwesome5 name="user-check" size={24} color="#fff" />
+              <Text
+                style={{
+                  marginLeft: 15,
+                }}
+              >
+                Become a seller
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View
+            style={{
+              padding: 20,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                routeCheck();
+              }}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 20,
+              }}
+            >
+              <FontAwesome5 name="user-check" size={24} color="#fff" />
+              <Text
+                style={{
+                  marginLeft: 15,
+                }}
+              >
+                {user.role === "pending" ? "Status Pending" : "Seller Account"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ))}
     </View>
   );
 }

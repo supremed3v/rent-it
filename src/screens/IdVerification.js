@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, TouchableOpacity, View, Image } from "react-native";
+import { Modal, TouchableOpacity, View, Image, Alert } from "react-native";
 import { Camera } from "expo-camera";
 import { Button, SegmentedButtons, Text } from "react-native-paper";
 import Header from "../components/Header";
@@ -228,7 +228,8 @@ export default function IDVerification() {
   const [base64Card, setBase64Card] = useState(null);
   const [base64Image, setBase64Image] = useState(null);
   const [value, setValue] = useState("ID");
-  const { faceVerification, loading, error, success } = useAuthContext();
+  const { faceVerification, loading, error, success, clearError, user } =
+    useAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -244,11 +245,31 @@ export default function IDVerification() {
   }
 
   const handleVerification = () => {
-    faceVerification(base64Image, base64Card);
-  };
+    const cardImage = `data:image/jpg;base64,${base64Card}`;
+    const faceImage = `data:image/jpg;base64,${base64Image}`;
+    const data = {
+      cardImage,
+      faceImage,
+      userId: user._id,
+    };
 
-  console.log(error);
-  console.log(success);
+    faceVerification(data);
+  };
+  if (error) {
+    console.log(error);
+  }
+
+  if (success) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", color: "green" }}>
+          Verification Successful
+        </Text>
+        <Text>You will be notified by email once we verify you.</Text>
+        <Button onPress={() => clearError()}>Go Back</Button>
+      </View>
+    );
+  }
 
   return (
     <>

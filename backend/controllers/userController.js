@@ -460,40 +460,31 @@ export const verifySellerOtp = async (req, res) => {
 };
 
 export const verifyUserImage = async (req, res) => {
-  const { base64Image, base64Card } = req.body;
+  const { cardImage, faceImage, userId } = req.body;
 
-  const newSeller = await User.findById(req.user.id);
+  const newSeller = await User.findById(userId);
+  try {
+    const image = await cloudinary.v2.uploader.upload(faceImage);
+    const card = await cloudinary.v2.uploader.upload(cardImage);
 
-  const imageUpload = await cloudinary.uploader.upload(base64Image, {
-    folder: "rental/user",
-  });
-
-  const cardUpload = await cloudinary.uploader.upload(base64Card, {
-    folder: "rental/user",
-  });
-
-  if (!imageUpload || !cardUpload) {
-    return res.status(400).json({
-      success: false,
-      message: "Image upload failed",
-    });
-  } else {
     newSeller.verifySellerImage = {
-      public_id: imageUpload.public_id,
-      url: imageUpload.secure_url,
+      public_id: image.public_id,
+      url: image.secure_url,
     };
-
-    newSeller.verifySellerCard = {
-      public_id: cardUpload.public_id,
-      url: cardUpload.secure_url,
+    newSeller.verifySellerIdCard = {
+      public_id: card.public_id,
+      url: card.secure_url,
     };
-
     await newSeller.save();
 
     res.status(200).json({
       success: true,
-      message:
-        "You have successfully uploaded your images for verification process now you have to wait for admin approval. You will be notified via email once your account is verified.",
+      message: "Image uploaded successfully and waiting for admin approval",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };

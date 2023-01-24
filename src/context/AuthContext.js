@@ -164,13 +164,6 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const verifyOtp = async (otp) => {
-    setAuthState({
-      ...authState,
-      loading: true,
-    });
-  };
-
   const clearError = () => {
     setAuthState({
       ...authState,
@@ -178,16 +171,13 @@ export const AuthContextProvider = ({ children }) => {
     });
   };
 
-  const faceVerification = (image1Base64, image2Base64) => {
+  const faceVerification = async (data) => {
     setAuthState({
       ...authState,
       loading: true,
     });
     try {
-      const res = axios.post(`${API}/api/v1/verify-image`, {
-        image1Base64,
-        image2Base64,
-      });
+      const res = await axios.post(`${API}/api/v1/verify-image`, data);
       setAuthState({
         ...authState,
         loading: false,
@@ -197,7 +187,7 @@ export const AuthContextProvider = ({ children }) => {
       setAuthState({
         ...authState,
         loading: false,
-        error: error,
+        error: error.response.data.message,
       });
     }
   };
@@ -216,7 +206,6 @@ export const AuthContextProvider = ({ children }) => {
         loadUser,
         logout,
         signUp,
-        verifyOtp,
         generateOtp,
         clearError,
         faceVerification,
