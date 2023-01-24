@@ -442,8 +442,6 @@ export const verifySellerOtp = async (req, res) => {
         message: "Incorrect OTP",
       });
     }
-
-    seller.role = "seller";
     seller.verifySellerToken = undefined;
     seller.verifySellerTokenExpiry = undefined;
     await seller.save();
@@ -495,6 +493,45 @@ export const verifyUserImage = async (req, res) => {
   res.status(200).json({
     success: true,
     message:
-      "You have successfully uploaded your images for verification process now you have to wait for admin approval",
+      "You have successfully uploaded your images for verification process now you have to wait for admin approval. You will be notified via email once your account is verified.",
   });
+};
+
+export const verifySellerAdmin = async (req, res) => {
+  const { id } = req.params;
+  const seller = await User.findById(id);
+
+  if (seller.role !== "user") {
+    return res.status(400).json({
+      success: false,
+      message: "This user is already a seller",
+    });
+  }
+
+  seller.role = "seller";
+  await seller.save();
+
+  const message = `Your account has been verified by admin. Now you can start renting your products.
+  \n\nThank you for using our service.
+  \n\nIf you have not requested this email, then ignore it.`;
+
+  try {
+    await sendEmail({
+      email: email,
+      subject: "Seller Account Verification",
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    seller.role = "user";
+    await seller.save();
+
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
 };
