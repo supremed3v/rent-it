@@ -165,13 +165,32 @@ export const updatePassword = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   const user = await User.findById(req.user.id);
 
-  user.name = req.body.name || user.name;
-  user.email = req.body.email || user.email;
+  const updatedData = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
   if (req.body.avatar !== "") {
-    user.avatar = req.body.avatar || user.avatar;
+    const image_id = user.avatar.public_id;
+    await cloudinary.v2.uploader.destroy(image_id);
+
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+      width: 150,
+      crop: "scale",
+    });
+
+    updatedData.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
   }
 
-  await user.save();
+  await User.findByIdAndUpdate(user, updatedData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
 
   res.status(200).json({
     success: true,
