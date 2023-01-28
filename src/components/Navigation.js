@@ -39,13 +39,14 @@ const CustomTabBar = ({ children }) => {
   const { user } = useAuthContext();
   const navigation = useNavigation();
   const postButton = () => {
-    if (
-      user.role === "seller" ||
-      user.role === "admin" ||
-      user.role === "pending"
-    ) {
+    if (user.role === "seller" || user.role === "admin") {
       navigation.navigate("AddProduct");
     } else {
+      if (user.role === "pending") {
+        Alert.alert(
+          "Your account is pending verification by admin please wait for a while and try again later :)"
+        );
+      }
       Alert.alert(
         "You are not authorized to add products",
         "Please register as a seller to add products",
