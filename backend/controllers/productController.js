@@ -380,8 +380,10 @@ export const getProductsBySeller = async (req, res) => {
   const products = await Product.find({ seller: req.user.id });
 
   if (!products) {
-    res.status(404);
-    throw new Error("Products not found");
+    res.status(404).json({
+      success: false,
+      message: "Products not found",
+    });
   }
 
   res.status(200).json({
