@@ -34,6 +34,7 @@ import OrderScreen from "../screens/OrderScreen";
 import CustomDrawer from "./CustomDrawer";
 import BecomeSeller from "../screens/BecomeSeller";
 import IDVerification from "../screens/IdVerification";
+import ListedProducts from "../screens/ListedProducts";
 
 const CustomTabBar = ({ children }) => {
   const { user } = useAuthContext();
@@ -280,6 +281,15 @@ export const DrawerNavigation = () => {
       <Drawer.Screen
         name="Orders"
         component={OrderScreen}
+        options={{
+          drawerIcon: ({ color }) => (
+            <FontAwesome name="shopping-bag" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Products"
+        component={ListedProducts}
         options={{
           drawerIcon: ({ color }) => (
             <FontAwesome name="shopping-bag" size={22} color={color} />

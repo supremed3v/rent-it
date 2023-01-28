@@ -5,6 +5,7 @@ import {
 } from "../middlewares/authenticate.js";
 import {
   getProductsByCategory,
+  getProductsBySeller,
   newProduct,
 } from "../controllers/productController.js";
 import {
@@ -28,5 +29,11 @@ router.post(
 
 router.get("/categories", getCategories);
 router.get("/getCategoriesProducts/:category", getProductsByCategory);
+router.get(
+  "/seller-products",
+  isAuthenticatedUser,
+  authorizeRoles("seller"),
+  getProductsBySeller
+);
 
 export default router;
