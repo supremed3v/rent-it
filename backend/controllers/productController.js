@@ -393,7 +393,10 @@ export const getProductsBySeller = async (req, res) => {
 };
 
 export const getProductsBySellerId = async (req, res) => {
-  const products = await Product.find({ seller: req.params.id });
+  const products = await Product.find({ seller: req.params.id }).where(
+    "approved",
+    true
+  );
 
   if (!products) {
     res.status(404);
