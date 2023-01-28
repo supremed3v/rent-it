@@ -51,15 +51,13 @@ export default function AddProduct() {
     imagesArray.push(`data:image/jpg;base64,${images[i]}`);
   }
 
-  console.log(imagesArray.length);
-
   const handleAddProduct = () => {
     const product = {
       name,
       price,
       description,
       category: value,
-      // images: myImages,
+      images: imagesArray,
     };
     console.log(product);
   };
