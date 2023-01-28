@@ -163,6 +163,32 @@ export default function CustomDrawer(props) {
                 {user.role === "pending" ? "Status Pending" : "Seller Account"}
               </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 20,
+              }}
+              onPress={() => {
+                props.navigation.navigate("MyProducts");
+              }}
+            >
+              <Text
+                style={{
+                  marginLeft: 15,
+                }}
+              >
+                My Products
+              </Text>
+              <AntDesign
+                name="right"
+                size={24}
+                color="#fff"
+                style={{
+                  marginLeft: 15,
+                }}
+              />
+            </TouchableOpacity>
           </View>
         ))}
     </View>
