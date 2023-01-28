@@ -14,6 +14,7 @@ export default function Header({ title }) {
         style={{
           flexDirection: "row",
           alignItems: "center",
+          justifyContent: "space-between",
           paddingHorizontal: 10,
           marginTop: 10,
         }}
@@ -24,12 +25,13 @@ export default function Header({ title }) {
         <Text
           style={{
             textAlign: "center",
-            marginLeft: 60,
+            // marginLeft: 60,
           }}
           variant="displaySmall"
         >
           {title}
         </Text>
+        <View />
       </View>
     </>
   );

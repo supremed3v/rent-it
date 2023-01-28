@@ -15,11 +15,21 @@ export default function ListedProducts() {
     }
   }, []);
 
-  console.log(rentedProducts);
-
   return (
     <View>
-      <Header title={"Listed Products"} />
+      <Header title={"Your Products"} />
+      {rentedProducts.length > 0 ? (
+        <Text>Rented Products available</Text>
+      ) : (
+        <Text
+          style={{
+            textAlign: "center",
+            marginTop: 20,
+          }}
+        >
+          No Rented Products available
+        </Text>
+      )}
     </View>
   );
 }
