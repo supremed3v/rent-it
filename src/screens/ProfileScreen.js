@@ -1,4 +1,4 @@
-import { View, Image } from "react-native";
+import { View, Image, Modal } from "react-native";
 import React, { useState } from "react";
 import Header from "../components/Header";
 import { Button, Text, TextInput } from "react-native-paper";
@@ -7,6 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 
 export default function ProfileScreen() {
   const { user } = useAuthContext();
+  const [openModal, setOpenModal] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,6 +48,42 @@ export default function ProfileScreen() {
   return (
     <View>
       <Header title={"Profile "} />
+
+      <Modal
+        animationType="slide"
+        transparent="true"
+        visible={setOpenModal}
+        onRequestClose={() => setOpenModal(false)}
+      >
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 22,
+            flex: 1,
+          }}
+        >
+          <View
+            style={{
+              margin: 20,
+              backgroundColor: "white",
+              borderRadius: 20,
+              padding: 35,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <Text>Modal Open</Text>
+          </View>
+        </View>
+      </Modal>
       <View
         style={{
           marginTop: 20,
@@ -92,6 +129,7 @@ export default function ProfileScreen() {
           style={{
             margin: 10,
           }}
+          onPress={pickImage}
         >
           <Text>Change Profile Picture</Text>
         </Button>
@@ -106,6 +144,7 @@ export default function ProfileScreen() {
           style={{
             margin: 10,
           }}
+          onPress={() => setOpenModal(!openModal)}
         >
           <Text>Change Password</Text>
         </Button>
