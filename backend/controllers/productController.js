@@ -377,7 +377,15 @@ export const updateProductStatus = async (req, res) => {
 };
 
 export const getProductsBySeller = async (req, res) => {
-  const products = await Product.find({ seller: req.user.id });
+  const products = await Product.find({ seller: req.user.id }).where(
+    "approved",
+    true
+  );
+
+  const nonApprovedProducts = await Product.find({ seller: req.user.id }).where(
+    "approved",
+    false
+  );
 
   if (!products) {
     res.status(404).json({
@@ -389,14 +397,12 @@ export const getProductsBySeller = async (req, res) => {
   res.status(200).json({
     success: true,
     products,
+    nonApprovedProducts,
   });
 };
 
 export const getProductsBySellerId = async (req, res) => {
-  const products = await Product.find({ seller: req.params.id }).where(
-    "approved",
-    true
-  );
+  const products = await Product.find({ seller: req.params.id });
 
   if (!products) {
     res.status(404);
