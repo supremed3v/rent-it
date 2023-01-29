@@ -114,7 +114,7 @@ export default function LoginSignup({ navigation }) {
               width: 300,
             }}
             placeholder="Enter email address"
-            autoCapitalize={false}
+            autoCapitalize="none"
           />
           <TextInput
             value={password}

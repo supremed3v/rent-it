@@ -4,7 +4,13 @@ import Products from "../screens/Products";
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Appbar, Avatar, Button, useTheme, Switch } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Alert, Pressable, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from "react-native";
 import { Text, Dialog } from "react-native-paper";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
@@ -144,8 +150,7 @@ export const TabNavigation = () => {
               bottom: 10,
               height: 60,
               borderRadius: 15,
-              width: 330,
-              marginLeft: 15,
+              width: "100%",
             },
             tabBarBadgeStyle: {
               backgroundColor: "#fff",

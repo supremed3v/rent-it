@@ -13,7 +13,6 @@ export default function AllProducts() {
 
   return (
     <View>
-      <SafeAreaView />
       {/* Grid view for categories button */}
       <FlatList
         data={categoriesDetails}
@@ -23,31 +22,7 @@ export default function AllProducts() {
         keyExtractor={(item, index) => index.toString()}
         horizontal={false}
         ListHeaderComponent={<Header title={"Categories"} />}
-        ListFooterComponent={
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 20,
-              marginBottom: 100,
-            }}
-          ></View>
-        }
       />
-      <ProductsCategory />
-
-      <Divider
-        style={{
-          marginTop: 20,
-          marginBottom: 20,
-          height: 2,
-          backgroundColor: "#fff",
-        }}
-        bold={true}
-        leftInset={true}
-        horizontalInset={true}
-      />
-      <Text variant="displayMedium">Products</Text>
     </View>
   );
 }
