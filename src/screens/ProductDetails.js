@@ -121,15 +121,16 @@ export default function ProductDetails({ route, navigation }) {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                marginTop: 20,
                 marginBottom: 20,
                 marginRight: 20,
                 marginLeft: 20,
+                alignItems: "center",
               }}
             >
               <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Ionicons name="arrow-back" size={30} color="#e7e7e7e7" />
               </TouchableOpacity>
+              <Text variant="displaySmall">{item.name}</Text>
               <AntDesign name="heart" size={24} color="#e7e7e7e7" />
             </View>
             <View
@@ -171,7 +172,6 @@ export default function ProductDetails({ route, navigation }) {
                 </Text>
                 <View
                   style={{
-                    // marginLeft: -30,
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
@@ -200,7 +200,6 @@ export default function ProductDetails({ route, navigation }) {
               </View>
             </View>
           </View>
-          <Divider />
           <View
             style={{
               flexDirection: "row",
@@ -245,7 +244,16 @@ export default function ProductDetails({ route, navigation }) {
               Payment Options
             </Button>
           </View>
-          <Divider />
+          <Divider
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+              borderWidth: 1,
+              borderColor: "white",
+            }}
+            horizontalInset={true}
+            leftInset={true}
+          />
           <View>
             {tab === "description" ? (
               <Text>Description Text</Text>

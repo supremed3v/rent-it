@@ -1,81 +1,114 @@
-import { View, Image } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import React from "react";
 import { Button, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCart } from "../context/CartContext";
 import { Entypo } from "@expo/vector-icons";
+import Header from "../components/Header";
 
 export default function Cart({ navigation }) {
   const { cart, removeFromCart } = useCart();
   return (
     <>
-      <SafeAreaView />
       <View>
-        <Text
-          variant="displayLarge"
-          style={{
-            textAlign: "center",
-          }}
-        >
-          Cart
-        </Text>
+        <Header title={"Cart"} />
         {cart.length !== 0 ? (
           cart.map((item) => (
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 20,
-                marginLeft: 20,
-                marginRight: 20,
-              }}
-              key={item.id}
-            >
-              <View
+            <>
+              <Pressable
                 style={{
                   flexDirection: "row",
+                  justifyContent: "space-between",
                   alignItems: "center",
+                  marginTop: 20,
+                  marginLeft: 20,
+                  marginRight: 20,
                 }}
+                key={item.id}
+                onPress={() =>
+                  navigation.navigate("ProductDetails", { item: item })
+                }
               >
-                <Image
-                  source={{ uri: item.image }}
-                  style={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: 20,
-                  }}
-                />
                 <View
                   style={{
-                    marginLeft: 20,
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
-                  <Text
-                    variant="bodyLarge"
+                  <Image
+                    source={{ uri: item.image }}
                     style={{
-                      fontSize: 20,
-                      fontWeight: "medium",
+                      width: 100,
+                      height: 100,
+                      borderRadius: 20,
+                    }}
+                  />
+                  <View
+                    style={{
+                      marginLeft: 20,
                     }}
                   >
-                    {item.name}
-                  </Text>
+                    <Text
+                      variant="bodyLarge"
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "medium",
+                      }}
+                    >
+                      {item.name}
+                    </Text>
+                    <Text
+                      variant=""
+                      style={{
+                        fontSize: 22,
+                        fontWeight: "bold",
+                        marginBottom: 10,
+                      }}
+                    >
+                      PKR {item.price} /-
+                    </Text>
+                  </View>
+                </View>
+                <Button onPress={() => removeFromCart(item)}>
+                  <Entypo name="trash" size={24} color="white" />
+                </Button>
+              </Pressable>
+              {cart.length !== 0 && (
+                <View>
                   <Text
-                    variant=""
                     style={{
                       fontSize: 22,
                       fontWeight: "bold",
-                      marginBottom: 10,
+                      textAlign: "right",
                     }}
                   >
-                    PKR {item.price} /-
+                    Total: PKR{" "}
+                    {cart.reduce(
+                      (acc, item) => acc + item.price * item.quantity,
+                      0
+                    )}
+                    /=
                   </Text>
                 </View>
+              )}
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 10,
+                }}
+              >
+                <Button
+                  mode="contained"
+                  textColor="#333"
+                  style={{
+                    width: 200,
+                  }}
+                >
+                  Confirm Order
+                </Button>
               </View>
-              <Button onPress={() => removeFromCart(item)}>
-                <Entypo name="trash" size={24} color="white" />
-              </Button>
-            </View>
+            </>
           ))
         ) : (
           <View
@@ -104,18 +137,6 @@ export default function Cart({ navigation }) {
               Explore Products
             </Button>
           </View>
-        )}
-        {cart.length !== 0 && (
-          <Text
-            style={{
-              fontSize: 22,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Total:{" "}
-            {cart.reduce((acc, item) => acc + item.price * item.quantity, 0)}
-          </Text>
         )}
       </View>
     </>
