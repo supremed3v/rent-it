@@ -1,7 +1,7 @@
-import { View, Image, Modal } from "react-native";
+import { View, Image } from "react-native";
 import React, { useState } from "react";
 import Header from "../components/Header";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput, Modal, Portal } from "react-native-paper";
 import { useAuthContext } from "../context/AuthContext";
 import * as ImagePicker from "expo-image-picker";
 
@@ -48,42 +48,74 @@ export default function ProfileScreen() {
   return (
     <View>
       <Header title={"Profile "} />
-
-      <Modal
-        animationType="slide"
-        transparent="true"
-        visible={setOpenModal}
-        onRequestClose={() => setOpenModal(false)}
-      >
-        <View
+      <Portal>
+        <Modal
+          visible={openModal}
+          onDismiss={() => setOpenModal(false)}
+          contentContainerStyle={{
+            height: 400,
+            backgroundColor: "#222",
+            width: 350,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
           style={{
             justifyContent: "center",
             alignItems: "center",
-            marginTop: 22,
-            flex: 1,
           }}
         >
-          <View
+          <Text>Update your password</Text>
+          <TextInput
+            label="Enter your current password"
             style={{
-              margin: 20,
-              backgroundColor: "white",
-              borderRadius: 20,
-              padding: 35,
-              alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
+              margin: 10,
+              width: 300,
             }}
+            mode="outlined"
+            onChangeText={(text) => setOldPassword(text)}
+            value={oldPassword}
+            autoCapitalize="none"
+          />
+
+          <TextInput
+            label="Enter your new password"
+            style={{
+              margin: 10,
+              width: 300,
+            }}
+            mode="outlined"
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            autoCapitalize="none"
+          />
+
+          <TextInput
+            label="Confirm new password"
+            style={{
+              margin: 10,
+              width: 300,
+            }}
+            mode="outlined"
+            onChangeText={(text) => setConfirmPassword(text)}
+            value={confirmPassword}
+            autoCapitalize="none"
+          />
+          <Button
+            mode="contained"
+            style={{
+              margin: 10,
+              marginTop: 20,
+              width: 250,
+            }}
+            dark={true}
+            disabled={
+              password === "" || oldPassword === "" || confirmPassword === ""
+            }
           >
-            <Text>Modal Open</Text>
-          </View>
-        </View>
-      </Modal>
+            Update Password
+          </Button>
+        </Modal>
+      </Portal>
       <View
         style={{
           marginTop: 20,
@@ -144,7 +176,7 @@ export default function ProfileScreen() {
           style={{
             margin: 10,
           }}
-          onPress={() => setOpenModal(!openModal)}
+          onPress={() => setOpenModal(true)}
         >
           <Text>Change Password</Text>
         </Button>
@@ -157,6 +189,7 @@ export default function ProfileScreen() {
             width: 150,
           }}
           dark={true}
+          disabled={name === "" || email === "" || avatar === null}
         >
           <Text
             style={{
