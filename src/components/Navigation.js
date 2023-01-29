@@ -1,7 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Products from "../screens/Products";
-import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  FontAwesome,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { Appbar, Avatar, Button, useTheme, Switch } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -284,7 +289,7 @@ export const DrawerNavigation = () => {
         }}
       />
       <Drawer.Screen
-        name="Orders"
+        name="Past Orders"
         component={OrderScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -297,7 +302,7 @@ export const DrawerNavigation = () => {
         component={ListedProducts}
         options={{
           drawerIcon: ({ color }) => (
-            <FontAwesome name="shopping-bag" size={22} color={color} />
+            <MaterialIcons name="dashboard" size={22} color={color} />
           ),
         }}
       />
