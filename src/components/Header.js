@@ -16,7 +16,6 @@ export default function Header({ title }) {
           alignItems: "center",
           justifyContent: "space-between",
           paddingHorizontal: 10,
-          marginTop: 10,
         }}
       >
         <Pressable onPress={() => navigation.goBack()}>
@@ -25,7 +24,6 @@ export default function Header({ title }) {
         <Text
           style={{
             textAlign: "center",
-            // marginLeft: 60,
           }}
           variant="displaySmall"
         >
