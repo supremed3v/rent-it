@@ -33,8 +33,6 @@ export default function CategorizedProducts({ route }) {
 
   const renderItem = ({ item }) => <ProductCard item={item} />;
 
-  if (loading) return <Loader />;
-
   return (
     <View>
       <FlatList
