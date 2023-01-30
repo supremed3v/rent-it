@@ -1,7 +1,6 @@
 import { View, Image, Pressable } from "react-native";
 import React from "react";
 import { Button, Text } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useCart } from "../context/CartContext";
 import { Entypo } from "@expo/vector-icons";
 import Header from "../components/Header";
@@ -116,7 +115,7 @@ export default function Cart({ navigation }) {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              marginTop: "50%",
+              marginTop: "30%",
             }}
           >
             <Text
@@ -132,6 +131,10 @@ export default function Cart({ navigation }) {
               autoPlay
               loop
               source={require("../../assets/empty-cart.json")}
+              style={{
+                width: 400,
+                height: 300,
+              }}
             />
             <Button
               mode="outlined"
