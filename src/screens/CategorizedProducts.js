@@ -5,19 +5,25 @@ import ProductCard from "../components/ProductCard";
 import { API } from "../context/ProductsContext";
 import axios from "axios";
 import Header from "../components/Header";
+import EmptyData from "../components/EmptyData";
+import Loader from "../components/Loader";
 
 export default function CategorizedProducts({ route }) {
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { category } = route.params;
 
   const getData = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         `${API}/api/v1/getCategoriesProducts/${category}`
       );
       setFilteredProducts(data.products);
+      setLoading(false);
     } catch (error) {
       console.log(error.response.data.message);
+      setLoading(false);
     }
   };
 
@@ -27,14 +33,10 @@ export default function CategorizedProducts({ route }) {
 
   const renderItem = ({ item }) => <ProductCard item={item} />;
 
+  if (loading) return <Loader />;
+
   return (
-    <View
-      style={{
-        flex: 1,
-        marginTop: 50,
-      }}
-    >
-      <SafeAreaView />
+    <View>
       <FlatList
         data={filteredProducts}
         renderItem={renderItem}
@@ -42,15 +44,7 @@ export default function CategorizedProducts({ route }) {
         numColumns={2}
         ListHeaderComponent={<Header title={"Products"} />}
         ListEmptyComponent={
-          <Text
-            variant="bodyLarge"
-            style={{
-              textAlign: "center",
-              marginTop: 20,
-            }}
-          >
-            No products found
-          </Text>
+          <EmptyData errorText={`No products in ${category}`} />
         }
       />
     </View>

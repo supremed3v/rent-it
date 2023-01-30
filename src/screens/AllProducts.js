@@ -19,7 +19,7 @@ export default function AllProducts() {
         renderItem={renderItem}
         //Setting the number of column
         numColumns={2}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item._id}
         horizontal={false}
         ListHeaderComponent={<Header title={"Categories"} />}
       />
