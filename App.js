@@ -20,6 +20,7 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
   reactNavigationDark: NavigationDarkTheme,
 });
+import { View } from "react-native";
 
 import { CartProvider } from "./src/context/CartContext";
 import { ProductProvider } from "./src/context/ProductsContext";
@@ -40,54 +41,11 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appReady, setAppReady] = useState(false);
-
-  useEffect(() => {
-    async function prepare() {
-      try {
-        await SplashScreen.hideAsync();
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setAppReady(true);
-      }
-    }
-    prepare();
-  }, []);
-
-  const onLayoutRootView = useCallback(async () => {
-    if (appReady) {
-      // This tells the splash screen to hide immediately! If we call this after
-      // `setAppIsReady`, then we may see a blank screen while the app is
-      // loading its initial state and rendering its first pixels. So instead,
-      // we hide the splash screen once we know the root view has already
-      // performed layout.
-      await SplashScreen.hideAsync();
-    }
-  }, [appReady]);
-
-  if (!appReady) {
-    return null;
-  }
-
   return (
     <>
       <AuthContextProvider>
         <ProductProvider>
           <CartProvider>
-            <SafeAreaView mode="light" />
-            <GestureHandlerRootView
-              onLayout={onLayoutRootView}
-              style={{
-                flex: 1,
-              }}
-            >
-              <SafeAreaView mode="light" />
-              <LottieView
-                source={require("./assets/rentit-splash.json")}
-                autoPlay
-                loop
-              />
-            </GestureHandlerRootView>
             <PaperProvider theme={CombinedDarkTheme}>
               <NavigationContainer theme={CombinedDarkTheme}>
                 <NativeScreen />
