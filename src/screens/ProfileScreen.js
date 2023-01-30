@@ -4,9 +4,10 @@ import Header from "../components/Header";
 import { Button, Text, TextInput, Modal, Portal } from "react-native-paper";
 import { useAuthContext } from "../context/AuthContext";
 import * as ImagePicker from "expo-image-picker";
+import Loader from "../components/Loader";
 
 export default function ProfileScreen() {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const [openModal, setOpenModal] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -201,6 +202,7 @@ export default function ProfileScreen() {
           </Text>
         </Button>
       </View>
+      {loading && <Loader />}
     </View>
   );
 }

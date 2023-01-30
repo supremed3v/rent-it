@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useCart } from "../context/CartContext";
 import { Entypo } from "@expo/vector-icons";
 import Header from "../components/Header";
+import LottieView from "lottie-react-native";
 
 export default function Cart({ navigation }) {
   const { cart, removeFromCart } = useCart();
@@ -127,6 +128,11 @@ export default function Cart({ navigation }) {
             >
               Cart is empty
             </Text>
+            <LottieView
+              autoPlay
+              loop
+              source={require("../../assets/empty-cart.json")}
+            />
             <Button
               mode="outlined"
               style={{
