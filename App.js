@@ -37,23 +37,18 @@ const CombinedDarkTheme = {
   },
 };
 
-SplashScreen.preventAutoHideAsync();
-
 export default function App() {
-  const [appReady, setAppReady] = useState(false);
   return (
-    <>
-      <AuthContextProvider>
-        <ProductProvider>
-          <CartProvider>
-            <PaperProvider theme={CombinedDarkTheme}>
-              <NavigationContainer theme={CombinedDarkTheme}>
-                <NativeScreen />
-              </NavigationContainer>
-            </PaperProvider>
-          </CartProvider>
-        </ProductProvider>
-      </AuthContextProvider>
-    </>
+    <AuthContextProvider>
+      <ProductProvider>
+        <CartProvider>
+          <PaperProvider theme={CombinedDarkTheme}>
+            <NavigationContainer theme={CombinedDarkTheme}>
+              <NativeScreen />
+            </NavigationContainer>
+          </PaperProvider>
+        </CartProvider>
+      </ProductProvider>
+    </AuthContextProvider>
   );
 }

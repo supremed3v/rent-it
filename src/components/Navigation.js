@@ -321,7 +321,8 @@ export const DrawerNavigation = () => {
 };
 
 export const NativeScreen = () => {
-  const { isAuthenticated, error, loadUser, loginToken } = useAuthContext();
+  const { isAuthenticated, error, loadUser, loginToken, loading } =
+    useAuthContext();
   useEffect(() => {
     loadUser();
     if (error) {
@@ -329,6 +330,7 @@ export const NativeScreen = () => {
     }
   }, [error, loginToken]);
   const Stack = createNativeStackNavigator();
+
   return (
     <PaperProvider theme={CombinedDarkTheme}>
       <Stack.Navigator
@@ -346,7 +348,6 @@ export const NativeScreen = () => {
         <Stack.Screen name="Drawer" component={DrawerNavigation} />
         <Stack.Screen name="BecomeSeller" component={BecomeSeller} />
         <Stack.Screen name="IDVerification" component={IDVerification} />
-        <Stack.Screen name="EditProduct" component={Loader} />
       </Stack.Navigator>
     </PaperProvider>
   );
