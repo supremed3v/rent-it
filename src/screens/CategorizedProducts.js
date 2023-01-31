@@ -45,6 +45,7 @@ export default function CategorizedProducts({ route }) {
           <EmptyData errorText={`No products in ${category}`} />
         }
       />
+      {/* {loading ? <Loader /> : null} */}
     </View>
   );
 }

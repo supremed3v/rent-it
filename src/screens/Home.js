@@ -7,6 +7,7 @@ import { useProductContext } from "../context/ProductsContext";
 import { useAuthContext } from "../context/AuthContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "../components/Header";
 
 export default function Home({ navigation }) {
   const theme = useTheme();
@@ -25,6 +26,14 @@ export default function Home({ navigation }) {
           marginTop: 20,
         }}
       >
+        <View
+          style={{
+            opacity: 0,
+            position: "absolute",
+          }}
+        >
+          <Header title="Home" />
+        </View>
         <View>
           <Text
             variant="displayMedium"

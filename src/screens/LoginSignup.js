@@ -59,7 +59,10 @@ export default function LoginSignup({ navigation }) {
       navigation.navigate("Drawer");
     }
   }, [isAuthenticated, error]);
-  console.log(error);
+
+  if (isAuthenticated) {
+    navigation.navigate("Drawer");
+  }
 
   return (
     <>

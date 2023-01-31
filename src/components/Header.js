@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { Pressable, View, BackHandler, Alert } from "react-native";
 import React from "react";
 import { Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function Header({ title }) {
   const navigation = useNavigation();
+
   return (
     <>
       <SafeAreaView />
