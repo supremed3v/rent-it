@@ -546,3 +546,24 @@ export const verifySellerAdmin = async (req, res) => {
     });
   }
 };
+
+export const setPushToken = async (req, res) => {
+  const { pushToken } = req.body;
+  const user = await User.findById(req.user.id);
+
+  if (user.pushToken === pushToken) {
+    return res.status(400).json({
+      success: false,
+      message: "Already set",
+    });
+  }
+
+  user.pushToken = pushToken;
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Push token set successfully",
+  });
+};
