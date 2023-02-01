@@ -4,6 +4,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  setPushToken,
   verifySeller,
   verifySellerOtp,
   verifyUserImage,
@@ -28,5 +29,7 @@ router.post(
 router.put("/verify-seller", verifySellerOtp);
 
 router.post("/verify-image", verifyUserImage);
+
+router.post("/set-pushToken", isAuthenticatedUser, setPushToken);
 
 export default router;
