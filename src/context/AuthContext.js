@@ -16,6 +16,8 @@ const initialState = {
 
 export const AuthContextProvider = ({ children }) => {
   const [authState, setAuthState] = useState(initialState);
+  const [pushToken, setPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
 
   const login = async (userCredentials) => {
     setAuthState({
@@ -209,6 +211,10 @@ export const AuthContextProvider = ({ children }) => {
         generateOtp,
         clearError,
         faceVerification,
+        notification,
+        setNotification,
+        pushToken,
+        setPushToken,
       }}
     >
       {children}
