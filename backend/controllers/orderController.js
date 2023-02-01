@@ -167,3 +167,28 @@ const updateAvailability = async (id) => {
   }
   await product.save({ validateBeforeSave: false });
 };
+
+export const sellerOrders = async (req, res) => {
+  const seller = await User.findById(req.user.id);
+
+  try {
+    const orders = await Order.find({
+      orderItems: { $elemMatch: { seller: seller._id } },
+    });
+    if (!orders) {
+      return res.status(404).json({
+        success: false,
+        message: "No orders found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
