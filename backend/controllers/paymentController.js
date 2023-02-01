@@ -32,3 +32,147 @@ export const sendPubKey = async (req, res) => {
     success: true,
   });
 };
+
+export const createSellerAccount = async (req, res) => {
+  try {
+    const account = await myStripe.accounts.create({
+      type: req.body.type,
+      country: req.body.country,
+      email: req.body.email,
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+    });
+    res.status(200).json({
+      success: true,
+      account,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
+
+export const getAccountDetails = async (req, res) => {
+  try {
+    const account = await myStripe.accounts.retrieve(req.body.accountId);
+    res.status(200).json({
+      success: true,
+      account,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
+
+export const createSellerTransfer = async (req, res) => {
+  try {
+    const transfer = await myStripe.transfers.create({
+      amount: req.body.amount,
+      currency: req.body.currency,
+      destination: req.body.accountId,
+    });
+    res.status(200).json({
+      success: true,
+      transfer,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
+
+export const sellerSales = async (req, res) => {
+  try {
+    const sales = await myStripe.balance.retrieve({
+      stripeAccount: req.body.accountId,
+    });
+    res.status(200).json({
+      success: true,
+      sales,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
+
+export const sellerTransactions = async (req, res) => {
+  try {
+    const transactions = await myStripe.balance.listTransactions({
+      stripeAccount: req.body.accountId,
+    });
+    res.status(200).json({
+      success: true,
+      transactions,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
+
+export const sellerPayouts = async (req, res) => {
+  try {
+    const payouts = await myStripe.payouts.list({
+      stripeAccount: req.body.accountId,
+    });
+    res.status(200).json({
+      success: true,
+      payouts,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
+
+export const sellerPayout = async (req, res) => {
+  try {
+    const payout = await myStripe.payouts.create({
+      amount: req.body.amount,
+      currency: req.body.currency,
+      stripeAccount: req.body.accountId,
+    });
+    res.status(200).json({
+      success: true,
+      payout,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
+
+export const sellerPayoutCancel = async (req, res) => {
+  try {
+    const payout = await myStripe.payouts.cancel(req.body.payoutId, {
+      stripeAccount: req.body.accountId,
+    });
+    res.status(200).json({
+      success: true,
+      payout,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
