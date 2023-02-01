@@ -7,6 +7,9 @@ export const newOrder = async (req, res) => {
   const { orderItems, shippingAddress, paymentInfo, itemsPrice, totalPrice } =
     req.body;
 
+  const orderItemsIds = orderItems.map((item) => item.product);
+  const products = await Product.find({ _id: { $in: orderItemsIds } });
+
   const order = await Order.create({
     orderItems,
     shippingAddress,
@@ -16,6 +19,15 @@ export const newOrder = async (req, res) => {
     user: req.user._id,
     paidAt: Date.now(),
   });
+
+  const updateProductAvailability = async () => {
+    for (let i = 0; i < products.length; i++) {
+      products[i].availability = false; // update availability
+      await products[i].save({ validateBeforeSave: false });
+    }
+  };
+
+  updateProductAvailability();
 
   res.status(201).json({
     success: true,
