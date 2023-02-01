@@ -39,3 +39,5 @@ router.get(
   authorizeRoles("seller", "admin"),
   sellerSales
 );
+
+export default router;

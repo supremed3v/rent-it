@@ -181,9 +181,19 @@ export const sellerOrders = async (req, res) => {
         message: "No orders found",
       });
     }
+
+    const totalAmount = orders.reduce((acc, item) => acc + item.totalPrice, 0);
+
+    const totalRented = orders.reduce(
+      (acc, item) => acc + item.orderItems.length,
+      0
+    );
+
     res.status(200).json({
       success: true,
       orders,
+      totalAmount,
+      totalRented,
     });
   } catch (error) {
     res.status(500).json({
