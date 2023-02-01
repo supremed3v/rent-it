@@ -52,8 +52,10 @@ async function registerForPushNotificationsAsync() {
       lightColor: "#FF231F7C",
     });
   }
-  token = (await Notifications.getExpoPushTokenAsync()).data;
-  console.log(token);
+  token = (await Notifications.getExpoPushTokenAsync()).data.replace(
+    "ExponentPushToken[",
+    ""
+  );
   return token;
 }
 
@@ -65,7 +67,7 @@ export default function App() {
       setExpoPushToken(token)
     );
   }, []);
-  console.log(expoPushToken);
+  console.log(expoPushToken.slice(0, -1));
 
   return (
     <AuthContextProvider>
