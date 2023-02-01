@@ -2,7 +2,8 @@ import axios from "axios";
 import { createContext, useContext, useState, useEffect } from "react";
 import { API } from "../context/ProductsContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { Platform } from "react-native";
+import * as Notifications from "expo-notifications";
 const AuthContext = createContext();
 
 const initialState = {
@@ -194,10 +195,31 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Platform.OS === "android") {
+      await Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data.replace(
+      "ExponentPushToken[",
+      ""
+    );
+    return token.slice(0, -1);
+  }
+
   useEffect(() => {
     getToken().then((value) =>
       setAuthState({ ...authState, loginToken: value })
     );
+  }, []);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => setPushToken(token));
   }, []);
 
   return (

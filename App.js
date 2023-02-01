@@ -42,33 +42,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-async function registerForPushNotificationsAsync() {
-  let token;
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
-  token = (await Notifications.getExpoPushTokenAsync()).data.replace(
-    "ExponentPushToken[",
-    ""
-  );
-  return token;
-}
-
 export default function App() {
-  const [expoPushToken, setExpoPushToken] = useState("");
-
-  useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-  }, []);
-  console.log(expoPushToken.slice(0, -1));
-
   return (
     <AuthContextProvider>
       <ProductProvider>
