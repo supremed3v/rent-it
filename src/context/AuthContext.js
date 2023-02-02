@@ -205,11 +205,8 @@ export const AuthContextProvider = ({ children }) => {
         lightColor: "#FF231F7C",
       });
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data.replace(
-      "ExponentPushToken[",
-      ""
-    );
-    return token.slice(0, -1);
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    return token;
   }
 
   useEffect(() => {
@@ -220,6 +217,12 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => setPushToken(token));
+    Notifications.addNotificationReceivedListener((notification) => {
+      setNotification(notification);
+    });
+    Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log(response);
+    });
   }, []);
 
   return (
