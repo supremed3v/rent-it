@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import User from "../models/UserModel.js";
 
 const myStripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -34,6 +35,13 @@ export const sendPubKey = async (req, res) => {
 };
 
 export const createSellerAccount = async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (user.stripe_account_id) {
+    return res.status(400).json({
+      success: false,
+      message: "You already have a stripe account",
+    });
+  }
   try {
     const account = await myStripe.accounts.create({
       type: req.body.type,
@@ -44,6 +52,8 @@ export const createSellerAccount = async (req, res) => {
         transfers: { requested: true },
       },
     });
+    const stripe_account_id = account.id;
+    await User.findByIdAndUpdate(req.user.id, { stripe_account_id });
     res.status(200).json({
       success: true,
       account,
