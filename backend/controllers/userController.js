@@ -122,8 +122,6 @@ export const getUserProfile = async (req, res) => {
       message: "Please login",
     });
   }
-  let pushTokens = ["ExponentPushToken[gkhWrWPlrry6W6DVzR2AcU]"];
-  sendNotification(pushTokens, "Hello", "Hello");
 };
 
 // @desc    Update / Change password

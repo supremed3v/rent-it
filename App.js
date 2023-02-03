@@ -2,18 +2,18 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
+import axios from "axios";
+import { API } from "./src/context/ProductsContext";
 import {
   adaptNavigationTheme,
   MD3DarkTheme,
   Provider as PaperProvider,
 } from "react-native-paper";
 import "react-native-gesture-handler";
-import { useState, useEffect, useCallback, useRef } from "react";
-
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { NativeScreen } from "./src/components/Navigation";
 import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -23,6 +23,7 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 import { CartProvider } from "./src/context/CartContext";
 import { ProductProvider } from "./src/context/ProductsContext";
 import { AuthContextProvider } from "./src/context/AuthContext";
+import { useEffect, useState } from "react";
 
 const CombinedDarkTheme = {
   ...MD3DarkTheme,
@@ -43,15 +44,28 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
+  const [pubKey, setSubKey] = useState("");
+
+  const fetchPubKey = async () => {
+    const { data } = await axios.get(`${API}/api/v1/get-pub-key`);
+    setSubKey(data.publishableKey);
+  };
+
+  useEffect(() => {
+    fetchPubKey();
+  }, []);
+  console.log(pubKey);
   return (
     <AuthContextProvider>
       <ProductProvider>
         <CartProvider>
-          <PaperProvider theme={CombinedDarkTheme}>
-            <NavigationContainer theme={CombinedDarkTheme}>
-              <NativeScreen />
-            </NavigationContainer>
-          </PaperProvider>
+          <StripeProvider publishableKey="">
+            <PaperProvider theme={CombinedDarkTheme}>
+              <NavigationContainer theme={CombinedDarkTheme}>
+                <NativeScreen />
+              </NavigationContainer>
+            </PaperProvider>
+          </StripeProvider>
         </CartProvider>
       </ProductProvider>
     </AuthContextProvider>

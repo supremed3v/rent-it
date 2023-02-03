@@ -6,6 +6,7 @@ import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
 import productRoute from "./routes/productRoutes.js";
 import userRoute from "./routes/userRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -23,6 +24,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use("/api/v1", productRoute);
 app.use("/api/v1", userRoute);
+app.use("/api/v1", paymentRoutes);
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,

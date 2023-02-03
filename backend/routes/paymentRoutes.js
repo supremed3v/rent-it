@@ -5,14 +5,16 @@ import {
   createSellerTransfer,
   getAccountDetails,
   sellerSales,
+  sendPubKey,
 } from "../controllers/paymentController.js";
 import {
   isAuthenticatedUser,
   authorizeRoles,
-} from "../middlewares/authenticate";
+} from "../middlewares/authenticate.js";
 
 const router = express.Router();
 
+router.get("/get-pub-key", sendPubKey);
 router.post("/create-payment-intent", createPayment);
 router.post(
   "/create-seller-account",
