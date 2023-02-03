@@ -47,6 +47,7 @@ import BecomeSeller from "../screens/BecomeSeller";
 import IDVerification from "../screens/IdVerification";
 import ListedProducts from "../screens/ListedProducts";
 import Loader from "./Loader";
+import Dashboard from "../screens/Dashboard";
 
 const CustomTabBar = ({ children }) => {
   const { user } = useAuthContext();
@@ -295,6 +296,15 @@ export const DrawerNavigation = () => {
         options={{
           drawerIcon: ({ color }) => (
             <FontAwesome name="shopping-bag" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{
+          drawerIcon: ({ color }) => (
+            <MaterialIcons name="dashboard" size={22} color={color} />
           ),
         }}
       />

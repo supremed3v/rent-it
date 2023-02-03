@@ -47,11 +47,12 @@ export const createSellerAccount = async (req, res) => {
     res.status(200).json({
       success: true,
       account,
+      message: "Account created successfully",
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      err: error.message,
+      error: error.message,
     });
   }
 };

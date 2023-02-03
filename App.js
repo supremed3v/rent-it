@@ -59,7 +59,7 @@ export default function App() {
     <AuthContextProvider>
       <ProductProvider>
         <CartProvider>
-          <StripeProvider publishableKey="">
+          <StripeProvider publishableKey={pubKey}>
             <PaperProvider theme={CombinedDarkTheme}>
               <NavigationContainer theme={CombinedDarkTheme}>
                 <NativeScreen />

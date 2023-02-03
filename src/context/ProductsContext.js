@@ -61,7 +61,6 @@ export const ProductProvider = ({ children }) => {
         loading: false,
         error: error.response.data.message,
       });
-      console.log(error.response.data.message);
     }
   };
 

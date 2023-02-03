@@ -122,6 +122,12 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const sellerHeader = {
+    headers: {
+      Authorization: `Bearer ${authState.loginToken}`,
+    },
+  };
+
   const logout = async () => {
     try {
       await AsyncStorage.removeItem("token");
@@ -240,6 +246,7 @@ export const AuthContextProvider = ({ children }) => {
         setNotification,
         pushToken,
         setPushToken,
+        sellerHeader,
       }}
     >
       {children}
