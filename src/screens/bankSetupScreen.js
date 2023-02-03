@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 import React, { useState } from "react";
 import Header from "../components/Header";
 import {
@@ -7,6 +7,7 @@ import {
   Dialog,
   RadioButton,
   Button,
+  Searchbar,
 } from "react-native-paper";
 
 export default function BankSetupScreen() {
@@ -14,6 +15,8 @@ export default function BankSetupScreen() {
   const [country, setCountry] = useState("");
   const [type, setType] = useState("express");
   const [visible, setVisible] = useState(false);
+  const [countryVisible, setCountryVisible] = useState(false);
+  const [query, setQuery] = useState("");
   const inputFields = [
     {
       label: "Email",
@@ -22,13 +25,20 @@ export default function BankSetupScreen() {
       type: "email",
       placeholder: "Enter your email",
     },
-    {
-      label: "Country",
-      value: country,
-      setValue: setCountry,
-      type: "text",
-      placeholder: "Enter your country",
-    },
+  ];
+
+  const countries = [
+    { label: "Nigeria", value: "NG" },
+    { label: "United States", value: "US" },
+    { label: "United Kingdom", value: "UK" },
+    { label: "Canada", value: "CA" },
+    { label: "France", value: "FR" },
+    { label: "Germany", value: "DE" },
+    { label: "Spain", value: "ES" },
+    { label: "Italy", value: "IT" },
+    { label: "Japan", value: "JP" },
+    { label: "China", value: "CN" },
+    { label: "India", value: "IN" },
   ];
   return (
     <View>
@@ -72,6 +82,25 @@ export default function BankSetupScreen() {
         />
       ))}
       <TextInput
+        label={country === "" ? "Choose country" : country}
+        value={country}
+        disabled
+        style={{
+          marginVertical: 10,
+          marginHorizontal: 20,
+        }}
+      />
+      <Button
+        style={{
+          marginHorizontal: 50,
+          marginVertical: 10,
+        }}
+        mode="contained"
+        onPress={() => setCountryVisible(true)}
+      >
+        Choose country
+      </Button>
+      <TextInput
         label="Account Type"
         value={type}
         disabled
@@ -109,7 +138,44 @@ export default function BankSetupScreen() {
           </RadioButton.Group>
         </Dialog.Content>
       </Dialog>
-      <Button
+      <Dialog
+        visible={countryVisible}
+        onDismiss={() => setCountryVisible(false)}
+        style={{
+          marginHorizontal: 20,
+          marginTop: 300,
+        }}
+      >
+        <Dialog.Title>Choose your country</Dialog.Title>
+        <Dialog.Content>
+          <Searchbar
+            placeholder="Search"
+            onChangeText={(text) => setQuery(text)}
+            value={query}
+          />
+          {countries
+            .filter((country) =>
+              country.label.toLowerCase().includes(query.toLowerCase())
+            )
+            .map((country) => (
+              <Button
+                key={country.value}
+                style={{
+                  marginVertical: 10,
+                  marginHorizontal: 20,
+                }}
+                mode="contained"
+                onPress={() => {
+                  setCountry(country.label);
+                  setCountryVisible(false);
+                }}
+              >
+                {country.label}
+              </Button>
+            ))}
+        </Dialog.Content>
+      </Dialog>
+      {/* <Button
         style={{
           marginHorizontal: 120,
           marginVertical: 10,
@@ -117,7 +183,7 @@ export default function BankSetupScreen() {
         mode="contained"
       >
         Submit
-      </Button>
+      </Button> */}
     </View>
   );
 }
