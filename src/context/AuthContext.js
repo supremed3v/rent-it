@@ -201,6 +201,33 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const setupSellerBank = async (data) => {
+    setAuthState({
+      ...authState,
+      loading: true,
+    });
+    try {
+      const res = await axios.post(
+        `${API}/api/v1/create-bank-account`,
+        data,
+        sellerHeader
+      );
+      setAuthState({
+        ...authState,
+        loading: false,
+        success: res.data.message,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        error: error.response.data.message,
+      });
+    } finally {
+      loadUser();
+    }
+  };
+
   async function registerForPushNotificationsAsync() {
     let token;
     if (Platform.OS === "android") {
@@ -247,6 +274,7 @@ export const AuthContextProvider = ({ children }) => {
         pushToken,
         setPushToken,
         sellerHeader,
+        setupSellerBank,
       }}
     >
       {children}

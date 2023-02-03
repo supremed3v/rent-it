@@ -17,7 +17,7 @@ const router = express.Router();
 router.get("/get-pub-key", sendPubKey);
 router.post("/create-payment-intent", createPayment);
 router.post(
-  "/create-seller-account",
+  "/create-bank-account",
   isAuthenticatedUser,
   authorizeRoles("seller"),
   createSellerAccount
