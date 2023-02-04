@@ -8,7 +8,7 @@ import { API } from "../context/ProductsContext";
 import axios from "axios";
 
 export default function BecomeSeller({ navigation }) {
-  const { user, generateOtp, verifyOtp, success, loading, error, clearError } =
+  const { user, generateOtp, success, loading, error, clearError } =
     useAuthContext();
   const [otp, setOtp] = useState("");
   const [pinReady, setPinReady] = useState(false);

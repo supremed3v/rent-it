@@ -13,6 +13,7 @@ const initialState = {
   error: null,
   loginToken: null,
   success: null,
+  bankDetails: null,
 };
 
 export const AuthContextProvider = ({ children }) => {
@@ -225,7 +226,30 @@ export const AuthContextProvider = ({ children }) => {
       });
     }
   };
-  console.log(authState.user);
+
+  const getBankDetails = async () => {
+    setAuthState({
+      ...authState,
+      loading: true,
+    });
+    try {
+      const { data } = await axios.get(
+        `${API}/api/v1/get-account-details`,
+        placeHeaders(authState.loginToken)
+      );
+      setAuthState({
+        ...authState,
+        loading: false,
+        bankDetails: data.account,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        error: error.response.data.message,
+      });
+    }
+  };
 
   async function registerForPushNotificationsAsync() {
     let token;
@@ -255,6 +279,12 @@ export const AuthContextProvider = ({ children }) => {
     Notifications.addNotificationResponseReceivedListener((response) => {
       console.log(response);
     });
+  }, []);
+
+  useEffect(() => {
+    if (authState.user && authState.user.role === "seller") {
+      getBankDetails();
+    }
   }, []);
 
   return (

@@ -5,13 +5,8 @@ import { Text, Modal, Button, TextInput } from "react-native-paper";
 import { useAuthContext } from "../context/AuthContext";
 
 export default function Dashboard({ navigation }) {
-  const { user } = useAuthContext();
-  const [visible, setVisible] = useState(false);
-  const [formFields, setFormFields] = useState({
-    email: "",
-    country: "",
-    type: "",
-  });
+  const { user, bankDetails } = useAuthContext();
+  console.log(bankDetails);
   return (
     <View>
       <Header title="Dashboard" />

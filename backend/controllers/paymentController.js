@@ -74,7 +74,9 @@ export const createSellerAccount = async (req, res) => {
 
 export const getAccountDetails = async (req, res) => {
   try {
-    const account = await myStripe.accounts.retrieve(req.body.accountId);
+    const account = await myStripe.accounts.retrieve(
+      req.body.stripe_account_id
+    );
     res.status(200).json({
       success: true,
       account,

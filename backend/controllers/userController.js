@@ -4,6 +4,8 @@ import sendEmail from "../middlewares/sendMail.js";
 import otpGenerator from "otp-generator";
 import cloudinary from "cloudinary";
 import sendNotification from "../middlewares/sendNotification.js";
+import Order from "../models/OrderModel.js";
+import Product from "../models/ProductModel.js";
 // @desc    Register a user
 
 // @route   POST /api/v1/register
@@ -564,5 +566,37 @@ export const setPushToken = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Push token set successfully",
+  });
+};
+
+export const sellerStats = async (req, res) => {
+  const seller = await User.findById(req.user.id);
+  const totalEarned = await Order.aggregate([
+    {
+      $match: {
+        seller: seller._id,
+        isPaid: true,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
+  const totalOrders = await Order.countDocuments({
+    seller: seller._id,
+    isPaid: true,
+  });
+  const totalProducts = await Product.countDocuments({
+    seller: seller._id,
+  });
+
+  res.status(200).json({
+    success: true,
+    totalEarned: totalEarned[0].total,
+    totalOrders,
+    totalProducts,
   });
 };
