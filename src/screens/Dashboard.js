@@ -23,8 +23,8 @@ export default function Dashboard({ navigation }) {
         }}
       >
         <Text>Dashboard</Text>
-        {user.acc_id ? (
-          <Text>Account ID: {user.acc_id}</Text>
+        {user.stripe_account_id ? (
+          <Text>Account ID: {user.stripe_account_id}</Text>
         ) : (
           <Button
             onPress={() => navigation.navigate("SetupBank")}

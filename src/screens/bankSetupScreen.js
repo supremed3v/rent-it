@@ -11,7 +11,7 @@ import {
 } from "react-native-paper";
 import { useAuthContext } from "../context/AuthContext";
 
-export default function BankSetupScreen() {
+export default function BankSetupScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState("");
   const [type, setType] = useState("express");
@@ -51,6 +51,9 @@ export default function BankSetupScreen() {
       type,
     };
     setupSellerBank(data);
+    setTimeout(() => {
+      navigation.navigate("Home");
+    }, 2000);
   };
 
   if (loading) return <Text>Loading...</Text>;
