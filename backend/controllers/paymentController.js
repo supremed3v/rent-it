@@ -1,5 +1,7 @@
 import Stripe from "stripe";
 import User from "../models/UserModel.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const myStripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -44,7 +46,7 @@ export const createSellerAccount = async (req, res) => {
   }
   try {
     const account = await myStripe.accounts.create({
-      type: req.body.type,
+      type: "custom",
       country: req.body.country,
       email: req.body.email,
       capabilities: {
@@ -62,8 +64,9 @@ export const createSellerAccount = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message,
+      error: error.raw.message,
     });
+    console.log(error);
   }
 };
 
@@ -96,8 +99,9 @@ export const createSellerTransfer = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      err: error.message,
+      error: error,
     });
+    console.log(error);
   }
 };
 
@@ -113,7 +117,7 @@ export const sellerSales = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      err: error.message,
+      error: error,
     });
   }
 };

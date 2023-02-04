@@ -55,7 +55,6 @@ export default function BankSetupScreen() {
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>{error}</Text>;
-
   return (
     <View>
       <Header title="Setup Bank" />
@@ -191,7 +190,7 @@ export default function BankSetupScreen() {
                 }}
                 mode="contained"
                 onPress={() => {
-                  setCountry(country.label);
+                  setCountry(country.value);
                   setCountryVisible(false);
                 }}
               >

@@ -46,7 +46,7 @@ export const AuthContextProvider = ({ children }) => {
         ...authState,
         loading: false,
         isAuthenticated: false,
-        error: error.response.data.message,
+        error: error,
       });
     }
   };
