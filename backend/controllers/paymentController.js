@@ -55,7 +55,9 @@ export const createSellerAccount = async (req, res) => {
       },
     });
     const stripe_account_id = account.id;
-    await User.findByIdAndUpdate(req.user.id, { stripe_account_id });
+    user.stripe_account_id = stripe_account_id;
+    await user.save();
+
     res.status(200).json({
       success: true,
       account,

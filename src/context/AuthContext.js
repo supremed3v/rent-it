@@ -216,6 +216,7 @@ export const AuthContextProvider = ({ children }) => {
         loading: false,
         success: res.data.message,
       });
+      loadUser();
     } catch (error) {
       setAuthState({
         ...authState,
@@ -224,6 +225,7 @@ export const AuthContextProvider = ({ children }) => {
       });
     }
   };
+  console.log(authState.user);
 
   async function registerForPushNotificationsAsync() {
     let token;
