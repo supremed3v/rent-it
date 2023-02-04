@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useState, useEffect } from "react";
-import { API } from "../context/ProductsContext";
+import { API, placeHeaders } from "./API";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
@@ -100,11 +100,10 @@ export const AuthContextProvider = ({ children }) => {
   const loadUser = async () => {
     if (authState.loginToken !== null) {
       try {
-        const res = await axios.get(`${API}/api/v1/me`, {
-          headers: {
-            Authorization: `Bearer ${authState.loginToken}`,
-          },
-        });
+        const res = await axios.get(
+          `${API}/api/v1/me`,
+          placeHeaders(authState.loginToken)
+        );
         setAuthState({
           ...authState,
           loading: false,
@@ -207,11 +206,11 @@ export const AuthContextProvider = ({ children }) => {
       loading: true,
     });
     try {
-      const res = await axios.post(
-        `${API}/api/v1/create-bank-account`,
-        data,
-        sellerHeader
-      );
+      const res = await axios.post(`${API}/api/v1/create-bank-account`, data, {
+        headers: {
+          Authorization: `Bearer ${authState.loginToken}`,
+        },
+      });
       setAuthState({
         ...authState,
         loading: false,
@@ -223,8 +222,6 @@ export const AuthContextProvider = ({ children }) => {
         loading: false,
         error: error.response.data.message,
       });
-    } finally {
-      loadUser();
     }
   };
 

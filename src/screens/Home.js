@@ -14,8 +14,6 @@ export default function Home({ navigation }) {
   const { user } = useAuthContext();
 
   const { categories, error } = useProductContext();
-  console.log("Categories:", categories);
-  console.log("Error:", error);
   const header = () => {
     return (
       <ScrollView

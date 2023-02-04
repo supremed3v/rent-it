@@ -9,6 +9,7 @@ import {
   Button,
   Searchbar,
 } from "react-native-paper";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function BankSetupScreen() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ export default function BankSetupScreen() {
   const [visible, setVisible] = useState(false);
   const [countryVisible, setCountryVisible] = useState(false);
   const [query, setQuery] = useState("");
+  const { setupSellerBank, loading, error } = useAuthContext();
   const inputFields = [
     {
       label: "Email",
@@ -24,6 +26,7 @@ export default function BankSetupScreen() {
       setValue: setEmail,
       type: "email",
       placeholder: "Enter your email",
+      keyboardType: "email-address",
     },
   ];
 
@@ -40,6 +43,19 @@ export default function BankSetupScreen() {
     { label: "China", value: "CN" },
     { label: "India", value: "IN" },
   ];
+
+  const handleSubmit = () => {
+    const data = {
+      email,
+      country,
+      type,
+    };
+    setupSellerBank(data);
+  };
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>{error}</Text>;
+
   return (
     <View>
       <Header title="Setup Bank" />
@@ -119,7 +135,16 @@ export default function BankSetupScreen() {
       >
         {type !== "express" ? "Change payment method" : "Choose payment method"}
       </Button>
-
+      <Button
+        style={{
+          marginHorizontal: 120,
+          marginVertical: 10,
+        }}
+        mode="contained"
+        onPress={handleSubmit}
+      >
+        Submit
+      </Button>
       <Dialog
         visible={visible}
         onDismiss={() => setVisible(false)}
@@ -175,15 +200,6 @@ export default function BankSetupScreen() {
             ))}
         </Dialog.Content>
       </Dialog>
-      {/* <Button
-        style={{
-          marginHorizontal: 120,
-          marginVertical: 10,
-        }}
-        mode="contained"
-      >
-        Submit
-      </Button> */}
     </View>
   );
 }

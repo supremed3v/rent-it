@@ -60,10 +60,6 @@ export default function LoginSignup({ navigation }) {
     }
   }, [isAuthenticated, error]);
 
-  if (isAuthenticated) {
-    navigation.navigate("Drawer");
-  }
-
   return (
     <>
       <SafeAreaView />

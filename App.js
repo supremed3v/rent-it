@@ -54,7 +54,6 @@ export default function App() {
   useEffect(() => {
     fetchPubKey();
   }, []);
-  console.log(pubKey);
   return (
     <AuthContextProvider>
       <ProductProvider>

@@ -16,7 +16,7 @@ export default async function sendNotification(pushTokens, message, title) {
       title: title,
     });
     expo.sendPushNotificationsAsync(messages).then((receipts) => {
-      console.log(receipts);
+      return receipts;
     });
   });
 }
