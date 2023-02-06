@@ -415,3 +415,17 @@ export const getProductsBySellerId = async (req, res) => {
     products,
   });
 };
+
+export const getLatestProducts = async (req, res) => {
+  const products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+
+  if (!products) {
+    res.status(404);
+    throw new Error("Products not found");
+  }
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+};

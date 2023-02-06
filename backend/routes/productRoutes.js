@@ -4,8 +4,10 @@ import {
   authorizeRoles,
 } from "../middlewares/authenticate.js";
 import {
+  getLatestProducts,
   getProductsByCategory,
   getProductsBySeller,
+  getTopProducts,
   newProduct,
 } from "../controllers/productController.js";
 import {
@@ -35,5 +37,8 @@ router.get(
   authorizeRoles("seller"),
   getProductsBySeller
 );
+
+router.get("/latest-products", getLatestProducts);
+router.get("/top-products", getTopProducts);
 
 export default router;
