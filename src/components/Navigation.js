@@ -336,12 +336,16 @@ export const NativeScreen = () => {
   const { isAuthenticated, error, loadUser, loginToken, loading } =
     useAuthContext();
   useEffect(() => {
-    loadUser();
+    if (loginToken) {
+      loadUser();
+    }
     if (error) {
       Alert.alert(error);
     }
-  }, [error, loginToken]);
+  }, [error, isAuthenticated, loadUser, loginToken]);
   const Stack = createNativeStackNavigator();
+
+  if (loading) return <Text>Loading...</Text>;
 
   return (
     <PaperProvider theme={CombinedDarkTheme}>
@@ -349,18 +353,27 @@ export const NativeScreen = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={isAuthenticated ? "Drawer" : "LoginSignup"}
       >
-        <Stack.Screen name="AllProducts" component={AllProducts} />
-        <Stack.Screen name="ProductDetails" component={ProductDetails} />
-        <Stack.Screen name="FilteredProducts" component={CategorizedProducts} />
-        <Stack.Screen name="ProductCard" component={ProductCard} />
-        <Stack.Screen name="LoginSignup" component={LoginSignup} />
-        <Stack.Screen name="AddProduct" component={AddProduct} />
-        <Stack.Screen name="Drawer" component={DrawerNavigation} />
-        <Stack.Screen name="BecomeSeller" component={BecomeSeller} />
-        <Stack.Screen name="IDVerification" component={IDVerification} />
-        <Stack.Screen name="SetupBank" component={BankSetupScreen} />
+        {!isAuthenticated ? (
+          <Stack.Screen name="LoginSignup" component={LoginSignup} />
+        ) : (
+          <>
+            <Stack.Screen name="Drawer" component={DrawerNavigation} />
+          </>
+        )}
+        <Stack.Group>
+          <Stack.Screen name="AllProducts" component={AllProducts} />
+          <Stack.Screen name="ProductDetails" component={ProductDetails} />
+          <Stack.Screen
+            name="FilteredProducts"
+            component={CategorizedProducts}
+          />
+          <Stack.Screen name="ProductCard" component={ProductCard} />
+          <Stack.Screen name="AddProduct" component={AddProduct} />
+          <Stack.Screen name="BecomeSeller" component={BecomeSeller} />
+          <Stack.Screen name="IDVerification" component={IDVerification} />
+          <Stack.Screen name="SetupBank" component={BankSetupScreen} />
+        </Stack.Group>
       </Stack.Navigator>
     </PaperProvider>
   );

@@ -10,11 +10,15 @@ import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { useAuthContext } from "../context/AuthContext";
 
 export default function CustomDrawer(props) {
-  const { user, logout } = useAuthContext();
+  const { user, logout, loadUser, loading } = useAuthContext();
   const handleLogout = () => {
     logout();
     props.navigation.navigate("LoginSignup");
   };
+
+  React.useEffect(() => {
+    loadUser();
+  }, []);
 
   const routeCheck = () => {
     if (
@@ -61,7 +65,7 @@ export default function CustomDrawer(props) {
         >
           <Image
             source={{
-              uri: user.avatar.url,
+              uri: user?.avatar?.url,
             }}
             style={{
               width: 100,
@@ -80,7 +84,7 @@ export default function CustomDrawer(props) {
             }}
             variant="displaySmall"
           >
-            {user.name}
+            {user?.name}
           </Text>
         </ImageBackground>
         <DrawerItemList {...props} />
