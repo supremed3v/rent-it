@@ -6,13 +6,11 @@ import { useProductContext } from "../context/ProductsContext";
 import { useAuthContext } from "../context/AuthContext";
 
 export default function ListedProducts() {
-  const { sellerProducts, rentedProducts } = useProductContext();
-  const { user, loginToken } = useAuthContext();
+  const { sellerProducts, rentedProducts, nonApprovedProducts } =
+    useProductContext();
 
   useEffect(() => {
-    if (user && loginToken) {
-      sellerProducts(loginToken);
-    }
+    sellerProducts();
   }, []);
 
   return (
@@ -28,6 +26,20 @@ export default function ListedProducts() {
           }}
         >
           No Rented Products available
+        </Text>
+      )}
+      {nonApprovedProducts.length > 0 ? (
+        <View>
+          <Text>Non Approved Products available</Text>
+        </View>
+      ) : (
+        <Text
+          style={{
+            textAlign: "center",
+            marginTop: 20,
+          }}
+        >
+          No Non Approved Products available
         </Text>
       )}
     </View>

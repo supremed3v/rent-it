@@ -12,13 +12,15 @@ const initialState = {
   loading: false,
   error: null,
   rentedProducts: [],
+  nonApprovedProducts: [],
+  successMessage: null,
 };
 
 export const API = "http://192.168.18.3:5000";
 
 export const ProductProvider = ({ children }) => {
   const [state, setState] = useState(initialState);
-  const { loginToken } = useAuthContext();
+  const { loginToken, user } = useAuthContext();
 
   const getCategories = async () => {
     try {
@@ -40,18 +42,22 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const addProduct = async (product) => {
+  const addProduct = async (product, token) => {
     setState({ ...state, loading: true });
     try {
-      const { data } = await axios.post(
-        `${API}/api/v1/add`,
-        placeHeaders(loginToken),
-        product
-      );
+      const { data } = await axios.post(`${API}/api/v1/add`, product, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (data.success) {
-        setState({ ...state, loading: false });
+        setState({
+          ...state,
+          loading: false,
+          error: null,
+          successMessage: data.message,
+        });
       }
-      getCategories();
     } catch (error) {
       setState({
         ...state,
@@ -61,24 +67,23 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const sellerProducts = async (token) => {
+  const sellerProducts = async () => {
     setState({ ...state, loading: true });
     try {
-      const { data } = await axios.get(
-        `${API}/api/v1/products/seller-products`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const { data } = await axios.get(`${API}/api/v1/seller-products`, {
+        headers: {
+          Authorization: `Bearer ${loginToken}`,
+        },
+      });
       if (data.success) {
         setState({
           ...state,
           loading: false,
           rentedProducts: data.products,
+          nonApprovedProducts: data.nonApprovedProducts,
         });
       }
+      console.log(data);
     } catch (error) {
       setState({
         ...state,
@@ -91,6 +96,11 @@ export const ProductProvider = ({ children }) => {
   useEffect(() => {
     getCategories();
   }, []);
+  useEffect(() => {
+    if (state.error) {
+      console.log(state.error);
+    }
+  }, [state.error]);
 
   return (
     <ProductContext.Provider

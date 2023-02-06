@@ -1,15 +1,16 @@
 import Product from "../models/ProductModel.js";
 import Category from "../models/CategoryModel.js";
 import User from "../models/UserModel.js";
+import cloudinary from "cloudinary";
 
 // @desc    Create new product
 // @route   POST /api/v1/admin/product/new
 // @access  Private
 
 export const newProduct = async (req, res) => {
-  const { name, price, description, category, images } = req.body;
+  const { name, price, description, category } = req.body;
 
-  if (!name || !price || !description || !category || !images) {
+  if (!name || !price || !description || !category) {
     return res.status(400).json({
       success: false,
       message: "Please enter all fields",
@@ -19,18 +20,18 @@ export const newProduct = async (req, res) => {
   const user = await User.findById(req.user.id);
   const categories = await Category.find();
 
-  let imagesArray = [];
+  let images = [];
 
-  if (typeof images === "string") {
-    images.push(images);
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
   } else {
-    imagesArray = images;
+    images = req.body.images;
   }
 
   const imagesLinks = [];
 
-  for (let i = 0; i < imagesArray.length; i++) {
-    const result = await cloudinary.uploader.upload(imagesArray[i], {
+  for (let i = 0; i < images.length; i++) {
+    const result = await cloudinary.uploader.upload(images[i], {
       folder: "rental",
     });
     imagesLinks.push({
@@ -38,11 +39,11 @@ export const newProduct = async (req, res) => {
       url: result.secure_url,
     });
   }
+  console.log(imagesLinks);
 
-  images = imagesLinks;
+  req.body.images = imagesLinks;
 
   const relatedCat = categories.find((cat) => cat.name === category);
-  const relatedCatId = relatedCat._id;
   if (!relatedCat) {
     return res.status(400).json({
       success: false,
@@ -55,7 +56,7 @@ export const newProduct = async (req, res) => {
     price,
     description,
     category,
-    images,
+    images: req.body.images,
     seller: req.user.id,
   });
 
@@ -66,9 +67,9 @@ export const newProduct = async (req, res) => {
     });
   }
   user.rentedItems.push(product._id);
-  const pushCat = await Category.findById(relatedCatId);
-  pushCat.relatedProducts.push(product._id);
-  await pushCat.save({ validateBeforeSave: false });
+  // Category count update
+  relatedCat.relatedProducts.push(product._id);
+  await relatedCat.save();
   await user.save();
 
   res.status(201).json({

@@ -233,7 +233,7 @@ export const TabNavigation = () => {
             ),
             tabBarButton: (props) => <CustomTabBar {...props} />,
           }}
-          component={Products}
+          component={AddProduct}
         />
         <Tab.Screen name="Likes" component={Products} />
         <Tab.Screen
@@ -342,7 +342,7 @@ export const NativeScreen = () => {
     if (error) {
       Alert.alert(error);
     }
-  }, [error, isAuthenticated, loadUser, loginToken]);
+  }, []);
   const Stack = createNativeStackNavigator();
 
   if (loading) return <Text>Loading...</Text>;
