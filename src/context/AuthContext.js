@@ -99,26 +99,24 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
   const loadUser = async () => {
-    if (authState.loginToken !== null) {
-      try {
-        const res = await axios.get(
-          `${API}/api/v1/me`,
-          placeHeaders(authState.loginToken)
-        );
-        setAuthState({
-          ...authState,
-          loading: false,
-          user: res.data.user,
-          isAuthenticated: true,
-        });
-      } catch (error) {
-        setAuthState({
-          ...authState,
-          loading: false,
-          isAuthenticated: false,
-          error: error.response.data.message,
-        });
-      }
+    try {
+      const res = await axios.get(
+        `${API}/api/v1/me`,
+        placeHeaders(authState.loginToken)
+      );
+      setAuthState({
+        ...authState,
+        loading: false,
+        user: res.data.user,
+        isAuthenticated: true,
+      });
+    } catch (error) {
+      setAuthState({
+        ...authState,
+        loading: false,
+        isAuthenticated: false,
+        error: error.response.data.message,
+      });
     }
   };
 
@@ -269,6 +267,12 @@ export const AuthContextProvider = ({ children }) => {
     getToken().then((value) =>
       setAuthState({ ...authState, loginToken: value })
     );
+  }, []);
+
+  useEffect(() => {
+    if (authState.loginToken) {
+      loadUser();
+    }
   }, []);
 
   useEffect(() => {

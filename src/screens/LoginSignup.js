@@ -16,7 +16,7 @@ export default function LoginSignup({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const { login, signUp, loading } = useAuthContext();
+  const { login, signUp, loading, loginToken, loadUser } = useAuthContext();
   const [image, setImage] = useState(null);
 
   const handleLogin = () => {
@@ -50,6 +50,13 @@ export default function LoginSignup({ navigation }) {
       setImage(base64);
     }
   };
+
+  useEffect(() => {
+    if (loginToken) {
+      loadUser();
+      navigation.navigate("Drawer");
+    }
+  }, []);
 
   return (
     <>

@@ -342,7 +342,8 @@ export const NativeScreen = () => {
     if (error) {
       Alert.alert(error);
     }
-  }, []);
+  }, [loginToken, error]);
+
   const Stack = createNativeStackNavigator();
 
   if (loading) return <Text>Loading...</Text>;

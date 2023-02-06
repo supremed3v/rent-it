@@ -59,7 +59,7 @@ export default function ProductDetails({ route, navigation }) {
           marginLeft: 20,
           marginRight: 20,
         }}
-        key={item.id}
+        key={item._id}
       >
         <View
           style={{
@@ -68,7 +68,7 @@ export default function ProductDetails({ route, navigation }) {
           }}
         >
           <Image
-            source={{ uri: item.image }}
+            source={{ uri: item.images[0].url }}
             style={{
               width: 100,
               height: 100,
@@ -106,7 +106,7 @@ export default function ProductDetails({ route, navigation }) {
       </View>
     );
   };
-
+  console.log({ item });
   return (
     <>
       <GestureHandlerRootView
@@ -139,7 +139,7 @@ export default function ProductDetails({ route, navigation }) {
               }}
             >
               <Image
-                source={{ uri: item.image }}
+                source={{ uri: item.images[0].url }}
                 style={{
                   width: 200,
                   height: 200,
