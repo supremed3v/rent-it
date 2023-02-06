@@ -68,7 +68,7 @@ export default function ProductDetails({ route, navigation }) {
           }}
         >
           <Image
-            source={{ uri: item.images[0].url }}
+            source={{ uri: item.image }}
             style={{
               width: 100,
               height: 100,
@@ -139,7 +139,7 @@ export default function ProductDetails({ route, navigation }) {
               }}
             >
               <Image
-                source={{ uri: item.images[0].url }}
+                source={{ uri: item.image }}
                 style={{
                   width: 200,
                   height: 200,

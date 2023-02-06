@@ -50,6 +50,7 @@ import Loader from "./Loader";
 import Dashboard from "../screens/Dashboard";
 import bankSetupScreen from "../screens/bankSetupScreen";
 import BankSetupScreen from "../screens/bankSetupScreen";
+import ConfirmOrder from "../screens/ConfirmOrder";
 
 const CustomTabBar = ({ children }) => {
   const { user } = useAuthContext();
@@ -374,6 +375,7 @@ export const NativeScreen = () => {
           <Stack.Screen name="BecomeSeller" component={BecomeSeller} />
           <Stack.Screen name="IDVerification" component={IDVerification} />
           <Stack.Screen name="SetupBank" component={BankSetupScreen} />
+          <Stack.Screen name="ConfirmOrder" component={ConfirmOrder} />
         </Stack.Group>
       </Stack.Navigator>
     </PaperProvider>

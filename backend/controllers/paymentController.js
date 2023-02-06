@@ -7,37 +7,29 @@ const myStripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const createPayment = async (req, res) => {
   try {
+    const { vendors } = req.body;
+    console.log(vendors);
     // Create a Payment Intent for each vendor
-    const paymentIntents = await Promise.all(
-      req.body.lineItems.map(async (item) => {
-        return myStripe.paymentIntents.create({
-          amount: item.amount,
-          currency: "usd",
-          payment_method: req.body.paymentMethodId,
-          confirmation_method: "manual",
-          confirm: true,
-          metadata: {
-            vendor_id: item.stripe_account_id,
-          },
-        });
-      })
-    );
+    const paymentIntent = await myStripe.paymentIntents.create({
+      amount: req.body.amount,
+      currency: req.body.currency,
+      metadata: { vendors: req.body.vendors },
+    });
 
     // Transfer funds to each vendor's bank account
-    const transfers = await Promise.all(
-      paymentIntents.map(async (paymentIntent) => {
-        return myStripe.transfers.create({
-          amount: paymentIntent.amount,
-          currency: paymentIntent.currency,
-          destination: paymentIntent.metadata.vendor_id,
-        });
-      })
-    );
+    vendors.forEach(async (vendor) => {
+      const transfer = await myStripe.transfers.create({
+        amount: vendor.amount,
+        currency: "usd",
+        destination: vendor.stripe_account_id,
+      });
+    });
 
     res.status(200).json({
       success: true,
       transfers,
       message: "Payment successful",
+      payment_intent: paymentIntent.client_secret,
     });
   } catch (error) {
     res.status(400).json({
