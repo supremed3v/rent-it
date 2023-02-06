@@ -6,6 +6,7 @@ import {
   getAccountDetails,
   sellerSales,
   sendPubKey,
+  updateSellerAccount,
 } from "../controllers/paymentController.js";
 import {
   isAuthenticatedUser,
@@ -41,5 +42,7 @@ router.get(
   authorizeRoles("seller", "admin"),
   sellerSales
 );
+
+router.put("/update-seller-account", updateSellerAccount);
 
 export default router;

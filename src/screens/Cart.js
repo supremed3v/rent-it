@@ -21,13 +21,11 @@ import BottomSheet, {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Cart({ navigation }) {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, clearCart } = useCart();
   const [open, setOpen] = useState(false);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
   let totalAmount = cart.reduce((acc, item) => acc + item.price, 0);
-
-  // Get vendors from cart and create an array of amounts for each vendor and store in state variable vendors (array of objects) with vendor id and amount to be paid to that vendor (amount = sum of all products from that vendor)
 
   const vendors = [];
   cart.forEach((item) => {
@@ -36,8 +34,6 @@ export default function Cart({ navigation }) {
       amount: item.price,
     });
   });
-
-  console.log(vendors);
 
   // callbacks
   const openModal = useCallback(() => {
@@ -54,25 +50,35 @@ export default function Cart({ navigation }) {
     console.log("handleSheetChanges", index);
   }, []);
 
-  const fetchPaymentSheetParams = async () => {
-    const { data } = await axios.post(
-      `${API}/create-payment-intent`,
-      {
-        amount: totalAmount * 100,
+  const handleBuy = async () => {
+    try {
+      const { data } = await axios.post(`${API}/api/v1/create-payment-intent`, {
+        amount: totalAmount,
         vendors: vendors,
-        currency: "usd",
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "",
-        },
+      });
+      const initSheet = await initPaymentSheet({
+        paymentIntentClientSecret: data.payment_intent,
+        merchantDisplayName: "Ecommerce",
+      });
+      if (initSheet.error) {
+        console.log(initSheet.error);
+        return;
       }
-    );
-    return data;
-  };
 
-  useEffect(() => {}, []);
+      const presentSheet = await presentPaymentSheet({
+        clientSecret: data.payment_intent,
+      });
+
+      if (presentSheet.error) {
+        console.log(presentSheet.error);
+        return;
+      }
+
+      clearCart();
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
 
   return (
     <>
@@ -171,10 +177,7 @@ export default function Cart({ navigation }) {
                     style={{
                       width: 200,
                     }}
-                    onPress={() => {
-                      openModal();
-                      // setOpen(true);
-                    }}
+                    onPress={handleBuy}
                   >
                     Checkout
                   </Button>
@@ -264,7 +267,7 @@ export default function Cart({ navigation }) {
                   console.log("focusField", focusedField);
                 }}
               />
-              <Button mode="contained" onPress={() => presentPaymentSheet()}>
+              <Button mode="contained" onPress={handleBuy}>
                 Pay
               </Button>
             </View>

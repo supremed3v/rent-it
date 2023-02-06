@@ -8,33 +8,48 @@ const myStripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const createPayment = async (req, res) => {
   try {
     const { vendors } = req.body;
-    console.log(vendors);
     // Create a Payment Intent for each vendor
     const paymentIntent = await myStripe.paymentIntents.create({
       amount: req.body.amount,
-      currency: req.body.currency,
-      metadata: { vendors: req.body.vendors },
+      currency: "usd",
+      payment_method_types: ["card"],
     });
 
-    // Transfer funds to each vendor's bank account
-    vendors.forEach(async (vendor) => {
-      const transfer = await myStripe.transfers.create({
+    // Get all vendors stripe accounts from the database and store in an array
+
+    const vendorAccounts = await User.find({
+      _id: { $in: vendors.map((vendor) => vendor.vendor_id) },
+    });
+    const transferData = vendors.map((vendor) => {
+      const vendorAccount = vendorAccounts.find(
+        (account) => account._id.toString() === vendor.vendor_id.toString()
+      );
+      return {
         amount: vendor.amount,
         currency: "usd",
-        destination: vendor.stripe_account_id,
-      });
+        destination: vendorAccount.stripe_account_id,
+      };
     });
+
+    // Create a transfer for each vendor
+    // if(res.status === 200) {
+    //   transferData.forEach(async (transfer) => {
+    //     await myStripe.transfers.create(transfer);
+    //   });
+    // }
+
+    // Transfer funds to each vendor's bank account
 
     res.status(200).json({
       success: true,
-      transfers,
       message: "Payment successful",
       payment_intent: paymentIntent.client_secret,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       success: false,
-      err: error.message,
+      error: error.message,
     });
   }
 };
@@ -77,7 +92,8 @@ export const createSellerAccount = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.raw.message,
+      error:
+        error.raw.message || error.message || error || "Something went wrong",
     });
     console.log(error);
   }
@@ -261,6 +277,26 @@ export const sellerRequestWithdrawal = async (req, res) => {
     res.status(200).json({
       success: true,
       payout,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      err: error.message,
+    });
+  }
+};
+
+export const updateSellerAccount = async (req, res) => {
+  try {
+    const account = await myStripe.accounts.update(req.body.stripe_account_id, {
+      tos_acceptance: {
+        date: Math.floor(Date.now() / 1000),
+        ip: req.connection.remoteAddress,
+      },
+    });
+    res.status(200).json({
+      success: true,
+      account,
     });
   } catch (error) {
     res.status(400).json({
