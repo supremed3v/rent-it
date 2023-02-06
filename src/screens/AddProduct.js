@@ -15,7 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 
 export default function AddProduct() {
   const [visible, setVisible] = useState(false);
-  const { categories } = useProductContext();
+  const { categories, addProduct } = useProductContext();
   const [value, setValue] = useState(null);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -61,6 +61,7 @@ export default function AddProduct() {
       category: value,
       images: imagesArray,
     };
+    addProduct(product);
   };
 
   return (
@@ -125,7 +126,7 @@ export default function AddProduct() {
             </>
           )}
           <Button mode="contained" icon={"camera"} onPress={pickImages}>
-            Select Images
+            {imagePreview === null ? "Select Images" : "Change Images"}
           </Button>
           <FlatList
             data={imagePreview}
