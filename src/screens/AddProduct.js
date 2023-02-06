@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, FlatList, Image } from "react-native";
 import React, { useState } from "react";
 import {
   Button,
@@ -20,6 +20,7 @@ export default function AddProduct() {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const [images, setImages] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
   const containerStyle = {
     backgroundColor: "#fff",
     width: 300,
@@ -42,6 +43,7 @@ export default function AddProduct() {
     });
     if (!result.canceled) {
       setImages(result.assets.map((item) => item.base64));
+      setImagePreview(result.assets.map((item) => item.uri));
     }
   };
 
@@ -59,7 +61,6 @@ export default function AddProduct() {
       category: value,
       images: imagesArray,
     };
-    console.log(product);
   };
 
   return (
@@ -126,6 +127,25 @@ export default function AddProduct() {
           <Button mode="contained" icon={"camera"} onPress={pickImages}>
             Select Images
           </Button>
+          <FlatList
+            data={imagePreview}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <View>
+                <Image
+                  source={{ uri: item }}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    margin: 10,
+                    borderRadius: 10,
+                    padding: 10,
+                  }}
+                />
+              </View>
+            )}
+            horizontal={true}
+          />
           <Portal>
             <Modal
               visible={visible}
