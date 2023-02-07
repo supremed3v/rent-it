@@ -202,7 +202,7 @@ export default function ProfileScreen() {
           </Text>
         </Button>
       </View>
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
     </View>
   );
 }

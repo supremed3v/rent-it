@@ -33,11 +33,19 @@ export const AuthContextProvider = ({ children }) => {
         loading: false,
         user: res.data.user,
         isAuthenticated: true,
+        success: res.data.success,
       });
       const jsonValue = res.data.token;
       try {
         if (jsonValue) {
           AsyncStorage.setItem("token", jsonValue);
+        } else {
+          setAuthState({
+            ...authState,
+            loading: false,
+            isAuthenticated: false,
+            error: "Invalid Credentials",
+          });
         }
       } catch (error) {
         console.log(error);
@@ -273,7 +281,22 @@ export const AuthContextProvider = ({ children }) => {
     if (authState.loginToken) {
       loadUser();
     }
+
+    () => {
+      Notifications.removeNotificationSubscription();
+    };
   }, []);
+
+  useEffect(() => {
+    if (authState.error) {
+      setTimeout(() => {
+        setAuthState({
+          ...authState,
+          error: null,
+        });
+      }, 3000);
+    }
+  }, [authState.error]);
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => setPushToken(token));
@@ -291,6 +314,9 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, []);
 
+  if (authState.error) {
+    console.log(authState.error);
+  }
   return (
     <AuthContext.Provider
       value={{

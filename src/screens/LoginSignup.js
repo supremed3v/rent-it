@@ -16,7 +16,8 @@ export default function LoginSignup({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const { login, signUp, loading, loginToken, loadUser } = useAuthContext();
+  const { login, signUp, loading, loginToken, loadUser, success } =
+    useAuthContext();
   const [image, setImage] = useState(null);
 
   const handleLogin = () => {
@@ -25,6 +26,9 @@ export default function LoginSignup({ navigation }) {
       password,
     };
     login(myForm);
+    if (success) {
+      navigation.navigate("Home");
+    }
   };
 
   const handleSignup = () => {
@@ -35,6 +39,10 @@ export default function LoginSignup({ navigation }) {
       avatar: image,
     };
     signUp(signupForm);
+
+    if (success) {
+      navigation.navigate("Home");
+    }
   };
 
   const handleImagePicker = async () => {
@@ -51,12 +59,12 @@ export default function LoginSignup({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    if (loginToken) {
-      loadUser();
-      navigation.navigate("Drawer");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (loginToken) {
+  //     loadUser();
+  //     navigation.navigate("Home");
+  //   }
+  // }, []);
 
   return (
     <>
