@@ -3,17 +3,12 @@ import React, { useEffect } from "react";
 import { useTheme, Text, Divider, Button } from "react-native-paper";
 import { productsData } from "../../assets/data";
 import ProductCard from "../components/ProductCard";
-import { useProductContext } from "../context/ProductsContext";
-import { useAuthContext } from "../context/AuthContext";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/Header";
 
 export default function Home({ navigation }) {
   const theme = useTheme();
-  const { user } = useAuthContext();
 
-  const { categories, error } = useProductContext();
   const header = () => {
     return (
       <ScrollView
