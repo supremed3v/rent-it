@@ -1,7 +1,6 @@
 import { useContext, createContext, useState } from "react";
 import axios from "axios";
-
-const AuthContext = createContext();
+import { useNavigate } from "react-router-dom";
 
 const initialAuthState = {
   isLoggedIn: false,
@@ -12,9 +11,11 @@ const initialAuthState = {
   success: false,
   isAdmin: false,
 };
+const AuthContext = createContext(initialAuthState);
 
 export const AuthContextProvider = ({ children }) => {
   const [authState, setAuthState] = useState(initialAuthState);
+  const navigate = useNavigate();
 
   const login = async (loginData) => {
     setAuthState({ ...authState, loading: true });
@@ -35,6 +36,7 @@ export const AuthContextProvider = ({ children }) => {
 
       const { token } = data;
       localStorage.setItem("token", token);
+      navigate("/dashboard");
     } catch (error) {
       setAuthState({
         ...authState,
@@ -42,16 +44,48 @@ export const AuthContextProvider = ({ children }) => {
         error: error.response.data.message,
         success: false,
       });
+      console.log(error);
     }
   };
 
   const logout = () => {
     setAuthState({ ...authState, isLoggedIn: false, user: null, token: null });
     localStorage.removeItem("token");
+    navigate("/login", { replace: true });
+  };
+
+  const loadUser = async () => {
+    if (localStorage.token) {
+      setAuthState({ ...authState, loading: true });
+      try {
+        const { data } = await axios.get("http://localhost:5000/api/v1/me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+          },
+        });
+        setAuthState({
+          ...authState,
+          loading: false,
+          isLoggedIn: true,
+          user: data.user,
+          token: localStorage.token,
+          success: true,
+          isAdmin: data.user.role === "admin" ? true : false,
+        });
+      } catch (error) {
+        setAuthState({
+          ...authState,
+          loading: false,
+          error: error.response.data.message,
+          success: false,
+        });
+        console.log(error);
+      }
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn: false, login, logout }}>
+    <AuthContext.Provider value={{ login, logout, loadUser, ...authState }}>
       {children}
     </AuthContext.Provider>
   );

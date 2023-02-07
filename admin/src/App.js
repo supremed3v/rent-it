@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import Home from "./pages/Home";
 import { ThemeContextProvider, useThemeContext } from "./context/ThemeContext";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Header from "./components/Header";
 import Users from "./pages/Users";
@@ -9,43 +9,15 @@ import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import Categories from "./pages/Categories";
 import Sellers from "./pages/Sellers";
+import { AuthContextProvider, useAuthContext } from "./context/AuthContext";
+import Login from "./pages/Login";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Header />,
-      children: [
-        {
-          path: "/",
-          element: <Home />,
-        },
-        {
-          path: "dashboard",
-          element: <Dashboard />,
-        },
-        {
-          path: "users",
-          element: <Users />,
-        },
-        {
-          path: "products",
-          element: <Products />,
-        },
-        {
-          path: "orders",
-          element: <Orders />,
-        },
-        {
-          path: "categories",
-          element: <Categories />,
-        },
-        {
-          path: "sellers",
-          element: <Sellers />,
-        },
-      ],
-    },
-  ]);
+  const { user } = useAuthContext();
+  console.log(user);
+
+  // create a custom router with conditional rendering of the dashboard if the user is logged in
+
   const { themeColor, toggleTheme } = useThemeContext();
   const theme = createTheme({
     palette: {
@@ -127,7 +99,75 @@ function App() {
     <ThemeContextProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <RouterProvider router={router} />
+        <BrowserRouter>
+          <AuthContextProvider>
+            <Routes>
+              <Route
+                path="/"
+                element={<Header />}
+                children={[
+                  <Route path="/" element={<Home />} />,
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                    key="dashboard"
+                  />,
+                  <Route
+                    path="/users"
+                    element={
+                      <ProtectedRoute>
+                        <Users />
+                      </ProtectedRoute>
+                    }
+                    key="users"
+                  />,
+                  <Route
+                    path="/products"
+                    element={
+                      <ProtectedRoute>
+                        <Products />
+                      </ProtectedRoute>
+                    }
+                    key="products"
+                  />,
+                  <Route
+                    path="/orders"
+                    element={
+                      <ProtectedRoute>
+                        <Orders />
+                      </ProtectedRoute>
+                    }
+                    key="orders"
+                  />,
+                  <Route
+                    path="/categories"
+                    element={
+                      <ProtectedRoute>
+                        <Categories />
+                      </ProtectedRoute>
+                    }
+                    key="categories"
+                  />,
+
+                  <Route
+                    path="/sellers"
+                    element={
+                      <ProtectedRoute>
+                        <Sellers />
+                      </ProtectedRoute>
+                    }
+                    key="sellers"
+                  />,
+                ]}
+              />
+              <Route path="/login" element={<Login />} />,
+            </Routes>
+          </AuthContextProvider>
+        </BrowserRouter>
       </ThemeProvider>
     </ThemeContextProvider>
   );
