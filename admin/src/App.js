@@ -1,15 +1,14 @@
-import {
-  Typography,
-  ThemeProvider,
-  createTheme,
-  Box,
-  CssBaseline,
-} from "@mui/material";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import Home from "./pages/Home";
 import { ThemeContextProvider, useThemeContext } from "./context/ThemeContext";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Header from "./components/Header";
+import Users from "./pages/Users";
+import Products from "./pages/Products";
+import Orders from "./pages/Orders";
+import Categories from "./pages/Categories";
+import Sellers from "./pages/Sellers";
 function App() {
   const router = createBrowserRouter([
     {
@@ -17,8 +16,32 @@ function App() {
       element: <Header />,
       children: [
         {
+          path: "/",
+          element: <Home />,
+        },
+        {
           path: "dashboard",
           element: <Dashboard />,
+        },
+        {
+          path: "users",
+          element: <Users />,
+        },
+        {
+          path: "products",
+          element: <Products />,
+        },
+        {
+          path: "orders",
+          element: <Orders />,
+        },
+        {
+          path: "categories",
+          element: <Categories />,
+        },
+        {
+          path: "sellers",
+          element: <Sellers />,
         },
       ],
     },
