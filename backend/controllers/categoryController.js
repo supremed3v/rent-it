@@ -1,4 +1,5 @@
 import Category from "../models/CategoryModel.js";
+import cloudinary from "cloudinary";
 
 // @desc    Get all categories
 // @route   GET /api/v1/categories
@@ -24,12 +25,23 @@ export const getCategories = async (req, res) => {
 
 export const addCategory = async (req, res) => {
   const { name, image } = req.body;
+
   if (!name || !image) {
     return res.status(400).json({
       success: false,
       message: "Please enter all fields",
     });
   }
+
+  const result = await cloudinary.v2.uploader.upload(image, {
+    folder: "categories",
+  });
+
+  req.body.image = {
+    public_id: result.public_id,
+    url: result.secure_url,
+  };
+
   const category = await Category.create({
     name,
     image,
@@ -51,4 +63,37 @@ export const deleteCategory = async (req, res) => {
     });
   }
   await category.remove();
+};
+
+export const updateCategory = async (req, res) => {
+  const category = Category.findById(req.params.id);
+
+  const { name, image } = req.body;
+
+  if (image === "") {
+    req.body.image = category.image;
+  } else {
+    const image_id = category.image.public_id;
+    await cloudinary.v2.uploader.destroy(image_id);
+    const result = await cloudinary.v2.uploader.upload(image, {
+      folder: "categories",
+    });
+    req.body.image = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+  }
+
+  if (!name) {
+    req.body.name = category.name;
+  } else {
+    req.body.name = name;
+  }
+
+  await category.save({ validateBeforeSave: false });
+  res.status(200).json({
+    success: true,
+    message: "Category updated successfully",
+    category,
+  });
 };

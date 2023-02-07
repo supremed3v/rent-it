@@ -372,10 +372,6 @@ export const updateProductStatus = async (req, res) => {
     await product.save({
       validateBeforeSave: false,
     });
-
-    // Category count update
-
-    // Category count update
     if (product.isApproved === true) {
       category.relatedProducts.push(product._id);
       await category.save();
