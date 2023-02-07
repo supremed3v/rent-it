@@ -67,9 +67,7 @@ export const newProduct = async (req, res) => {
     });
   }
   user.rentedItems.push(product._id);
-  // Category count update
-  relatedCat.relatedProducts.push(product._id);
-  await relatedCat.save();
+
   await user.save();
 
   res.status(201).json({
@@ -357,6 +355,7 @@ export const getProductsByCategory = async (req, res) => {
 
 export const updateProductStatus = async (req, res) => {
   const product = await Product.findById(req.params.id);
+  const category = await Category.findOne({ name: product.category });
 
   if (product) {
     if (req.user.role !== "admin") {
@@ -373,6 +372,18 @@ export const updateProductStatus = async (req, res) => {
     await product.save({
       validateBeforeSave: false,
     });
+
+    // Category count update
+
+    // Category count update
+    if (product.isApproved === true) {
+      category.relatedProducts.push(product._id);
+      await category.save();
+    } else {
+      category.relatedProducts.pull(product._id);
+      await category.save();
+    }
+
     res.status(201).json({ message: "Product updated" });
   }
 };
