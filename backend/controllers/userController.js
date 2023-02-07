@@ -600,3 +600,34 @@ export const sellerStats = async (req, res) => {
     totalProducts,
   });
 };
+
+export const adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid credentials",
+    });
+  }
+
+  const isPasswordMatched = await user.matchPassword(password);
+
+  if (!isPasswordMatched) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Password",
+    });
+  }
+
+  if (user.role !== "admin") {
+    return res.status(400).json({
+      success: false,
+      message: "You are not an admin",
+    });
+  }
+
+  sendToken(user, 200, res);
+};

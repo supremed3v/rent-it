@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
     setAuthState({ ...authState, loading: true });
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/v1/login",
+        "http://localhost:5000/api/v1/admin-login",
         loginData
       );
       setAuthState({
@@ -33,7 +33,7 @@ export const AuthContextProvider = ({ children }) => {
         isAdmin: data.user.role === "admin" ? true : false,
       });
 
-      const { token, user } = data;
+      const { token } = data;
       localStorage.setItem("token", token);
     } catch (error) {
       setAuthState({
@@ -56,3 +56,5 @@ export const AuthContextProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuthContext = () => useContext(AuthContext);
