@@ -337,11 +337,11 @@ export const NativeScreen = () => {
   const { isAuthenticated, error, loadUser, loginToken, loading } =
     useAuthContext();
   useEffect(() => {
-    if (loginToken) {
+    if (loginToken && !isAuthenticated) {
       loadUser();
     }
     if (error) {
-      Alert.alert(error);
+      Alert.alert("Error", error, [{ text: "OK" }]);
     }
   }, [loginToken, error]);
 
