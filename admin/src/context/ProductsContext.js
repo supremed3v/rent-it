@@ -39,9 +39,9 @@ export const ProductsContextProvider = ({ children }) => {
         error: error.response.data.message,
       });
     }
-  }, [setProductsState]);
+  }, []);
 
-  const getProduct = async (id) => {
+  const getProduct = useCallback(async (id) => {
     setProductsState({ ...productsState, productLoading: true });
     try {
       const { data } = await axios.get(
@@ -59,7 +59,7 @@ export const ProductsContextProvider = ({ children }) => {
         error: error.response.data.message,
       });
     }
-  };
+  }, []);
 
   const approveProduct = async (id, isApproved) => {
     setProductsState({ ...productsState, loading: true });

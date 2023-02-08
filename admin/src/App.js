@@ -9,14 +9,12 @@ import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import Categories from "./pages/Categories";
 import Sellers from "./pages/Sellers";
-import { AuthContextProvider, useAuthContext } from "./context/AuthContext";
+import { AuthContextProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ProductsContextProvider } from "./context/ProductsContext";
+import EditProduct from "./pages/EditProduct";
 function App() {
-  const { user } = useAuthContext();
-  console.log(user);
-
   // create a custom router with conditional rendering of the dashboard if the user is logged in
 
   const { themeColor } = useThemeContext();
@@ -167,6 +165,15 @@ function App() {
                         </ProtectedRoute>
                       }
                       key="sellers"
+                    />,
+                    <Route
+                      path="/product/:id"
+                      element={
+                        <ProtectedRoute>
+                          <EditProduct />
+                        </ProtectedRoute>
+                      }
+                      key="editProduct"
                     />,
                   ]}
                 />

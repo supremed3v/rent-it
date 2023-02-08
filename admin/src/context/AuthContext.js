@@ -1,4 +1,10 @@
-import { useContext, createContext, useState } from "react";
+import {
+  useContext,
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -54,7 +60,7 @@ export const AuthContextProvider = ({ children }) => {
     navigate("/login", { replace: true });
   };
 
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     if (localStorage.token) {
       setAuthState({ ...authState, loading: true });
       try {
@@ -82,7 +88,11 @@ export const AuthContextProvider = ({ children }) => {
         console.log(error);
       }
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
 
   return (
     <AuthContext.Provider value={{ login, logout, loadUser, ...authState }}>

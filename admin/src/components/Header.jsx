@@ -140,7 +140,7 @@ const Header = () => {
                 anchor="left"
                 open={drawerOpen}
                 onClose={toggleDrawer}
-                variant="temporary"
+                variant="permanent"
                 style={{
                     marginTop: '64px',
                 }}
@@ -153,9 +153,7 @@ const Header = () => {
                     },
 
                 }}
-                ModalProps={{
-                    hideBackdrop: true,
-                }}
+
 
             >
                 <Box
