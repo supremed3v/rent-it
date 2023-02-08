@@ -1,12 +1,15 @@
-import { Typography } from '@mui/material'
+import { Typography, Button } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProductsContext } from "../context/ProductsContext"
 
 const Products = () => {
-    const { products } = useProductsContext()
+    const { products, getProducts } = useProductsContext()
     const navigate = useNavigate()
+    useEffect(() => {
+        getProducts()
+    }, [getProducts])
     const columns = [
         { field: '_id', headerName: 'ID', width: 70 },
         { field: 'name', headerName: 'Name', width: 130 },
@@ -18,7 +21,7 @@ const Products = () => {
         { field: "seller", headerName: "Seller", width: 130 },
         { field: "available", headerName: "Availibility", width: 130 },
         {
-            field: "action", headerName: "Action", width: 130, renderCell: (params) => {
+            field: "action", headerName: "Action", width: 170, renderCell: (params) => {
                 const onEdit = () => {
                     console.log(params.row._id)
                     navigate(`/product/${params.row._id}`)
@@ -28,8 +31,13 @@ const Products = () => {
                 }
                 return (
                     <>
-                        <button onClick={onEdit}>Edit</button>
-                        <button>Delete</button>
+                        <Button onClick={onEdit} variant="outlined" size='small' sx={{
+                            backgroundColor: "#f50057",
+                            marginRight: "10px"
+                        }} >Edit</Button>
+                        <Button onClick={onEdit} variant="outlined" sx={{
+                            backgroundColor: "#41441c",
+                        }} size="small" >Delete</Button>
                     </>
                 )
             }
