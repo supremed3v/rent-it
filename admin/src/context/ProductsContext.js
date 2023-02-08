@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { useAuthContext } from "./AuthContext";
 
 const initialProductsState = {
   products: [],
@@ -14,6 +15,7 @@ const ProductsContext = createContext(initialProductsState);
 
 export const ProductsContextProvider = ({ children }) => {
   const [productsState, setProductsState] = useState(initialProductsState);
+  const { token } = useAuthContext();
 
   const getProducts = async () => {
     setProductsState({ ...productsState, loading: true });
@@ -52,6 +54,30 @@ export const ProductsContextProvider = ({ children }) => {
       });
     }
   };
+
+  const approveProduct = async (id) => {
+    setProductsState({ ...productsState, loading: true });
+    try {
+      const { data } = await axios.put(
+        `http://localhost:5000/api/v1/product/approve/${id}`
+      );
+      setProductsState({
+        ...productsState,
+        loading: false,
+        success: data.success,
+      });
+    } catch (error) {
+      setProductsState({
+        ...productsState,
+        loading: false,
+        error: error.response.data.message,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (token) getProducts();
+  }, []);
 
   return (
     <ProductsContext.Provider

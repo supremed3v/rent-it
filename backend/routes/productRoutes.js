@@ -5,6 +5,8 @@ import {
 } from "../middlewares/authenticate.js";
 import {
   getLatestProducts,
+  getProduct,
+  getProducts,
   getProductsByCategory,
   getProductsBySeller,
   getTopProducts,
@@ -40,5 +42,7 @@ router.get(
 
 router.get("/latest-products", getLatestProducts);
 router.get("/top-products", getTopProducts);
+router.get("/products", getProducts);
+router.get("/product/:id", getProduct);
 
 export default router;

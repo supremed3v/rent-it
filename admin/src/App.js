@@ -12,6 +12,7 @@ import Sellers from "./pages/Sellers";
 import { AuthContextProvider, useAuthContext } from "./context/AuthContext";
 import Login from "./pages/Login";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProductsContextProvider } from "./context/ProductsContext";
 function App() {
   const { user } = useAuthContext();
   console.log(user);
@@ -101,75 +102,77 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <AuthContextProvider>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Header />
-                  </ProtectedRoute>
-                }
-                children={[
-                  <Route path="/" element={<Home />} key="home" />,
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    }
-                    key="dashboard"
-                  />,
-                  <Route
-                    path="/users"
-                    element={
-                      <ProtectedRoute>
-                        <Users />
-                      </ProtectedRoute>
-                    }
-                    key="users"
-                  />,
-                  <Route
-                    path="/products"
-                    element={
-                      <ProtectedRoute>
-                        <Products />
-                      </ProtectedRoute>
-                    }
-                    key="products"
-                  />,
-                  <Route
-                    path="/orders"
-                    element={
-                      <ProtectedRoute>
-                        <Orders />
-                      </ProtectedRoute>
-                    }
-                    key="orders"
-                  />,
-                  <Route
-                    path="/categories"
-                    element={
-                      <ProtectedRoute>
-                        <Categories />
-                      </ProtectedRoute>
-                    }
-                    key="categories"
-                  />,
+            <ProductsContextProvider>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <Header />
+                    </ProtectedRoute>
+                  }
+                  children={[
+                    <Route path="/" element={<Home />} key="home" />,
+                    <Route
+                      path="/dashboard"
+                      element={
+                        <ProtectedRoute>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      }
+                      key="dashboard"
+                    />,
+                    <Route
+                      path="/users"
+                      element={
+                        <ProtectedRoute>
+                          <Users />
+                        </ProtectedRoute>
+                      }
+                      key="users"
+                    />,
+                    <Route
+                      path="/products"
+                      element={
+                        <ProtectedRoute>
+                          <Products />
+                        </ProtectedRoute>
+                      }
+                      key="products"
+                    />,
+                    <Route
+                      path="/orders"
+                      element={
+                        <ProtectedRoute>
+                          <Orders />
+                        </ProtectedRoute>
+                      }
+                      key="orders"
+                    />,
+                    <Route
+                      path="/categories"
+                      element={
+                        <ProtectedRoute>
+                          <Categories />
+                        </ProtectedRoute>
+                      }
+                      key="categories"
+                    />,
 
-                  <Route
-                    path="/sellers"
-                    element={
-                      <ProtectedRoute>
-                        <Sellers />
-                      </ProtectedRoute>
-                    }
-                    key="sellers"
-                  />,
-                ]}
-              />
-              <Route path="/login" element={<Login />} />,
-            </Routes>
+                    <Route
+                      path="/sellers"
+                      element={
+                        <ProtectedRoute>
+                          <Sellers />
+                        </ProtectedRoute>
+                      }
+                      key="sellers"
+                    />,
+                  ]}
+                />
+                <Route path="/login" element={<Login />} />,
+              </Routes>
+            </ProductsContextProvider>
           </AuthContextProvider>
         </BrowserRouter>
       </ThemeProvider>
