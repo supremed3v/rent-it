@@ -11,6 +11,7 @@ import {
   getProductsBySeller,
   getTopProducts,
   newProduct,
+  updateProductStatus,
 } from "../controllers/productController.js";
 import {
   addCategory,
@@ -44,5 +45,11 @@ router.get("/latest-products", getLatestProducts);
 router.get("/top-products", getTopProducts);
 router.get("/products", getProducts);
 router.get("/product/:id", getProduct);
+router.put(
+  "/product/approve/:id",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  updateProductStatus
+);
 
 export default router;

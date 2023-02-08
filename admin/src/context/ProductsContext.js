@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import { useAuthContext } from "./AuthContext";
 
@@ -17,7 +23,7 @@ export const ProductsContextProvider = ({ children }) => {
   const [productsState, setProductsState] = useState(initialProductsState);
   const { token } = useAuthContext();
 
-  const getProducts = async () => {
+  const getProducts = useCallback(async () => {
     setProductsState({ ...productsState, loading: true });
     try {
       const { data } = await axios.get("http://localhost:5000/api/v1/products");
@@ -33,7 +39,7 @@ export const ProductsContextProvider = ({ children }) => {
         error: error.response.data.message,
       });
     }
-  };
+  }, [setProductsState]);
 
   const getProduct = async (id) => {
     setProductsState({ ...productsState, productLoading: true });
@@ -55,11 +61,17 @@ export const ProductsContextProvider = ({ children }) => {
     }
   };
 
-  const approveProduct = async (id) => {
+  const approveProduct = async (id, isApproved) => {
     setProductsState({ ...productsState, loading: true });
     try {
       const { data } = await axios.put(
-        `http://localhost:5000/api/v1/product/approve/${id}`
+        `http://localhost:5000/api/v1/product/approve/${id}`,
+        { isApproved },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setProductsState({
         ...productsState,
@@ -76,8 +88,8 @@ export const ProductsContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (token) getProducts();
-  }, []);
+    getProducts();
+  }, [getProducts]);
 
   return (
     <ProductsContext.Provider
