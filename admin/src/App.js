@@ -18,7 +18,7 @@ function App() {
 
   // create a custom router with conditional rendering of the dashboard if the user is logged in
 
-  const { themeColor, toggleTheme } = useThemeContext();
+  const { themeColor } = useThemeContext();
   const theme = createTheme({
     palette: {
       mode: themeColor,
@@ -104,9 +104,13 @@ function App() {
             <Routes>
               <Route
                 path="/"
-                element={<Header />}
+                element={
+                  <ProtectedRoute>
+                    <Header />
+                  </ProtectedRoute>
+                }
                 children={[
-                  <Route path="/" element={<Home />} />,
+                  <Route path="/" element={<Home />} key="home" />,
                   <Route
                     path="/dashboard"
                     element={
