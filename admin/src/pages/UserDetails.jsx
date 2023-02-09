@@ -8,6 +8,7 @@ import { Box, Button, Grid, TextField, Typography, Switch, FormGroup, FormContro
 export default function UserDetails() {
     const { id } = useParams()
     const [userDetails, setUserDetails] = useState([])
+    const [sellerProducts, setSellerProducts] = useState([])
     const { token } = useAuthContext()
 
     const getUserDetails = useCallback(async () => {
@@ -27,13 +28,84 @@ export default function UserDetails() {
         getUserDetails()
     }, [getUserDetails])
 
-    console.log(userDetails)
+
+    const getRentedItems = useCallback(async () => {
+        try {
+            const { data } = await axios.get(`http://localhost:5000/api/v1/get-rented-products/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            setSellerProducts(data.products)
+        } catch (error) {
+            console.log(error.response.data.message)
+        }
+    }, [token, id])
+
+    useEffect(() => {
+        getRentedItems()
+    }, [getRentedItems])
+
+    console.log(sellerProducts)
 
     return (
-        <Box>
+        <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100vh"
+
+        }} >
             <Typography variant="h4" sx={{
                 marginBottom: "20px"
             }}>User Details</Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        fullWidth
+                        label="Name"
+                        variant="filled"
+                        value={userDetails?.name}
+                        contentEditable={false}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        fullWidth
+                        label="Email"
+                        variant="filled"
+                        value={userDetails?.email}
+
+                        contentEditable={false}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Typography variant="h6" textAlign={"center"}>
+                        Role: {" "}
+                        {userDetails?.role?.charAt(0).toUpperCase() + userDetails?.role?.slice(1)}</Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Box sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+
+                    }}>
+
+                        <img
+                            src={userDetails?.avatar?.url === "url" && "https://picsum.photos/200/300"}
+                            alt={userDetails?.name}
+                            style={{
+                                width: "100px",
+                                height: "100px",
+                                borderRadius: "50%",
+                                objectFit: "cover"
+                            }}
+
+                        />
+                    </Box>
+                </Grid>
+            </Grid>
         </Box>
     )
 }

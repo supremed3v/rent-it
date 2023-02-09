@@ -3,8 +3,10 @@ import { DataGrid } from '@mui/x-data-grid';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthContext } from '../context/AuthContext';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const Users = () => {
+    const navigate = useNavigate()
     const [users, setUsers] = useState([])
     const { token } = useAuthContext()
 
@@ -73,7 +75,7 @@ const Users = () => {
             width: 130,
             renderCell: (params) => {
                 const onClick = () => {
-                    console.log(params.row._id)
+                    navigate(`/users/${params.row._id}`)
                 }
                 return (
                     <>

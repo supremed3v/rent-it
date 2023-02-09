@@ -654,3 +654,12 @@ export const getSellerDetails = async (req, res) => {
     seller,
   });
 };
+
+export const getSellerProducts = async (req, res) => {
+  const products = await Product.find({ seller: req.params.id });
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+};
