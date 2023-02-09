@@ -1,6 +1,7 @@
 import express from "express";
 import {
   adminLogin,
+  getSellerDetails,
   getUserProfile,
   loginUser,
   logoutUser,
@@ -34,5 +35,11 @@ router.post("/verify-image", verifyUserImage);
 router.post("/set-pushToken", isAuthenticatedUser, setPushToken);
 
 router.post("/admin-login", adminLogin);
+router.get(
+  "/seller-details/:id",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  getSellerDetails
+);
 
 export default router;

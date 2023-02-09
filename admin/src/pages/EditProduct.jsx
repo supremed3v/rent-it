@@ -2,13 +2,35 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useProductsContext } from "../context/ProductsContext"
 import { Box, Button, Grid, TextField, Typography, Switch, FormGroup, FormControlLabel } from "@mui/material"
-
+import axios from 'axios'
+import { useAuthContext } from '../context/AuthContext'
 export default function EditProduct() {
     const { getProduct, product } = useProductsContext()
+    const [sellerDetails, setSellerDetails] = React.useState([])
+    const { token } = useAuthContext()
+
     const { id } = useParams()
     React.useEffect(() => {
         getProduct(id)
     }, [getProduct, id])
+
+    const getSellerDetails = React.useCallback(async () => {
+        try {
+            const { data } = await axios.get(`http://localhost:5000/api/v1/seller-details/${product?.seller}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+            )
+            setSellerDetails(data.seller)
+        } catch (error) {
+
+        }
+    }, [product?.seller, token])
+
+    React.useEffect(() => {
+        getSellerDetails()
+    }, [getSellerDetails])
 
     return (
         <Box sx={{
@@ -92,6 +114,18 @@ export default function EditProduct() {
                 <Typography variant='h4'>
                     Seller Details
                 </Typography>
+                {sellerDetails && <Box>
+                    <Typography variant='h6'>
+                        Name: {sellerDetails?.name}
+                    </Typography>
+                    <Typography variant='h6'>
+                        Email: {sellerDetails?.email}
+                    </Typography>
+                    <Typography variant='h6'>
+                        Listed Products: {sellerDetails?.rentedItems?.length}
+                    </Typography>
+                </Box>}
+
             </Box>
         </Box>
 

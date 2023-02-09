@@ -631,3 +631,12 @@ export const adminLogin = async (req, res) => {
 
   sendToken(user, 200, res);
 };
+
+export const getSellerDetails = async (req, res) => {
+  const seller = await User.findById(req.params.id);
+
+  res.status(200).json({
+    success: true,
+    seller,
+  });
+};
