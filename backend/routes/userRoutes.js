@@ -1,6 +1,7 @@
 import express from "express";
 import {
   adminLogin,
+  getAllUsers,
   getSellerDetails,
   getUserProfile,
   loginUser,
@@ -40,6 +41,13 @@ router.get(
   isAuthenticatedUser,
   authorizeRoles("admin"),
   getSellerDetails
+);
+
+router.get(
+  "/allUsers",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  getAllUsers
 );
 
 export default router;
