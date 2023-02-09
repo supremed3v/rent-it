@@ -126,6 +126,20 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
+export const getSingleUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.status(200).json({
+    success: true,
+    user,
+  });
+  if (!user) {
+    res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+};
+
 // @desc    Update / Change password
 
 // @route   PUT /api/v1/password/update

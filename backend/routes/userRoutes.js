@@ -3,6 +3,7 @@ import {
   adminLogin,
   getAllUsers,
   getSellerDetails,
+  getSingleUser,
   getUserProfile,
   loginUser,
   logoutUser,
@@ -48,6 +49,13 @@ router.get(
   isAuthenticatedUser,
   authorizeRoles("admin"),
   getAllUsers
+);
+
+router.get(
+  "/user-details/:id",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  getSingleUser
 );
 
 export default router;

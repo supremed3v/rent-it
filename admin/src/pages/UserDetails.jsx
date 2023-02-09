@@ -25,8 +25,9 @@ export default function UserDetails() {
 
     useEffect(() => {
         getUserDetails()
-    }
-        , [getUserDetails])
+    }, [getUserDetails])
+
+    console.log(userDetails)
 
     return (
         <Box>
