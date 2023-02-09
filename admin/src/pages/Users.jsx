@@ -54,12 +54,36 @@ const Users = () => {
             field: 'role',
             headerName: 'Role',
             width: 130,
+
         },
         {
             field: 'createdAt',
             headerName: 'Created At',
             width: 130,
         },
+        {
+            field: "rentedItems",
+            headerName: "Rented Items",
+            width: 130,
+            textAlign: "center"
+        },
+        {
+            field: "action",
+            headerName: "Action",
+            width: 130,
+            renderCell: (params) => {
+                const onClick = () => {
+                    console.log(params.row._id)
+                }
+                return (
+                    <>
+                        <Button onClick={onClick} size="small" variant="contained" style={{
+                            backgroundColor: "#10B981",
+                        }} >View</Button>
+                    </>
+                )
+            }
+        }
 
     ];
 
@@ -70,7 +94,8 @@ const Users = () => {
             name: user.name,
             email: user.email,
             role: user.role,
-            createdAt: user.createdAt.slice(0, 10).split("-").reverse().join("-")
+            createdAt: user.createdAt.slice(0, 10).split("-").reverse().join("-"),
+            rentedItems: user.rentedItems.length
         }
     })
 
@@ -79,7 +104,7 @@ const Users = () => {
         <>
             <Typography>Users</Typography>
             <div style={{ height: 400, width: '100%' }}>
-                <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection
+                <DataGrid rows={rows} columns={columns} pageSize={5}
                     getRowId={(row) => row._id}
                 />
             </div>
