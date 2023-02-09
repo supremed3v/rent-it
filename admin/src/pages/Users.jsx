@@ -28,13 +28,18 @@ const Users = () => {
 
     console.log(users)
 
+    const gridUserImage = (props) => {
+        console.log(props, "props")
+        return (
+            <>
+                <img src={props.avatar?.url} alt="user" width="50px" height="50px" />
+                <Typography>{props.name}</Typography>
+            </>
+        )
+    }
+
     const columns = [
-        { field: '_id', headerName: 'ID', width: 70 },
-        {
-            field: 'avatar',
-            headerName: 'Avatar',
-            width: 130,
-        },
+        { field: '_id', headerName: 'ID', width: 250 },
         {
             field: 'name',
             headerName: 'Name',
@@ -43,7 +48,7 @@ const Users = () => {
         {
             field: 'email',
             headerName: 'Email',
-            width: 130,
+            width: 250,
         },
         {
             field: 'role',
@@ -55,11 +60,7 @@ const Users = () => {
             headerName: 'Created At',
             width: 130,
         },
-        {
-            field: 'updatedAt',
-            headerName: 'Updated At',
-            width: 130,
-        },
+
     ];
 
     const rows = users.map(user => {
@@ -69,8 +70,7 @@ const Users = () => {
             name: user.name,
             email: user.email,
             role: user.role,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt
+            createdAt: user.createdAt.slice(0, 10).split("-").reverse().join("-")
         }
     })
 
