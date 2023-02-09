@@ -647,7 +647,8 @@ export const adminLogin = async (req, res) => {
 };
 
 export const getSellerDetails = async (req, res) => {
-  const seller = await User.findById(req.params.id);
+  const { id } = req.params;
+  const seller = await User.findById(id);
 
   res.status(200).json({
     success: true,

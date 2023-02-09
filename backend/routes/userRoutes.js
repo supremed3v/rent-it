@@ -41,7 +41,7 @@ router.post("/admin-login", adminLogin);
 router.get(
   "/seller-details/:id",
   isAuthenticatedUser,
-  authorizeRoles("admin"),
+  authorizeRoles("admin", "seller"),
   getSellerDetails
 );
 

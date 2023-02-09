@@ -16,7 +16,7 @@ export default function EditProduct() {
 
     const getSellerDetails = React.useCallback(async () => {
         try {
-            const { data } = await axios.get(`http://localhost:5000/api/v1/seller-details/${product?.seller}`, {
+            const { data } = await axios.get(`http://localhost:5000/api/v1/seller-details/${product.seller}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

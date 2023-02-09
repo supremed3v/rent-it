@@ -10,7 +10,7 @@ const Users = () => {
     const [users, setUsers] = useState([])
     const { token } = useAuthContext()
 
-    const listUsers = useCallback(async () => {
+    const listUsers = async () => {
         try {
             const { data } = await axios.get("http://localhost:5000/api/v1/allUsers", {
                 headers: {
@@ -22,11 +22,11 @@ const Users = () => {
         } catch (error) {
             console.log(error)
         }
-    }, [token])
+    }
 
     useEffect(() => {
         listUsers()
-    }, [listUsers])
+    }, [])
 
     console.log(users)
 
