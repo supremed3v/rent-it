@@ -106,6 +106,33 @@ export default function UserDetails() {
                     </Box>
                 </Grid>
             </Grid>
+            {sellerProducts?.length > 0 && <Typography variant="h4" sx={{
+                marginTop: "20px"
+            }}>Rented Items</Typography>}
+            {sellerProducts?.map((product) => (
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginTop: "20px"
+                }}>
+                    <Typography variant="h6" sx={{
+                        marginBottom: "20px"
+                    }}>Product Name: {product?.name}</Typography>
+                    <img
+                        src={product?.images[0]?.url !== "url" ? product?.images[0]?.url : "https://picsum.photos/200/300"}
+                        alt={product?.name}
+                        style={{
+                            width: "100px",
+                            height: "100px",
+                            borderRadius: "50%",
+                            objectFit: "cover"
+                        }}
+                    />
+                </Box>
+            ))
+
+            }
         </Box>
     )
 }
