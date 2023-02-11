@@ -149,6 +149,32 @@ export default function UserDetails() {
                             />
                         </Box>
                     </Grid>
+                    <Grid item xs={12} md={6}>
+                        {userDetails?.role === "seller" && (
+                            <img 
+                            src={userDetails?.verifySellerIdCard?.url === "url" ? "https://picsum.photos/200/300" : userDetails?.verifySellerIdCard?.url} alt={userDetails?.name} style={{
+                                width: "300px",
+                                height: "300px",
+                                borderRadius: "10px",
+                                objectFit: "cover"
+                            }}
+                            />
+                        )}
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        {userDetails?.role === "seller" && (
+                            <img
+                                src={userDetails?.verifySellerImage?.url === "url" ? "https://picsum.photos/200/300" : userDetails?.verifySellerImage?.url}
+                                alt={userDetails?.name}
+                                style={{
+                                    width: "300px",
+                                    height: "300px",
+                                    borderRadius: "10px",
+                                    objectFit: "cover"
+                                }}
+                                />
+                        )}
+                    </Grid>
                 </Grid>
             </Box>
             {sellerProducts?.length > 0 && (
