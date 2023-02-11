@@ -1,4 +1,4 @@
-import {useState, useCallback, useEffect, createContext} from 'react';
+import {useState, useCallback, useEffect, createContext, useContext} from 'react';
 import axios from 'axios'
 
 
@@ -14,7 +14,7 @@ const CategoriesContext = createContext(initialState);
 export const CategoriesProviders = ({children}) => {
     const [state, setState] = useState(initialState);
 
-    const fetchCategories = useCallback(async () => {
+    const fetchCategories = async () => {
         setState({...state, loading: true});
         try {
             const {data} = await axios.get("http://localhost:5000/api/v1/categories");
@@ -22,12 +22,12 @@ export const CategoriesProviders = ({children}) => {
         } catch (error) {
             setState({...state, loading: false, error: error.response.message});
         }
-    }, [state]);
+    };
 
     useEffect(() => {
         fetchCategories();
-    }, [fetchCategories]);
-
+    }, []);
+    console.log(state.categories)
     const addCategory = async (category) => {
         setState({...state, loading: true});
         try {
@@ -49,3 +49,4 @@ export const CategoriesProviders = ({children}) => {
     )
 }
 
+export const useCategoriesContext = () => useContext(CategoriesContext);

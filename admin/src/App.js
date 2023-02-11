@@ -15,6 +15,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ProductsContextProvider } from "./context/ProductsContext";
 import EditProduct from "./pages/EditProduct";
 import UserDetails from "./pages/UserDetails";
+import { CategoriesProviders } from "./context/CategoriesContext";
 function App() {
   // create a custom router with conditional rendering of the dashboard if the user is logged in
 
@@ -102,6 +103,7 @@ function App() {
         <BrowserRouter>
           <AuthContextProvider>
             <ProductsContextProvider>
+              <CategoriesProviders>
               <Routes>
                 <Route
                   path="/"
@@ -189,6 +191,7 @@ function App() {
                 />
                 <Route path="/login" element={<Login />} />,
               </Routes>
+              </CategoriesProviders>
             </ProductsContextProvider>
           </AuthContextProvider>
         </BrowserRouter>

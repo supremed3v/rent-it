@@ -24,6 +24,7 @@ import { CartProvider } from "./src/context/CartContext";
 import { ProductProvider } from "./src/context/ProductsContext";
 import { AuthContextProvider } from "./src/context/AuthContext";
 import { useEffect, useState } from "react";
+import { CategoriesProviders } from "./admin/src/context/CategoriesContext";
 
 const CombinedDarkTheme = {
   ...MD3DarkTheme,
@@ -57,6 +58,7 @@ export default function App() {
   return (
     <AuthContextProvider>
       <ProductProvider>
+          <CategoriesProviders>
         <CartProvider>
           <StripeProvider publishableKey={pubKey}>
             <PaperProvider theme={CombinedDarkTheme}>
@@ -66,6 +68,7 @@ export default function App() {
             </PaperProvider>
           </StripeProvider>
         </CartProvider>
+          </CategoriesProviders>
       </ProductProvider>
     </AuthContextProvider>
   );
