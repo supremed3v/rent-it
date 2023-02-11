@@ -137,7 +137,7 @@ export default function UserDetails() {
                         }}>
 
                             <img
-                                src={userDetails?.avatar?.url === "url" && "https://picsum.photos/200/300"}
+                                src={userDetails?.avatar?.url === "url" ? "https://picsum.photos/200/300" : userDetails?.avatar?.url}
                                 alt={userDetails?.name}
                                 style={{
                                     width: "100px",

@@ -1,13 +1,15 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useProductsContext } from "../context/ProductsContext"
-import { Box, Button, Grid, TextField, Typography, Switch, FormGroup, FormControlLabel } from "@mui/material"
+import { Box, Button, Grid, TextField, Typography, Switch, FormGroup, FormControlLabel, Modal } from "@mui/material"
 import axios from 'axios'
 import { useAuthContext } from '../context/AuthContext'
 export default function EditProduct() {
     const { getProduct, product } = useProductsContext()
     const [sellerDetails, setSellerDetails] = React.useState([])
     const { token } = useAuthContext()
+
+    const [openModal, setOpenModal] = React.useState(false)
 
     const { id } = useParams()
     React.useEffect(() => {
@@ -31,6 +33,10 @@ export default function EditProduct() {
     React.useEffect(() => {
         getSellerDetails()
     }, [getSellerDetails])
+
+    const handleModal = () => {
+        setOpenModal(!openModal)
+    }
 
     return (
         <Box sx={{
@@ -85,22 +91,57 @@ export default function EditProduct() {
                     />
                 </Grid> */}
                 <Grid item xs={12} md={6}>
-                    <FormGroup>
-                        <FormControlLabel control={
-                            <Switch defaultChecked={product?.isApproved ? true : false}
-                            />
-                        }
-                            label={product?.isApproved === "true" ? "Already Approved" : "Product not approved"} />
-                    </FormGroup>
+                    {product?.isApproved ?
+                        <Typography variant="h6">
+                            Available</Typography>
+
+                        :
+                        <>
+                            <Button variant="contained" sx={{
+                                backgroundColor: "#f50057",
+                                color: "#fff"
+
+                            }}
+                                onClick={handleModal}
+                            >Approve Product</Button>
+                            <Modal
+                                open={openModal}
+                                onClose={handleModal}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                            >
+                                <Box sx={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    width: 400,
+                                    bgcolor: "background.paper",
+                                    border: "2px solid #000",
+                                    boxShadow: 24,
+                                    p: 4,
+                                }}>
+                                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                                        Approve Product
+                                    </Typography>
+                                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                        Are you sure you want to approve this product?
+                                    </Typography>
+                                    <Button variant="contained" sx={{
+                                        backgroundColor: "#f50057",
+                                        color: "#fff"
+
+                                    }}>Approve</Button>
+                                </Box>
+                            </Modal>
+                        </>
+                    }
+
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <TextField
-
-                        fullWidth
-                        label="Available"
-                        variant="filled"
-                        value={product?.available}
-                    />
+                    <Typography variant="h6">
+                        {product?.isAvailable ? "Rented" : "Not out for rent"}
+                    </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Button variant="contained" sx={{
