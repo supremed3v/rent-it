@@ -43,6 +43,7 @@ export default function EditProduct() {
         navigate(`/users/${sellerDetails._id}`)
     }
 
+
     return (
         <Box sx={{
             display: "flex",
@@ -88,14 +89,39 @@ export default function EditProduct() {
                         value={product?.category || "No category"}
                     />
                 </Grid>
-                {/* <Grid item xs={12} md={6}>
-                    <TextField
-                        fullWidth
-                        label="Images"
-                        variant="outlined"
-                        value={product.images}
-                    />
-                </Grid> */}
+                <Grid item xs={12} md={6}>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: "20px",
+                        overflowX: "scroll",
+                        scrollBehavior: "smooth",
+                        scrollbarWidth: "none",
+                        msOverflowStyle: "none",
+                        '&::-webkit-scrollbar': {
+                            display: "none"
+                        }
+
+                    }}>
+
+                        {product?.images?.length > 0 && (
+                            product?.images.map((image, index) => (
+                                <img src={image.url === "url" ? "https://picsum.photos/200/300" : image.url} key={index} alt={image.url}
+                                    style={{
+                                        width: "100px",
+                                        height: "100px",
+                                        objectFit: "cover",
+                                        margin: "0 10px"
+                                    }}
+                                />
+                            ))
+                        )}
+                    </Box>
+                    <Typography variant="caption">
+                        Drag left to see more images...
+                    </Typography>
+                </Grid>
                 <Grid item xs={12} md={6}>
                     {product?.isApproved ?
                         <Typography variant="h6">

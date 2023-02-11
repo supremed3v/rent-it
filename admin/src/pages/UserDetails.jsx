@@ -109,7 +109,7 @@ export default function UserDetails() {
                             fullWidth
                             label="Name"
                             variant="filled"
-                            value={userDetails?.name}
+                            value={userDetails?.name || "Name"}
                             contentEditable={false}
                         />
                     </Grid>
@@ -118,7 +118,7 @@ export default function UserDetails() {
                             fullWidth
                             label="Email"
                             variant="filled"
-                            value={userDetails?.email}
+                            value={userDetails?.email || "Email"}
 
                             contentEditable={false}
                         />
