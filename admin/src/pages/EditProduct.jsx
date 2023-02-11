@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useProductsContext } from "../context/ProductsContext"
 import { Box, Button, Grid, TextField, Typography, Switch, FormGroup, FormControlLabel, Modal } from "@mui/material"
 import axios from 'axios'
@@ -8,6 +8,7 @@ export default function EditProduct() {
     const { getProduct, product } = useProductsContext()
     const [sellerDetails, setSellerDetails] = React.useState([])
     const { token } = useAuthContext()
+    const navigate = useNavigate()
 
     const [openModal, setOpenModal] = React.useState(false)
 
@@ -38,6 +39,10 @@ export default function EditProduct() {
         setOpenModal(!openModal)
     }
 
+    const handleSellerDetails = () => {
+        navigate(`/users/${sellerDetails._id}`)
+    }
+
     return (
         <Box sx={{
             display: "flex",
@@ -53,8 +58,9 @@ export default function EditProduct() {
                     <TextField
                         fullWidth
                         label="Name"
-                        variant="filled"
-                        value={product?.name}
+                        variant="outlined"
+                        value={product?.name || "No name"}
+                        contentEditable={false}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -62,7 +68,7 @@ export default function EditProduct() {
                         fullWidth
                         label="Price"
                         variant="filled"
-                        value={product?.price}
+                        value={product?.price || 0}
 
                     />
                 </Grid>
@@ -71,7 +77,7 @@ export default function EditProduct() {
                         fullWidth
                         label="Description"
                         variant="filled"
-                        value={product?.description}
+                        value={product?.description || "No description"}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -79,7 +85,7 @@ export default function EditProduct() {
                         fullWidth
                         label="Category"
                         variant="filled"
-                        value={product?.category}
+                        value={product?.category || "No category"}
                     />
                 </Grid>
                 {/* <Grid item xs={12} md={6}>
@@ -97,11 +103,7 @@ export default function EditProduct() {
 
                         :
                         <>
-                            <Button variant="contained" sx={{
-                                backgroundColor: "#f50057",
-                                color: "#fff"
-
-                            }}
+                            <Button variant="contained"
                                 onClick={handleModal}
                             >Approve Product</Button>
                             <Modal
@@ -145,13 +147,37 @@ export default function EditProduct() {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Button variant="contained" sx={{
-                        backgroundColor: "#f50057",
-                        color: "#fff"
+                        backgroundColor: "red",
+                        color: "#fff",
+                        '&:hover': {
+                            backgroundColor: "white",
+                            color: "red",
+                        }
 
-                    }}>Update</Button>
+
+                    }}>Delete</Button>
                 </Grid>
             </Grid>
-            <Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginTop: "20px",
+                    borderColor: "#fff",
+                    padding: "20px",
+                    borderRadius: "10px",
+                    borderWidth: "2px",
+                    borderStyle: "solid",
+                    backgroundColor: "#041014",
+                    cursor: "pointer",
+                    '&:hover': {
+                        transform: "scale(1.05)",
+                        transition: "all 0.3s ease-in-out"
+                    }
+                }}
+                onClick={handleSellerDetails}
+            >
                 <Typography variant='h4'>
                     Seller Details
                 </Typography>
