@@ -77,11 +77,13 @@ const Categories = () => {
                     Create Category
                 </Button>
             </Box>
-            <CategoryModal
+            {openModal && (
+                <CategoryModal
                 openModal={openModal}
                 setOpenModal={setOpenModal}
                 category={modalCategory}
             />
+            )}
         </Box>
     );
 };
