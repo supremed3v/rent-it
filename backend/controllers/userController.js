@@ -664,3 +664,23 @@ export const getSellerProducts = async (req, res) => {
     products,
   });
 };
+
+export const sendSellerMessage = async (req, res) => {
+  try {
+    await sendEmail({
+      email: req.body.email,
+      subject: req.body.subject,
+      message: req.body.message,
+    }).then(() => {
+      res.status(200).json({
+        success: true,
+        message: "Email sent successfully",
+      });
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};

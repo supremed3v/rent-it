@@ -4,11 +4,13 @@ import {
   getAllUsers,
   getSellerDetails,
   getSellerProducts,
+  getSellers,
   getSingleUser,
   getUserProfile,
   loginUser,
   logoutUser,
   registerUser,
+  sendSellerMessage,
   setPushToken,
   verifySeller,
   verifySellerOtp,
@@ -53,6 +55,13 @@ router.get(
 );
 
 router.get(
+  "/sellers",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  getSellers
+);
+
+router.get(
   "/user-details/:id",
   isAuthenticatedUser,
   authorizeRoles("admin"),
@@ -64,6 +73,13 @@ router.get(
   isAuthenticatedUser,
   authorizeRoles("admin", "seller"),
   getSellerProducts
+);
+
+router.post(
+  "/send-email",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  sendSellerMessage
 );
 
 export default router;
