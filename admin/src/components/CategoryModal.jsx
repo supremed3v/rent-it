@@ -1,7 +1,10 @@
 import React from "react";
 import { Box, Button, Divider, Modal, Typography } from "@mui/material";
+import axios from 'axios'
+import { useAuthContext } from "../context/AuthContext";
 
 const CategoryModal = ({ category, openModal, setOpenModal }) => {
+  const { token } = useAuthContext();
   const [image, setImage] = React.useState(null);
   const [imagePreview, setImagePreview] = React.useState(null);
   const [baseImage, setBaseImage] = React.useState(null);
@@ -24,6 +27,22 @@ const CategoryModal = ({ category, openModal, setOpenModal }) => {
     base64(image).then((data) => {
       setBaseImage(data);
     });
+  }
+
+  const handleUpdate = () => {
+    axios.put(`http://localhost:5000/api/v1/category/${category._id}`, {
+      image: baseImage
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then((res) => {
+      console.log(res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 
 
@@ -69,14 +88,16 @@ const CategoryModal = ({ category, openModal, setOpenModal }) => {
               </Typography>
               <Divider/>
               <Button variant="contained" component="label">
-                Pick Image
+                {image !== null ? "Change Image" : "Upload Image"}
                 <input type="file" hidden onChange={(e) => setImage(e.target.files[0])} />
               </Button>
             {imagePreview !== null && <img src={imagePreview} alt={category.name} style={{ width: "100%" }} />}
             </Box>
           }
+        {imagePreview !== null && <Button variant="contained" onClick={handleUpdate}>Update</Button>}
       </Box>
       )}
+
     </Modal>
   );
 };
