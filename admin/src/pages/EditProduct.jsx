@@ -42,6 +42,9 @@ export default function EditProduct() {
           },
         }
       );
+      if (data.success) {
+        setOpenModal(false);
+      }
       getProduct(id);
     } catch (error) {
       console.log(error)
@@ -73,7 +76,6 @@ export default function EditProduct() {
   const handleSellerDetails = () => {
     navigate(`/users/${sellerDetails._id}`);
   };
-  console.log(product)
   return (
     <Box
       sx={{
