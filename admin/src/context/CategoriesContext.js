@@ -13,21 +13,21 @@ const CategoriesContext = createContext(initialState);
 
 export const CategoriesProviders = ({children}) => {
     const [state, setState] = useState(initialState);
-
-    const fetchCategories = async () => {
-        setState({...state, loading: true});
-        try {
-            const {data} = await axios.get("http://localhost:5000/api/v1/categories");
-            setState({...state, loading: false, categories: data.categories});
-        } catch (error) {
-            setState({...state, loading: false, error: error.response.message});
-        }
-    };
-
+    
     useEffect(() => {
         fetchCategories();
     }, []);
-    console.log(state.categories)
+    const fetchCategories = () => {
+        setState({...state, loading: true});
+        axios.get("http://localhost:5000/api/v1/categories")
+            .then(({data}) => {
+                setState({...state, categories: data.categories, loading: false});
+            })
+            .catch((error) => {
+                setState({...state, error: error.response.data.message, loading: false});
+            })
+    };
+
     const addCategory = async (category) => {
         setState({...state, loading: true});
         try {

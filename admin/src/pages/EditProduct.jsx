@@ -22,11 +22,31 @@ export default function EditProduct() {
   const navigate = useNavigate();
 
   const [openModal, setOpenModal] = React.useState(false);
+  const [isApproved, setIsApproved] = React.useState(false);
 
   const { id } = useParams();
   React.useEffect(() => {
     getProduct(id);
   }, [getProduct, id]);
+
+  const handleApprove = async () => {
+    try {
+      const { data } = await axios.put(
+        `http://localhost:5000/api/v1/product/approve/${id}`,
+        {
+          isApproved: isApproved,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      getProduct(id);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const getSellerDetails = React.useCallback(async () => {
     try {
@@ -53,7 +73,7 @@ export default function EditProduct() {
   const handleSellerDetails = () => {
     navigate(`/users/${sellerDetails._id}`);
   };
-
+  console.log(product)
   return (
     <Box
       sx={{
@@ -147,8 +167,8 @@ export default function EditProduct() {
           )}
         </Grid>
         <Grid item xs={12} md={6}>
-          {product?.isApproved ? (
-            <Typography variant="h6">Available</Typography>
+          {product?.approved ? (
+            <Typography variant="h6">Product approved</Typography>
           ) : (
             <>
               <Button variant="contained" onClick={handleModal}>
@@ -184,13 +204,11 @@ export default function EditProduct() {
                     Are you sure you want to approve this product?
                   </Typography>
                   <RadioGroup
-                    defaultValue={product?.isApproved ? "yes" : "no"}
-                    onChange={(e) => {
-                        console.log(e.target.value);
-                    }}
+                    defaultValue={product?.isApproved ? "true" : "false"}
+                    onChange={(e) => setIsApproved(e.target.value)}
                   >
-                    <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-                    <FormControlLabel value="no" control={<Radio />} label="No" />
+                    <FormControlLabel value="true" control={<Radio />} label="Yes" />
+                    <FormControlLabel value="false" control={<Radio />} label="No" />
                   </RadioGroup>
                   <Button
                     variant="contained"
@@ -198,7 +216,7 @@ export default function EditProduct() {
                       backgroundColor: "#f50057",
                       color: "#fff",
                     }}
-                    onClick={handleModal}
+                    onClick={handleApprove}
                   >
                     Approve
                   </Button>

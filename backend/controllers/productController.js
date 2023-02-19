@@ -363,16 +363,18 @@ export const updateProductStatus = async (req, res) => {
       throw new Error("Not authorized to update this product");
     }
 
-    if (product.isApproved === true) {
-      res.status(401);
-      throw new Error("Product already approved");
+    if (product.approved === true) {
+      res.status(401).json({
+        success: false,
+        message: "Product already approved",
+      });
     }
 
-    product.isApproved = req.body.isApproved;
+    product.approved = req.body.isApproved;
     await product.save({
       validateBeforeSave: false,
     });
-    if (product.isApproved === true) {
+    if (req.body.isApproved === true) {
       category.relatedProducts.push(product._id);
       await category.save();
     } else {
