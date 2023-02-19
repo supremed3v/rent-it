@@ -210,6 +210,29 @@ const Header = () => {
       >
         <Outlet />
       </Box>
+      {/* <Box>
+        <AppBar
+          position="static"
+          color="secondary"
+          sx={{
+            // marginTop: "calc(10% + 60px)",
+            top: "auto",
+            position: "fixed",
+            bottom: 0,
+            width: "100%",
+            backgroundColor: "#ccc",
+          }}
+          component="footer"
+          square
+          variant="contained"
+        >
+          <Toolbar>
+            <Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
+              Footer
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box> */}
     </Box>
   );
 };

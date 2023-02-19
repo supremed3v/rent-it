@@ -155,6 +155,53 @@ const SellerDetails = () => {
             )}
           </Grid>
         </Box>
+        <Divider
+          sx={{
+            my: 2,
+          }}
+        />
+        <Typography variant="h6">Orders</Typography>
+        <Grid container spacing={2}>
+          {seller.orders.length > 0 ? (
+            seller.orders.map((order) => (
+              <Grid item xs={12} md={6} key={order._id}>
+                <Box
+                  sx={{
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    p: 2,
+                    mb: 2,
+                    cursor: "pointer",
+                    "&:hover": {
+                      transform: "scale(1.02)",
+                      boxShadow: "0 0 10px #fff",
+                    },
+                    transition: "all 0.3s ease-in-out",
+                    mt: 2,
+                  }}
+                  onClick={() => navigate(`/order/${order._id}`)}
+                >
+                  <Typography variant="h6">{order._id}</Typography>
+                  <Typography variant="body1">
+                    {order.createdAt.slice(0, 10)}
+                  </Typography>
+                  <Typography variant="body1">{order.amount}</Typography>
+                </Box>
+              </Grid>
+            ))
+          ) : (
+            <Box
+              sx={{
+                mt: 2,
+                ml: 10,
+              }}
+            >
+              <div>
+                <Typography variant="h3">No orders</Typography>
+              </div>
+            </Box>
+          )}
+        </Grid>
       </Box>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box
