@@ -16,6 +16,7 @@ import {
 import {
   addCategory,
   getCategories,
+  updateCategory,
 } from "../controllers/categoryController.js";
 const router = express.Router();
 
@@ -30,6 +31,13 @@ router.post(
   isAuthenticatedUser,
   authorizeRoles("admin"),
   addCategory
+);
+
+router.put(
+  "/updateCategory/:id",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  updateCategory
 );
 
 router.get("/categories", getCategories);
