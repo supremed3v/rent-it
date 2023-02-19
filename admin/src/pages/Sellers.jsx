@@ -59,7 +59,13 @@ const Sellers = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => navigate(`/admin/seller/${params.row._id}`)}
+            onClick={() =>
+              navigate(`/seller/${params.row._id}`, {
+                state: {
+                  seller: params.row,
+                },
+              })
+            }
           >
             View
           </Button>
@@ -76,6 +82,7 @@ const Sellers = () => {
       email: seller.email,
       rentedItems: seller.rentedItems.length,
       approved: seller.verifySellerIdCard ? "Yes" : "No",
+      ...seller,
     };
   });
 

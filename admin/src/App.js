@@ -16,6 +16,7 @@ import { ProductsContextProvider } from "./context/ProductsContext";
 import EditProduct from "./pages/EditProduct";
 import UserDetails from "./pages/UserDetails";
 import { CategoriesProviders } from "./context/CategoriesContext";
+import SellerDetails from "./pages/SellerDetails";
 function App() {
   // create a custom router with conditional rendering of the dashboard if the user is logged in
 
@@ -104,94 +105,102 @@ function App() {
           <AuthContextProvider>
             <ProductsContextProvider>
               <CategoriesProviders>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute>
-                      <Header />
-                    </ProtectedRoute>
-                  }
-                  children={[
-                    <Route path="/" element={<Home />} key="home" />,
-                    <Route
-                      path="/dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <Dashboard />
-                        </ProtectedRoute>
-                      }
-                      key="dashboard"
-                    />,
-                    <Route
-                      path="/users"
-                      element={
-                        <ProtectedRoute>
-                          <Users />
-                        </ProtectedRoute>
-                      }
-                      key="users"
-                    />,
-                    <Route
-                      path="/users/:id"
-                      element={
-                        <ProtectedRoute>
-                          <UserDetails />
-                        </ProtectedRoute>
-                      }
-                      key="user"
-                    />,
-                    <Route
-                      path="/products"
-                      element={
-                        <ProtectedRoute>
-                          <Products />
-                        </ProtectedRoute>
-                      }
-                      key="products"
-                    />,
-                    <Route
-                      path="/orders"
-                      element={
-                        <ProtectedRoute>
-                          <Orders />
-                        </ProtectedRoute>
-                      }
-                      key="orders"
-                    />,
-                    <Route
-                      path="/categories"
-                      element={
-                        <ProtectedRoute>
-                          <Categories />
-                        </ProtectedRoute>
-                      }
-                      key="categories"
-                    />,
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Header />
+                      </ProtectedRoute>
+                    }
+                    children={[
+                      <Route path="/" element={<Home />} key="home" />,
+                      <Route
+                        path="/dashboard"
+                        element={
+                          <ProtectedRoute>
+                            <Dashboard />
+                          </ProtectedRoute>
+                        }
+                        key="dashboard"
+                      />,
+                      <Route
+                        path="/users"
+                        element={
+                          <ProtectedRoute>
+                            <Users />
+                          </ProtectedRoute>
+                        }
+                        key="users"
+                      />,
+                      <Route
+                        path="/users/:id"
+                        element={
+                          <ProtectedRoute>
+                            <UserDetails />
+                          </ProtectedRoute>
+                        }
+                        key="user"
+                      />,
+                      <Route
+                        path="/products"
+                        element={
+                          <ProtectedRoute>
+                            <Products />
+                          </ProtectedRoute>
+                        }
+                        key="products"
+                      />,
+                      <Route
+                        path="/orders"
+                        element={
+                          <ProtectedRoute>
+                            <Orders />
+                          </ProtectedRoute>
+                        }
+                        key="orders"
+                      />,
+                      <Route
+                        path="/categories"
+                        element={
+                          <ProtectedRoute>
+                            <Categories />
+                          </ProtectedRoute>
+                        }
+                        key="categories"
+                      />,
 
-                    <Route
-                      path="/sellers"
-                      element={
-                        <ProtectedRoute>
-                          <Sellers />
-                        </ProtectedRoute>
-                      }
-                      key="sellers"
-                    />,
-                    <Route
-                      path="/product/:id"
-                      element={
-                        <ProtectedRoute>
-                          <EditProduct />
-                        </ProtectedRoute>
-                      }
-                      key="editProduct"
-                    />,
-                  ]}
-                />
-                <Route path="/login" element={<Login />} />,
-              </Routes>
-              
+                      <Route
+                        path="/sellers"
+                        element={
+                          <ProtectedRoute>
+                            <Sellers />
+                          </ProtectedRoute>
+                        }
+                        key="sellers"
+                      />,
+                      <Route
+                        path="/seller/:id"
+                        element={
+                          <ProtectedRoute>
+                            <SellerDetails />
+                          </ProtectedRoute>
+                        }
+                        key="seller"
+                      />,
+                      <Route
+                        path="/product/:id"
+                        element={
+                          <ProtectedRoute>
+                            <EditProduct />
+                          </ProtectedRoute>
+                        }
+                        key="editProduct"
+                      />,
+                    ]}
+                  />
+                  <Route path="/login" element={<Login />} />,
+                </Routes>
               </CategoriesProviders>
             </ProductsContextProvider>
           </AuthContextProvider>
