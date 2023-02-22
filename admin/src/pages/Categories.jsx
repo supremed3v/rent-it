@@ -4,12 +4,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryModal from "../components/CategoryModal";
 import { useCategoriesContext } from "../context/CategoriesContext";
+import axios from "axios";
 
 const Categories = () => {
   const navigate = useNavigate();
   const { categories } = useCategoriesContext();
   const [openModal, setOpenModal] = React.useState(false);
   const [modalCategory, setModalCategory] = React.useState(null);
+
   const handleModal = (category) => {
     setOpenModal(!openModal);
     setModalCategory(category);
