@@ -47,6 +47,7 @@ const Categories = () => {
     _id: category._id,
     name: category.name,
     relatedProducts: category.relatedProducts.length,
+    ...category,
   }));
 
   return (

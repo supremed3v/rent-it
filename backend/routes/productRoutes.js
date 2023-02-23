@@ -34,7 +34,7 @@ router.post(
 );
 
 router.put(
-  "/updateCategory/:id",
+  "/categories/:id",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   updateCategory

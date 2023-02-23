@@ -69,20 +69,18 @@ export const updateCategory = async (req, res) => {
   const category = Category.findById(req.params.id);
 
   const { name, image } = req.body;
+  const newCategoryData = {
+    name: req.body.name === category.name ? category.name : req.body.name,
+  };
 
-  if (image === "") {
-    req.body.image = category.image;
-  } else {
-    const image_id = category.image.public_id;
-    await cloudinary.v2.uploader.destroy(image_id);
-    const result = await cloudinary.v2.uploader.upload(image, {
-      folder: "categories",
-    });
-    req.body.image = {
-      public_id: result.public_id,
-      url: result.secure_url,
-    };
-  }
+  const result = await cloudinary.v2.uploader.upload(image, {
+    folder: "categories",
+  });
+  console.log(result, "result");
+  newCategoryData.image = {
+    public_id: result.public_id,
+    url: result.secure_url,
+  };
 
   if (!name) {
     req.body.name = category.name;
@@ -90,10 +88,17 @@ export const updateCategory = async (req, res) => {
     req.body.name = name;
   }
 
-  await category.save({ validateBeforeSave: false });
+  const updateCategory = await Category.findByIdAndUpdate(
+    req.params.id,
+    newCategoryData,
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
   res.status(200).json({
     success: true,
     message: "Category updated successfully",
-    category,
   });
 };

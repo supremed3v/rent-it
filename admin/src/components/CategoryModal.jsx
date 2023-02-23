@@ -7,61 +7,44 @@ const CategoryModal = ({ category, openModal, setOpenModal }) => {
   const { token } = useAuthContext();
   const [image, setImage] = React.useState(null);
   const [imagePreview, setImagePreview] = React.useState(null);
-  const [baseImage, setBaseImage] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const handleInputRef = React.useRef(null);
+  console.log(category);
 
-  const base64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-        setImagePreview(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
-
-  if (image) {
-    base64(image).then((data) => {
-      setBaseImage(data);
-    });
-  }
-
-  const handleUpdate = () => {
-    axios
-      .put(
-        `https://rent-it.up.railway.app/api/v1/updateCategory/${category._id}`,
+  const handleUpdate = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.put(
+        `http://localhost:5000/api/v1/categories/${category._id}`,
         {
-          image: baseImage,
+          image: image,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      )
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status === "success") {
-          setOpenModal(false);
-        } else {
-          console.log(res.data.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-      });
+      );
+      if (data.success) {
+        setLoading(false);
+        setOpenModal(false);
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
-  // React.useEffect(() => {
-  //   if (category.image) {
-  //     createImagePreview(category.image);
-  //   } else {
-  //     setImagePreview(null);
-  //   }
-  // }, [category.image]);
+  const handleImage = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImagePreview(reader.result);
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+  console.log(image);
 
   return (
     <Modal open={openModal} onClose={() => setOpenModal(false)}>
@@ -87,9 +70,9 @@ const CategoryModal = ({ category, openModal, setOpenModal }) => {
           </Typography>
           {category.image ? (
             <img
-              src={category.image}
+              src={category.image.url}
               alt={category.name}
-              style={{ width: "100%" }}
+              style={{ width: "100%", height: "100%" }}
             />
           ) : (
             <Box>
@@ -100,7 +83,10 @@ const CategoryModal = ({ category, openModal, setOpenModal }) => {
                 <input
                   type="file"
                   hidden
-                  onChange={(e) => setImage(e.target.files[0])}
+                  onChange={handleImage}
+                  accept="image/*"
+                  name="image"
+                  ref={handleInputRef}
                 />
               </Button>
               {imagePreview !== null && (
@@ -117,6 +103,7 @@ const CategoryModal = ({ category, openModal, setOpenModal }) => {
               Update
             </Button>
           )}
+          {loading && <h1>Loading...</h1>}
         </Box>
       )}
     </Modal>
