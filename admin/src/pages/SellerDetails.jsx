@@ -24,12 +24,13 @@ function getSellerProducts(token, sellerId) {
 const SellerDetails = () => {
   const navigate = useNavigate();
   const [sellerProducts, setSellerProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { token } = useAuthContext();
   const { state } = useLocation();
   const { seller } = state;
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState({
-    to: seller.email,
+  const [form, setForm] = useState({
+    email: seller.email,
     subject: "",
     message: "",
   });
@@ -39,7 +40,26 @@ const SellerDetails = () => {
       setSellerProducts(data);
     });
   }, [token, seller._id]);
-  console.log(sellerProducts);
+  const handleSendEmail = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/api/v1/send-email",
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setLoading(false);
+      setOpen(false);
+      console.log(data);
+    } catch (error) {
+      console.log(error.response.data.message);
+      setLoading(false);
+    }
+  };
   return (
     <div>
       <Grid
@@ -231,7 +251,7 @@ const SellerDetails = () => {
             }}
             multiline
             maxRows={4}
-            onChange={(e) => setEmail({ ...email, subject: e.target.value })}
+            onChange={(e) => setForm({ ...form, subject: e.target.value })}
           />
           <TextField
             label="Message"
@@ -241,7 +261,7 @@ const SellerDetails = () => {
             }}
             multiline
             rows={4}
-            onChange={(e) => setEmail({ ...email, message: e.target.value })}
+            onChange={(e) => setForm({ ...form, message: e.target.value })}
           />
           <Divider />
           <Button
@@ -249,6 +269,8 @@ const SellerDetails = () => {
               mt: 2,
             }}
             variant="contained"
+            disabled={loading}
+            onClick={handleSendEmail}
           >
             Send
           </Button>
