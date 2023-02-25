@@ -10,14 +10,47 @@ export const newOrder = async (req, res) => {
   const orderItemsIds = orderItems.map((item) => item.product);
   const products = await Product.find({ _id: { $in: orderItemsIds } });
 
-  const order = await Order.create({
-    orderItems,
-    shippingAddress,
-    paymentInfo,
-    itemsPrice,
-    totalPrice,
-    user: req.user._id,
-    paidAt: Date.now(),
+  const vendorOrder = [];
+
+  for (let i = 0; i < products.length; i++) {
+    const vendor = await User.findById(products[i].user);
+    vendorOrder.push({
+      vendor: vendor._id,
+      orderItems: orderItems.filter((item) => item.product === products[i]._id),
+      shippingAddress,
+      paymentInfo,
+      itemsPrice,
+      totalPrice,
+      user: req.user._id,
+      paidAt: Date.now(),
+    });
+  }
+
+  vendorOrder.forEach(async (order) => {
+    const newOrder = await Order.create(order);
+    const vendor = await User.findById(order.vendor);
+
+    const message = `
+      <h1>You have a new order</h1>
+      <p>You have a new order. Please login to your dashboard to check it out</p>
+      <hr />
+      <p>This email may contain sensitive information</p>
+      <p>https://rentit-app.herokuapp.com</p>
+    `;
+    try {
+      await sendMail({
+        email: vendor.email,
+        subject: "New Order ",
+        message,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    res.status(201).json({
+      success: true,
+      order: newOrder,
+    });
   });
 
   const updateProductAvailability = async () => {
@@ -31,7 +64,7 @@ export const newOrder = async (req, res) => {
 
   res.status(201).json({
     success: true,
-    order,
+    message: "Order placed successfully",
   });
 };
 
