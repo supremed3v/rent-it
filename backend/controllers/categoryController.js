@@ -76,7 +76,6 @@ export const updateCategory = async (req, res) => {
   const result = await cloudinary.v2.uploader.upload(image, {
     folder: "categories",
   });
-  console.log(result, "result");
   newCategoryData.image = {
     public_id: result.public_id,
     url: result.secure_url,
