@@ -29,6 +29,8 @@ export const newOrder = async (req, res) => {
   vendorOrder.forEach(async (order) => {
     const newOrder = await Order.create(order);
     const vendor = await User.findById(order.vendor);
+    vendor.orders.push(newOrder._id);
+    await vendor.save({ validateBeforeSave: false });
 
     const message = `
       <h1>You have a new order</h1>
@@ -46,11 +48,6 @@ export const newOrder = async (req, res) => {
     } catch (error) {
       console.log(error);
     }
-
-    res.status(201).json({
-      success: true,
-      order: newOrder,
-    });
   });
 
   const updateProductAvailability = async () => {
