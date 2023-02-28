@@ -26,6 +26,7 @@ export default function Cart({ navigation }) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
   let totalAmount = cart.reduce((acc, item) => acc + item.price, 0);
+  const stripe = useStripe();
 
   const vendors = [];
   cart.forEach((item) => {
@@ -78,6 +79,28 @@ export default function Cart({ navigation }) {
     } catch (error) {
       console.log(error.response.data.message);
     }
+  };
+
+  const submitPay = async () => {
+    try {
+      const { data } = await axios.post(
+        `${API}/api/v1/create-payment-intent`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const clientSecret = data.client_secret;
+
+      if (!stripe) return;
+
+      const result = await stripe.confirmPayment(clientSecret, {
+        payment_method: {},
+      });
+    } catch (error) {}
   };
 
   return (
