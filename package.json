@@ -28,6 +28,7 @@
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "lottie-react-native": "^5.1.4",
+    "metro-core": "^0.75.1",
     "react": "18.1.0",
     "react-devtools": "^4.27.1",
     "react-native": "0.70.5",

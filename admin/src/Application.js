@@ -17,7 +17,7 @@ import EditProduct from "./pages/EditProduct";
 import UserDetails from "./pages/UserDetails";
 import { CategoriesProviders } from "./context/CategoriesContext";
 import SellerDetails from "./pages/SellerDetails";
-function App() {
+function Application() {
   // create a custom router with conditional rendering of the dashboard if the user is logged in
 
   const { themeColor } = useThemeContext();
@@ -210,4 +210,4 @@ function App() {
   );
 }
 
-export default App;
+export default Application;

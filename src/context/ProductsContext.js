@@ -42,6 +42,25 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const getProducts = async () => {
+    try {
+      setState({ ...state, loading: true });
+      const { data } = await axios.get(`${API}/api/v1/products`);
+      setState({
+        ...state,
+        loading: false,
+        products: data.products,
+      });
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        error: error.response.data.message,
+      });
+      console.log(error);
+    }
+  };
+
   const addProduct = async (product, token) => {
     setState({ ...state, loading: true });
     try {
@@ -95,6 +114,7 @@ export const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     getCategories();
+    getProducts();
   }, []);
   useEffect(() => {
     if (state.error) {

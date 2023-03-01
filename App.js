@@ -58,7 +58,6 @@ export default function App() {
   return (
     <AuthContextProvider>
       <ProductProvider>
-          <CategoriesProviders>
         <CartProvider>
           <StripeProvider publishableKey={pubKey}>
             <PaperProvider theme={CombinedDarkTheme}>
@@ -68,7 +67,6 @@ export default function App() {
             </PaperProvider>
           </StripeProvider>
         </CartProvider>
-          </CategoriesProviders>
       </ProductProvider>
     </AuthContextProvider>
   );

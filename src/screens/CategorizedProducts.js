@@ -40,7 +40,11 @@ export default function CategorizedProducts({ route }) {
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         numColumns={2}
-        ListHeaderComponent={<Header title={"Products"} />}
+        ListHeaderComponent={
+          <Header
+            title={category.charAt(0).toUpperCase() + category.slice(1)}
+          />
+        }
         ListEmptyComponent={
           <EmptyData errorText={`No products in ${category}`} />
         }
